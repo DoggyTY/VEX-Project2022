@@ -18,7 +18,7 @@
 
 using namespace vex;
 bool b = false;
-int i = 0;
+int i = 215;
 int main() {
   //Left motors: LeftDriveSmart
   //Right motors: RightDriveSmart
@@ -32,7 +32,7 @@ int main() {
   Drivetrain.driveFor(reverse,i,mm);
   Drivetrain.turnFor(left,180,degrees);
   Motor9.spinFor(forward,50,degrees);
-  //other motor open
+  Claw.spinFor(forward,10,degrees);
   Drivetrain.driveFor(forward,i,mm);
-  //other motor close
+  Claw.spinFor(backward,10,degrees);
 }

@@ -12,21 +12,23 @@
 // [Name]               [Type]        [Port(s)]
 // Drivetrain           drivetrain    1, 10           
 // Motor9               motor         9               
+// Claw                 motor         3               
+// Itsabumber           bumper        A               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
 
 using namespace vex;
-bool b = false;
 int i = 215;
 int main() {
   //Left motors: LeftDriveSmart
   //Right motors: RightDriveSmart
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-  while (!b) {
+  
+  while (!Itsabumber.pressing()) {
     Drivetrain.setDriveVelocity(25,percent);
-    Drivetrain.drive(forward);
+    Drivetrain.drive(reverse);
   }
   Drivetrain.stop();
   Drivetrain.driveFor(reverse,i,mm);
@@ -34,5 +36,5 @@ int main() {
   Motor9.spinFor(forward,50,degrees);
   Claw.spinFor(forward,10,degrees);
   Drivetrain.driveFor(forward,i,mm);
-  Claw.spinFor(backward,10,degrees);
+  Claw.spinFor(reverse,10,degrees); //This needs to be done
 }

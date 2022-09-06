@@ -6,6 +6,7 @@ extern brain Brain;
 extern drivetrain Drivetrain;
 extern motor Motor9;
 extern motor Claw;
+extern bumper Itsabumber;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

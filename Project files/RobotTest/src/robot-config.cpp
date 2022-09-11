@@ -14,10 +14,11 @@ drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 295,
 motor Motor9 = motor(PORT9, ratio36_1, false);
 motor Claw = motor(PORT3, ratio36_1, false);
 bumper Itsabumber = bumper(Brain.ThreeWirePort.A);
+controller Controller1 = controller(primary);
 
 // VEXcode generated functions
-
-
+// define variable for remote controller enable/disable
+bool RemoteControlCodeEnabled = true;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

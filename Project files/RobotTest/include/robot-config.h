@@ -7,6 +7,7 @@ extern drivetrain Drivetrain;
 extern motor Motor9;
 extern motor Claw;
 extern bumper Itsabumber;
+extern controller Controller1;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

@@ -66,3 +66,8 @@ double FindGoal(int x int z){
   double xDist = sqrt(pow(abs(GoalX-x),2)+pow(abs(z-GoalZ),2));
   return sqrt(pow(xDist,2)+pow(GoalY))
 }
+
+// Player control
+void player() {
+
+}

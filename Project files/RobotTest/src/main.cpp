@@ -23,14 +23,18 @@ using namespace vex;
 int GoalY = 0;
 int GoalX = 0;
 int GoalZ = 0;
-// Right Joystick Down
-int Axisone = Controller1.Axis1.position(percent);
-// Right Joystick Up
-int Axistwo = Controller1.Axis2.position(percent);
-// Left Joystick Up
-int Axisthree = Controller1.Axis3.position(percent);
-// Left Joystick Down
-int Axisfour = Controller1.Axis4.position(percent);
+double RobotY = 0;
+double RobotX = 0; // Need to change this to GPS sensors
+double RobotZ = 0;
+double RobotHead = 0;
+// Right Joystick Horizonal
+int RightSide = Controller1.Axis1.position(percent);
+// Right Joystick Vertical
+int RightVert = Controller1.Axis2.position(percent);
+// Left Joystick Vertical
+int LeftVert = Controller1.Axis3.position(percent);
+// Left Joystick Horizonal
+int LeftSide = Controller1.Axis4.position(percent);
 
 int i = 215;
 int main() {
@@ -63,14 +67,13 @@ int main() {
 }
 
 double FindGoal(int x, int z){
-  double xDist = sqrt(pow(abs(GoalX-x),2)+pow(abs(z-GoalZ),2));
-  return sqrt(pow(xDist,2)+pow(GoalY))
+  return sqrt(pow(abs(GoalX-x),2)+pow(abs(z-GoalZ),2));
 }
 
-void FindXYZ() {
-  
-}
+
 // Player control
 void player() {
-
+  while (true){
+    
+  }
 }

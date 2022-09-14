@@ -62,11 +62,14 @@ int main() {
   //Claw.spinFor(reverse,10,degrees); //This needs to be done
 }
 
-double FindGoal(int x int z){
+double FindGoal(int x, int z){
   double xDist = sqrt(pow(abs(GoalX-x),2)+pow(abs(z-GoalZ),2));
   return sqrt(pow(xDist,2)+pow(GoalY))
 }
 
+void FindXYZ() {
+  
+}
 // Player control
 void player() {
 

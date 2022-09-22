@@ -72,7 +72,7 @@ double FindGoal(int x, int z){
 
 
 // Player control
-void player() {
+void Player() {
   while (true){
     
   }

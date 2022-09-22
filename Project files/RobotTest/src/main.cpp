@@ -10,11 +10,9 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// Drivetrain           drivetrain    1, 10           
-// Motor9               motor         9               
-// Claw                 motor         3               
-// Itsabumber           bumper        A               
 // Controller1          controller                    
+// LeftDrive            motor_group   1, 2, 3
+// RightDrive           motor_group   8, 9, 10        
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -38,8 +36,6 @@ int LeftSide = Controller1.Axis4.position(percent);
 
 int i = 215;
 int main() {
-  //Left motors: LeftDriveSmart
-  //Right motors: RightDriveSmart
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   
@@ -74,6 +70,19 @@ double FindGoal(int x, int z){
 // Player control
 void Player() {
   while (true){
-    
+    LeftDrive.setVelocity(LeftVert,pct);
+    RightDrive.setVelocity(LeftVert,pct);
+    //LeftDrive, Left wheels
+    //RightDrive, Right wheels
+    LeftDrive.Spin(forward);
+    RightDrive.Spin(forward);
+    if (LeftSide != 0) {
+      LeftDrive.setVelocity(LeftVert+LeftSide,pct);
+      RightDrive.setVelocity(LeftVert-RightVert,pct);
+    } else {
+      LeftDrive.setVelocity(LeftVert,pct);
+      LeftDrive.setVelocity(LeftVert,pct);
+    }
+
   }
 }

@@ -11,8 +11,10 @@
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
-// LeftDrive            motor_group   1, 2, 3
-// RightDrive           motor_group   8, 9, 10        
+// LeftDrive            motor_group   1, 3            
+// LeftDriveMotorB      motor         2               
+// RightDrive           motor_group   8, 10           
+// RightDriveMotorE     motor         9               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -38,28 +40,9 @@ int i = 215;
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-  
-  //while(!Controller1.ButtonA.pressing()){
-    //Brain.Screen.print(Axisone);
-    //Brain.Screen.newLine();
-    //Brain.Screen.print(Axistwo);
-    //Brain.Screen.newLine();
-    //Brain.Screen.print(Axisthree);
-    //Brain.Screen.newLine();
-  //  Brain.Screen.print(Axisfour);
-  //  Brain.Screen.newLine();
-  //}
-  //while (!Itsabumber.pressing()) {
-  //  Drivetrain.setDriveVelocity(25,percent);
-  //  Drivetrain.drive(reverse);
-  //}
-  //Drivetrain.stop();
-  //Drivetrain.driveFor(reverse,i,mm);
-  //Drivetrain.turnFor(left,180,degrees);
-  //Motor9.spinFor(forward,50,degrees);
-  //Claw.spinFor(forward,10,degrees);
-  //Drivetrain.driveFor(forward,i,mm);
-  //Claw.spinFor(reverse,10,degrees); //This needs to be done
+  AceBase();
+  //wait(4,sec);
+  //Player();
 }
 
 double FindGoal(int x, int z){
@@ -69,20 +52,50 @@ double FindGoal(int x, int z){
 
 // Player control
 void Player() {
+  LeftDrive.setVelocity(LeftVert,pct);
+  LeftDriveMotorC.setVelocity(LeftVert,pct);
+  RightDrive.setVelocity(LeftVert,pct);
+  RightDriveMotorC.setVelocity(LeftVert.pct)
   while (true){
-    LeftDrive.setVelocity(LeftVert,pct);
-    RightDrive.setVelocity(LeftVert,pct);
-    //LeftDrive, Left wheels
-    //RightDrive, Right wheels
-    LeftDrive.Spin(forward);
-    RightDrive.Spin(forward);
-    if (LeftSide != 0) {
+    //LeftDrive, Left wheels -- LeftDriveMotorB
+    //RightDrive, Right wheels -- RightDriveMotorE
+    LeftDrive.spin(forward);
+    LeftDriveMotorC.spin(forward);
+    RightDrive.spin(forward);
+    RightDriveMotorC.spin(forward);
+    if (LeftSide > 33 or LeftSide < -33) {
       LeftDrive.setVelocity(LeftVert+LeftSide,pct);
-      RightDrive.setVelocity(LeftVert-RightVert,pct);
+      LeftDriveMotorC.setVelocity(LeftVert+LeftSide,pct);
+      RightDrive.setVelocity(LeftVert-LeftSide,pct);
+      RightDriveMotorC.setVelocity(LeftVert-LeftSide,pct);
     } else {
       LeftDrive.setVelocity(LeftVert,pct);
-      LeftDrive.setVelocity(LeftVert,pct);
+      LeftDriveMotorC.setVelocity(LeftVert,pct);
+      RightDrive.setVelocity(LeftVert,pct);
+      RightDriveMotorC.setVelocity(LeftVert,pct);
     }
-
   }
 }
+
+void AceBase(){
+  if (Controller1.ButtonUp.PRESSED() == true){
+    LeftDrive.spinTo(-600,mm);
+    RightDrive.spinTo(-600,mm);
+    LeftDriveMotorC.spinTo(600,mm);
+    RightDriveMotorC.spinTo(600,mm);
+  }
+  else if (Controller1.ButtonRight.PRESSED() == true) {
+    LeftDrive.spinTo(-600,mm);
+    RightDrive.spinTo(600,mm);
+    LeftDriveMotorC.spinTo(600,mm);
+    RightDriveMotorC.spinTo(-600,mm);
+  }
+  else if (Controller1.ButtonLeft.PRESSED() == true){
+    LeftDrive.spinTo(600,mm);
+    RightDrive.spinTo(-600,mm);
+    LeftDriveMotorC.spinTo(-600,mm);
+    RightDriveMotorC.spinTo(600,mm);
+  }
+}
+
+// Don't look down here there isn't anything down here but suffering :)

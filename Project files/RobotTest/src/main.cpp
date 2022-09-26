@@ -55,7 +55,7 @@ void Player() {
   LeftDrive.setVelocity(LeftVert,pct);
   LeftDriveMotorC.setVelocity(LeftVert,pct);
   RightDrive.setVelocity(LeftVert,pct);
-  RightDriveMotorC.setVelocity(LeftVert.pct)
+  RightDriveMotorC.setVelocity(LeftVert,pct);
   while (true){
     //LeftDrive, Left wheels -- LeftDriveMotorB
     //RightDrive, Right wheels -- RightDriveMotorE
@@ -78,23 +78,31 @@ void Player() {
 }
 
 void AceBase(){
-  if (Controller1.ButtonUp.PRESSED() == true){
-    LeftDrive.spinTo(-600,mm);
-    RightDrive.spinTo(-600,mm);
-    LeftDriveMotorC.spinTo(600,mm);
-    RightDriveMotorC.spinTo(600,mm);
-  }
-  else if (Controller1.ButtonRight.PRESSED() == true) {
-    LeftDrive.spinTo(-600,mm);
-    RightDrive.spinTo(600,mm);
-    LeftDriveMotorC.spinTo(600,mm);
-    RightDriveMotorC.spinTo(-600,mm);
-  }
-  else if (Controller1.ButtonLeft.PRESSED() == true){
-    LeftDrive.spinTo(600,mm);
-    RightDrive.spinTo(-600,mm);
-    LeftDriveMotorC.spinTo(-600,mm);
-    RightDriveMotorC.spinTo(600,mm);
+  while (true){
+    if (Controller1.ButtonUp.pressing()){
+      LeftDrive.spin(forward);
+      RightDrive.spin(reverse);
+      LeftDriveMotorC.spin(reverse);
+      RightDriveMotorC.spin(forward);
+    }
+    else if (Controller1.ButtonRight.pressing()) {
+      LeftDrive.spin(reverse);
+      RightDrive.spin(forward);
+      LeftDriveMotorC.spin(forward);
+      RightDriveMotorC.spin(reverse);
+    }
+    else if (Controller1.ButtonLeft.pressing()){
+      LeftDrive.spin(forward);
+      RightDrive.spin(reverse);
+      LeftDriveMotorC.spin(reverse);
+      RightDriveMotorC.spin(forward);
+    }
+    else {
+      LeftDrive.stop();
+      RightDrive.stop();
+      LeftDriveMotorC.stop();
+      RightDriveMotorC.stop();
+    }
   }
 }
 

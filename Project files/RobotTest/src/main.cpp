@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
-/*    Author:       e2622588                                                  */
+/*    Author:       Team 8861F                                                */
 /*    Created:      Tue Sep 06 2022                                           */
 /*    Description:  V5 project                                                */
 /*                                                                            */
@@ -20,7 +20,11 @@
 #include "vex.h"
 
 using namespace vex;
-class Test { 
+int main() {
+    // Initializing Robot Configuration. DO NOT REMOVE!
+    vexcodeInit();
+    return 0;
+  }
   bool Auto = false;
   int GoalY = 0;
   int GoalX = 0;
@@ -39,15 +43,6 @@ class Test {
   int LeftSide = Controller1.Axis4.position(percent);
 
   int i = 215;
-  int main() {
-    // Initializing Robot Configuration. DO NOT REMOVE!
-    vexcodeInit();
-    AceBase();
-    AceBaseAuto();
-    //wait(4,sec);
-    //Player();
-    return 0;
-  }
 
   double FindGoal(int x, int z){
     return sqrt(pow(abs(GoalX-x),2)+pow(abs(z-GoalZ),2));
@@ -81,6 +76,7 @@ class Test {
     }
   }
 
+  //I don't believe that this would work with the function.
   void AceBase(){
     while (!Auto){
       if (Controller1.ButtonUp.pressing()){
@@ -103,10 +99,6 @@ class Test {
         RightDrive.stop();
       }
     }
-  }
-
-
-  void AceBaseAuto() {
     while (Auto) {
       LeftDrive.spinFor(forward,1,turns,false);
       RightDrive.spinFor(forward,1,turns);
@@ -138,6 +130,5 @@ class Test {
       //fifth straight portion
     }
   }
-};
 
 // Don't look down here there isn't anything down here but suffering :)

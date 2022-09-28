@@ -94,6 +94,7 @@ void AceBase() {
       LeftDrive.stop();
       RightDrive.stop();
     }
+    wait(0.1,seconds);
   }
 
     

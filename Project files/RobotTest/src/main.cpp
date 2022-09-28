@@ -12,9 +12,7 @@
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
 // LeftDrive            motor_group   1, 3            
-// LeftDriveMotorB      motor         2               
 // RightDrive           motor_group   8, 10           
-// RightDriveMotorE     motor         9               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -60,28 +58,20 @@ double FindGoal(int x, int z) {
 // Player control
 void Player() {
   LeftDrive.setVelocity(LeftVert, pct);
-  LeftDriveMotorC.setVelocity(LeftVert, pct);
   RightDrive.setVelocity(LeftVert, pct);
-  RightDriveMotorC.setVelocity(LeftVert, pct);
 
   while (true) {
     //LeftDrive, Left wheels -- LeftDriveMotorB
     //RightDrive, Right wheels -- RightDriveMotorE
     LeftDrive.spin(forward);
-    LeftDriveMotorC.spin(forward);
     RightDrive.spin(forward);
-    RightDriveMotorC.spin(forward);
 
     if (LeftSide > 33 or LeftSide < -33) {
       LeftDrive.setVelocity(LeftVert + LeftSide, pct);
-      LeftDriveMotorC.setVelocity(LeftVert + LeftSide, pct);
       RightDrive.setVelocity(LeftVert - LeftSide, pct);
-      RightDriveMotorC.setVelocity(LeftVert - LeftSide, pct);
     } else {
       LeftDrive.setVelocity(LeftVert, pct);
-      LeftDriveMotorC.setVelocity(LeftVert, pct);
       RightDrive.setVelocity(LeftVert, pct);
-      RightDriveMotorC.setVelocity(LeftVert, pct);
     }
   }
 }

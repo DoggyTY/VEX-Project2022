@@ -81,13 +81,13 @@ void AceBase() {
   while (!Auto) {
     if (Controller1.ButtonUp.pressing()) {
       LeftDrive.spin(forward);
-      RightDrive.spin(reverse);
-    } else if (Controller1.ButtonRight.pressing()) {
-      LeftDrive.spin(reverse);
       RightDrive.spin(forward);
-    } else if (Controller1.ButtonLeft.pressing()) {
+    } else if (Controller1.ButtonRight.pressing()) {
       LeftDrive.spin(forward);
       RightDrive.spin(reverse);
+    } else if (Controller1.ButtonLeft.pressing()) {
+      LeftDrive.spin(reverse);
+      RightDrive.spin(forward);
     } else if (Controller1.ButtonA.pressing()) {
       Auto = true;
     } else {
@@ -96,32 +96,33 @@ void AceBase() {
     }
   }
 
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //we need to find out how far 1 turn of the mortor is or what the 
-  //method for the robot to drive a fixed distance because I forget what that is
-  LeftDrive.spinFor(reverse, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //first turn
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //second straight portion
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(reverse, 1, turns);
-  //second turn
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //third straight portion
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(reverse, 1, turns);
-  //third turn
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //fourth straight portion
-  LeftDrive.spinFor(reverse, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //fifth turn
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //fifth straight portion
+    
+    LeftDrive.spinFor(forward, 1, turns, false);
+    RightDrive.spinFor(forward, 1, turns);
+//  //we need to find out how far 1 turn of the mortor is or what the 
+//  //method for the robot to drive a fixed distance because I forget what that is
+//  LeftDrive.spinFor(reverse, 1, turns, false);
+//  RightDrive.spinFor(forward, 1, turns);
+//  //first turn
+//  LeftDrive.spinFor(forward, 1, turns, false);
+//  RightDrive.spinFor(forward, 1, turns);
+//  //second straight portion
+//  LeftDrive.spinFor(forward, 1, turns, false);
+//  RightDrive.spinFor(reverse, 1, turns);
+//  //second turn
+//  LeftDrive.spinFor(forward, 1, turns, false);
+//  RightDrive.spinFor(forward, 1, turns);
+//  //third straight portion
+//  LeftDrive.spinFor(forward, 1, turns, false);
+//  RightDrive.spinFor(reverse, 1, turns);
+//  //third turn
+//  LeftDrive.spinFor(forward, 1, turns, false);
+//  RightDrive.spinFor(forward, 1, turns);
+//  //fourth straight portion
+//  LeftDrive.spinFor(reverse, 1, turns, false);
+//  RightDrive.spinFor(forward, 1, turns);
+//  //fifth turn
+//  LeftDrive.spinFor(forward, 1, turns, false);
+//  RightDrive.spinFor(forward, 1, turns);
+//  //fifth straight portion
 }

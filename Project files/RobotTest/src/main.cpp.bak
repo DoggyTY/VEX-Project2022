@@ -54,16 +54,17 @@ int main() {
 }
 
 double FindGoal(int x, int z) {
-  return sqrt(pow(abs(GoalX - x), 2) + pow(abs(z - GoalZ), 2));
+  return sqrt(pow(abs(GoalX-x),2)+pow(abs(z-GoalZ),2));
 }
+
 
 // Player control
 void Player() {
-  LeftDrive.setVelocity(LeftVert, pct);
-  LeftDriveMotorC.setVelocity(LeftVert, pct);
-  RightDrive.setVelocity(LeftVert, pct);
-  RightDriveMotorC.setVelocity(LeftVert, pct);
-
+  LeftDrive.setVelocity(LeftVert,pct);
+  LeftDriveMotorC.setVelocity(LeftVert,pct);
+  RightDrive.setVelocity(LeftVert,pct);
+  RightDriveMotorC.setVelocity(LeftVert,pct);
+  
   while (true) {
     //LeftDrive, Left wheels -- LeftDriveMotorB
     //RightDrive, Right wheels -- RightDriveMotorE
@@ -71,34 +72,33 @@ void Player() {
     LeftDriveMotorC.spin(forward);
     RightDrive.spin(forward);
     RightDriveMotorC.spin(forward);
-
+    
     if (LeftSide > 33 or LeftSide < -33) {
-      LeftDrive.setVelocity(LeftVert + LeftSide, pct);
-      LeftDriveMotorC.setVelocity(LeftVert + LeftSide, pct);
-      RightDrive.setVelocity(LeftVert - LeftSide, pct);
-      RightDriveMotorC.setVelocity(LeftVert - LeftSide, pct);
+      LeftDrive.setVelocity(LeftVert+LeftSide,pct);
+      LeftDriveMotorC.setVelocity(LeftVert+LeftSide,pct);
+      RightDrive.setVelocity(LeftVert-LeftSide,pct);
+      RightDriveMotorC.setVelocity(LeftVert-LeftSide,pct);
     } else {
-      LeftDrive.setVelocity(LeftVert, pct);
-      LeftDriveMotorC.setVelocity(LeftVert, pct);
-      RightDrive.setVelocity(LeftVert, pct);
-      RightDriveMotorC.setVelocity(LeftVert, pct);
+      LeftDrive.setVelocity(LeftVert,pct);
+      LeftDriveMotorC.setVelocity(LeftVert,pct);
+      RightDrive.setVelocity(LeftVert,pct);
+      RightDriveMotorC.setVelocity(LeftVert,pct);
     }
   }
 }
-
 //I don't believe that this would work with the function.
 void AceBase() {
   while (!Auto) {
-    if (Controller1.ButtonUp.pressing()) {
+    if (Controller1.ButtonUp.pressing()){
       LeftDrive.spin(forward);
       RightDrive.spin(reverse);
     } else if (Controller1.ButtonRight.pressing()) {
       LeftDrive.spin(reverse);
       RightDrive.spin(forward);
-    } else if (Controller1.ButtonLeft.pressing()) {
+    } else if (Controller1.ButtonLeft.pressing()){
       LeftDrive.spin(forward);
       RightDrive.spin(reverse);
-    } else if (Controller1.ButtonA.pressing()) {
+    } else if (Controller1.ButtonA.pressing()){
       Auto = true;
     } else {
       LeftDrive.stop();
@@ -106,32 +106,36 @@ void AceBase() {
     }
   }
 
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //we need to find out how far 1 turn of the mortor is or what the 
-  //method for the robot to drive a fixed distance because I forget what that is
-  LeftDrive.spinFor(reverse, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //first turn
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //second straight portion
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(reverse, 1, turns);
-  //second turn
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //third straight portion
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(reverse, 1, turns);
-  //third turn
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //fourth straight portion
-  LeftDrive.spinFor(reverse, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //fifth turn
-  LeftDrive.spinFor(forward, 1, turns, false);
-  RightDrive.spinFor(forward, 1, turns);
-  //fifth straight portion
-}
+      LeftDrive.spinFor(forward,1,turns,false);
+      RightDrive.spinFor(forward,1,turns);
+      //we need to find out how far 1 turn of the mortor is or what the 
+      //method for the robot to drive a fixed distance because I forget what that is
+      LeftDrive.spinFor(reverse,1,turns, false);
+      RightDrive.spinFor(forward,1,turns);
+      //first turn
+      LeftDrive.spinFor(forward,1,turns,false);
+      RightDrive.spinFor(forward,1,turns);
+      //second straight portion
+      LeftDrive.spinFor(forward,1,turns, false);
+      RightDrive.spinFor(reverse,1,turns);
+      //second turn
+      LeftDrive.spinFor(forward,1,turns,false);
+      RightDrive.spinFor(forward,1,turns);
+      //third straight portion
+      LeftDrive.spinFor(forward,1,turns, false);
+      RightDrive.spinFor(reverse,1,turns);
+      //third turn
+      LeftDrive.spinFor(forward,1,turns,false);
+      RightDrive.spinFor(forward,1,turns);
+      //fourth straight portion
+      LeftDrive.spinFor(reverse,1,turns, false);
+      RightDrive.spinFor(forward,1,turns);
+      //fifth turn
+      LeftDrive.spinFor(forward,1,turns,false);
+      RightDrive.spinFor(forward,1,turns);
+      //fifth straight portion
+    }
+
+// Don't look down here there isn't anything down here but suffering :)
+
+void fun(int a);

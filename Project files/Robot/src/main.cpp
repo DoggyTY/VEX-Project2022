@@ -13,99 +13,143 @@
 // Controller1          controller                    
 // LeftDrive            motor_group   1, 3            
 // RightDrive           motor_group   8, 10           
+// Drivetrain           drivetrain
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
 
 using namespace vex;
 void AceBase();
+void SlowAceBase();
 
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
+  //SlowAceBase();
   AceBase();
+}
+void SlowAceBase() {
+  Drivetrain.setDriveVelocity(50,percent);
+  while (true) {
+    break;
+    if (Controller1.ButtonUp.pressing()) {
+      Drivetrain.drive(forward);
+    } else if (Controller1.ButtonDown.pressing()) {
+      Drivetrain.drive(reverse);
+    } else if (Controller1.ButtonLeft.pressing()) {
+      Drivetrain.turn(left);
+    } else if(Controller1.ButtonRight.pressing()) {
+      Drivetrain.turn(right);
+    } else {
+      Drivetrain.stop();
+    }
+    if (Controller1.ButtonA.pressing()) {
+      Drivetrain.stop();
+      break;
+    }
+  }
+  Drivetrain.turn(left);
+  wait(2.95,seconds);
+  Drivetrain.stop();
+  wait(0.5,seconds);
+  Drivetrain.drive(forward);
+  wait(3*2,seconds);
+  Drivetrain.stop();
+  wait(0.1,seconds);
+  Drivetrain.turn(right);
+  wait(0.75*2,seconds);
+  Drivetrain.stop();
+  //Part1
+  wait(0.1,seconds);
+  Drivetrain.drive(forward);
+  wait(3*2,seconds);
+  Drivetrain.stop();
+  wait(0.1,seconds);
+  Drivetrain.turn(left);
+  wait(0.75*2,seconds);
+  Drivetrain.stop();
+  //Part2
+  wait(0.5,seconds);
+  Drivetrain.drive(forward);
+  wait(3*2,seconds);
+  Drivetrain.stop();
+  wait(0.1,seconds);
+  Drivetrain.turn(left);
+  wait(0.75*2,seconds);
+  Drivetrain.stop();
+  //Part3
+  wait(0.5,seconds);
+  Drivetrain.drive(forward);
+  wait(3*2,seconds);
+  Drivetrain.stop();
+  wait(0.1,seconds);
+  Drivetrain.turn(right);
+  wait(0.75*2,seconds);
+  Drivetrain.stop();
+  //Part4
+  wait(0.5,seconds);
+  Drivetrain.drive(forward);
+  wait(3*2,seconds);
+  Drivetrain.stop();
 }
 
 void AceBase() {
+  Drivetrain.setDriveVelocity(100,percent);
   while (true) {
     if (Controller1.ButtonUp.pressing()) {
-      LeftDrive.spin(forward);
-      RightDrive.spin(forward);
+      Drivetrain.drive(forward);
     } else if (Controller1.ButtonDown.pressing()) {
-      LeftDrive.spin(reverse);
-      RightDrive.spin(reverse);
+      Drivetrain.drive(reverse);
     } else if (Controller1.ButtonLeft.pressing()) {
-      LeftDrive.spin(reverse);
-      RightDrive.spin(forward);
+      Drivetrain.turn(left);
     } else if(Controller1.ButtonRight.pressing()) {
-      LeftDrive.spin(forward);
-      RightDrive.spin(reverse);
+      Drivetrain.turn(right);
     } else {
-      LeftDrive.stop();
-      RightDrive.stop();
+      Drivetrain.stop();
     }
     if (Controller1.ButtonA.pressing()) {
-      LeftDrive.stop();
-      RightDrive.stop();
+      Drivetrain.stop();
       break;
     }
   }
   wait(0.5,seconds);
-  LeftDrive.spin(forward);
-  RightDrive.spin(forward);
-  wait(3,seconds);
-  LeftDrive.stop();
-  RightDrive.stop();
+  Drivetrain.drive(forward);
+  wait(6,seconds);
+  Drivetrain.stop();
   wait(0.1,seconds);
-  LeftDrive.spin(forward);
-  RightDrive.spin(reverse);
+  Drivetrain.turn(left);
   wait(0.75,seconds);
-  LeftDrive.stop();
-  RightDrive.stop();
+  Drivetrain.stop();
   //Part1
   wait(0.1,seconds);
-  LeftDrive.spin(forward);
-  RightDrive.spin(forward);
-  wait(3,seconds);
-  LeftDrive.stop();
-  RightDrive.stop();
+  Drivetrain.drive(forward);
+  wait(4.5,seconds);
+  Drivetrain.stop();
   wait(0.1,seconds);
-  LeftDrive.spin(reverse);
-  RightDrive.spin(forward);
+  Drivetrain.turn(right);
   wait(0.75,seconds);
-  LeftDrive.stop();
-  RightDrive.stop();
+  Drivetrain.stop();
   //Part2
   wait(0.5,seconds);
-  LeftDrive.spin(forward);
-  RightDrive.spin(forward);
-  wait(3,seconds);
-  LeftDrive.stop();
-  RightDrive.stop();
+  Drivetrain.drive(forward);
+  wait(6,seconds);
+  Drivetrain.stop();
   wait(0.1,seconds);
-  LeftDrive.spin(reverse);
-  RightDrive.spin(forward);
-  wait(0.75,seconds);
-  LeftDrive.stop();
-  RightDrive.stop();
+  Drivetrain.turn(right);
+  wait(0.7,seconds);
+  Drivetrain.stop();
   //Part3
   wait(0.5,seconds);
-  LeftDrive.spin(forward);
-  RightDrive.spin(forward);
-  wait(3,seconds);
-  LeftDrive.stop();
-  RightDrive.stop();
+  Drivetrain.drive(forward);
+  wait(4.5,seconds);
+  Drivetrain.stop();
   wait(0.1,seconds);
-  LeftDrive.spin(forward);
-  RightDrive.spin(reverse);
+  Drivetrain.turn(left);
   wait(0.75,seconds);
-  LeftDrive.stop();
-  RightDrive.stop();
-  //Part4
-  wait(0.5,seconds);
-  LeftDrive.spin(forward);
-  RightDrive.spin(forward);
-  wait(3,seconds);
-  LeftDrive.stop();
-  RightDrive.stop();
+  Drivetrain.stop();
+  //part 4
+  wait(0.1,seconds);
+  Drivetrain.drive(forward);
+  wait(6,seconds);
+  Drivetrain.stop();
 }

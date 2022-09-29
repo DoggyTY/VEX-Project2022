@@ -75,8 +75,7 @@ void Player() {
     }
   }
 }
-
-//I don't believe that this would work with the function.
+de
 void AceBase() {
   while (!Auto) {
     if (Controller1.ButtonUp.pressing()) {

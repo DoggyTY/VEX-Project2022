@@ -94,8 +94,9 @@ void SlowAceBase() {
 }
 
 void AceBase() {
-  Drivetrain.setDriveVelocity(100,percent);
+  Drivetrain.setDriveVelocity(30,percent);
   while (true) {
+    break;
     if (Controller1.ButtonUp.pressing()) {
       Drivetrain.drive(forward);
     } else if (Controller1.ButtonDown.pressing()) {
@@ -112,44 +113,13 @@ void AceBase() {
       break;
     }
   }
-  wait(0.5,seconds);
-  Drivetrain.drive(forward);
-  wait(6,seconds);
-  Drivetrain.stop();
-  wait(0.1,seconds);
-  Drivetrain.turn(left);
-  wait(0.75,seconds);
-  Drivetrain.stop();
-  //Part1
-  wait(0.1,seconds);
-  Drivetrain.drive(forward);
-  wait(4.5,seconds);
-  Drivetrain.stop();
-  wait(0.1,seconds);
-  Drivetrain.turn(right);
-  wait(0.75,seconds);
-  Drivetrain.stop();
-  //Part2
-  wait(0.5,seconds);
-  Drivetrain.drive(forward);
-  wait(6,seconds);
-  Drivetrain.stop();
-  wait(0.1,seconds);
-  Drivetrain.turn(right);
-  wait(0.7,seconds);
-  Drivetrain.stop();
-  //Part3
-  wait(0.5,seconds);
-  Drivetrain.drive(forward);
-  wait(4.5,seconds);
-  Drivetrain.stop();
-  wait(0.1,seconds);
-  Drivetrain.turn(left);
-  wait(0.75,seconds);
-  Drivetrain.stop();
-  //part 4
-  wait(0.1,seconds);
-  Drivetrain.drive(forward);
-  wait(6,seconds);
-  Drivetrain.stop();
+  Drivetrain.driveFor(forward,65,inches);
+  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.driveFor(forward,50,inches);
+  Drivetrain.turnFor(right,73,degrees);
+  Drivetrain.driveFor(forward,83,inches);
+  Drivetrain.turnFor(right,73,degrees);
+  Drivetrain.driveFor(forward,50,inches);
+  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.driveFor(forward,65,inches);
 }

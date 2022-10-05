@@ -75,7 +75,6 @@ void Player() {
     }
   }
 }
-de
 void AceBase() {
   while (!Auto) {
     if (Controller1.ButtonUp.pressing()) {

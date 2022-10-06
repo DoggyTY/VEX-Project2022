@@ -70,17 +70,15 @@ void AceBase() {
 }
 
 void ControlStick() {
-  int AxisThree = Controller1.Axis3.position();
-  int AxisFour = Controller1.Axis4.position();
+  LeftDrive.spin(forward);
+  RightDrive.spin(forward);
   while (true) {
-    LeftDrive.spin(forward);
-    RightDrive.spin(forward);
-    if (AxisFour > 33 or AxisFour < -33) {
-      LeftDrive.setVelocity(AxisThree+AxisFour,pct);
-      RightDrive.setVelocity(AxisThree-AxisFour,pct);
+    if (Controller1.Axis3.position() > 33 or Controller1.Axis4.position() < -33) {
+      LeftDrive.setVelocity(Controller1.Axis3.position()+Controller1.Axis4.position(),percent);
+      RightDrive.setVelocity(Controller1.Axis3.position()-Controller1.Axis4.position(),percent);
     } else {
-      LeftDrive.setVelocity(AxisThree,pct);
-      RightDrive.setVelocity(AxisThree,pct);
+      LeftDrive.setVelocity(Controller1.Axis3.position(),percent);
+      RightDrive.setVelocity(Controller1.Axis3.position(),percent);
     }
   }
 }

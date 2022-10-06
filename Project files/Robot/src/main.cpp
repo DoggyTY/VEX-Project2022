@@ -82,10 +82,10 @@ void ControlStick() {
       RightDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
     }
 
-    if (Controller1.ButtonR1.pressing()) {
-      // insert motor here
+    if (Controller1.ButtonR2.pressing()) {
+      RollMotor.spin(forward);
     } else if (Controller1.ButtonR1.pressing()) {
-      // insert motor here
+      RollMotor.spin(reverse);
     }
   }
 }

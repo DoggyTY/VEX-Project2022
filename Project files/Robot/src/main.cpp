@@ -80,6 +80,12 @@ void ControlStick() {
       LeftDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
       RightDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
     }
+
+    if (Controller1.ButtonR1.pressing()) {
+      // insert motor here
+    } else if (Controller1.ButtonR1.pressing()) {
+      // insert motor here
+    }
   }
 }
 

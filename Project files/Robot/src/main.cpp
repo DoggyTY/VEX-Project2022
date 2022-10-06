@@ -17,6 +17,7 @@
 // RollMotor            motor         5               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
+#include "v5_apitypes.h"
 #include "vex.h"
 #include "vex_drivetrain.h"
 #include "vex_global.h"
@@ -24,6 +25,7 @@
 using namespace vex;
 void AceBase();
 void ControlStick();
+void CompAuto();
 int Speedcap = 2;
 int Turncap = 3;
 /* 
@@ -37,6 +39,7 @@ int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   ControlStick();
+  CompAuto();
   //AceBase();
 }
 
@@ -90,7 +93,21 @@ void ControlStick() {
     } else {
       RollMotor.stop();
     }
+    if (Controller1.ButtonA.pressing()){
+      break;
+    }
   }
+}
+
+void CompAuto() {
+  Drivetrain.driveFor(1,inches);
+  Drivetrain.turnFor(73,degrees);
+  Drivetrain.driveFor(14,inches);
+  Drivetrain.turnFor(73,degrees);
+  Drivetrain.driveFor(2,inches);
+  RollMotor.spin(forward);
+  wait(1,seconds);
+  RollMotor.stop();
 }
 
 // Don't look down here there isn't anything down here but suffering :)

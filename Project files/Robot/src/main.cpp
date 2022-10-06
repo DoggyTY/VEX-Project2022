@@ -73,6 +73,7 @@ void AceBase() {
 void ControlStick() {
   LeftDrive.spin(forward);
   RightDrive.spin(forward);
+  RollMotor.setVelocity(100,percent);
   while (true) {
     if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33) {
       LeftDrive.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
@@ -86,6 +87,8 @@ void ControlStick() {
       RollMotor.spin(forward);
     } else if (Controller1.ButtonR1.pressing()) {
       RollMotor.spin(reverse);
+    } else {
+      RollMotor.stop();
     }
   }
 }

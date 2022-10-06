@@ -23,8 +23,8 @@
 using namespace vex;
 void AceBase();
 void ControlStick();
-
-
+int Speedcap = 2;
+int Turncap = 3;
 /* 
 IMPORTANT VARIBLES/UNITS
 
@@ -73,12 +73,12 @@ void ControlStick() {
   LeftDrive.spin(forward);
   RightDrive.spin(forward);
   while (true) {
-    if (Controller1.Axis3.position() > 33 or Controller1.Axis4.position() < -33) {
-      LeftDrive.setVelocity(Controller1.Axis3.position()+Controller1.Axis4.position(),percent);
-      RightDrive.setVelocity(Controller1.Axis3.position()-Controller1.Axis4.position(),percent);
+    if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33) {
+      LeftDrive.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
+      RightDrive.setVelocity((Controller1.Axis3.position()-Controller1.Axis4.position())/Turncap,percent);
     } else {
-      LeftDrive.setVelocity(Controller1.Axis3.position(),percent);
-      RightDrive.setVelocity(Controller1.Axis3.position(),percent);
+      LeftDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
+      RightDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
     }
   }
 }

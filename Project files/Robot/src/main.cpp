@@ -11,8 +11,8 @@
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
-// LeftDrive            motor_group   1, 3            
-// RightDrive           motor_group   8, 10           
+// LeftDrive            motor_group   9, 10           
+// RightDrive           motor_group   1, 2            
 // Drivetrain           drivetrain    21, 20, 19, 18  
 // RollMotor            motor         5               
 // ---- END VEXCODE CONFIGURED DEVICES ----

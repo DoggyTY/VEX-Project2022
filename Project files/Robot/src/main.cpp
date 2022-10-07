@@ -27,7 +27,7 @@ void AceBase();
 void ControlStick();
 void CompAuto();
 int Speedcap = 2;
-int Turncap = 3;
+int Turncap = 2;
 /* 
 IMPORTANT VARIBLES/UNITS
 

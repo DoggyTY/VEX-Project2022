@@ -96,6 +96,10 @@ void ControlStick() {
     if (Controller1.ButtonA.pressing()){
       break;
     }
+    if (Controller1.ButtonB.pressing() && Brain.Timer.time() == 0){
+      Brain.setTimer(2, seconds);
+      Shoot.spinFor(1,seconds);
+    }
   }
 }
 

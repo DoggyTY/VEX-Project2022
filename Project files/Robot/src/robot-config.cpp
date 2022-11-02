@@ -1,4 +1,6 @@
 #include "vex.h"
+#include "vex_global.h"
+#include "vex_motorgroup.h"
 
 using namespace vex;
 using signature = vision::signature;
@@ -9,19 +11,16 @@ brain  Brain;
 
 // VEXcode device constructors
 controller Controller1 = controller(primary);
-motor LeftDriveMotorA = motor(PORT9, ratio18_1, true);
-motor LeftDriveMotorB = motor(PORT10, ratio18_1, false);
+motor LeftDriveMotorA = motor(PORT9, ratio18_1, false);
+motor LeftDriveMotorB = motor(PORT10, ratio18_1, true);
 motor_group LeftDrive = motor_group(LeftDriveMotorA, LeftDriveMotorB);
-motor RightDriveMotorA = motor(PORT1, ratio18_1, true);
-motor RightDriveMotorB = motor(PORT2, ratio18_1, false);
+motor RightDriveMotorA = motor(PORT1, ratio18_1, false);
+motor RightDriveMotorB = motor(PORT2, ratio18_1, true);
 motor_group RightDrive = motor_group(RightDriveMotorA, RightDriveMotorB);
-motor leftMotorA = motor(PORT21, ratio18_1, false);
-motor leftMotorB = motor(PORT20, ratio18_1, false);
-motor_group LeftDriveSmart = motor_group(leftMotorA, leftMotorB);
-motor rightMotorA = motor(PORT19, ratio18_1, true);
-motor rightMotorB = motor(PORT18, ratio18_1, true);
-motor_group RightDriveSmart = motor_group(rightMotorA, rightMotorB);
-drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 295, 40, mm, 1);
+drivetrain Drivetrain = drivetrain(LeftDrive, RightDrive, 319.19, 295, 40, mm, 1);
+motor ShootMotorLeft = motor(PORT14, ratio6_1,false);
+motor ShootMotorRight = motor(PORT15, ratio6_1, true);
+motor_group Shoot = motor_group(ShootMotorLeft, ShootMotorRight);
 motor RollMotor = motor(PORT5, ratio18_1, false);
 
 // VEXcode generated functions

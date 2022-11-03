@@ -26,6 +26,13 @@ using namespace vex;
 void AceBase();
 void ControlStick();
 void CompAuto();
+void driveforward(int i);
+void driveback(int i);
+void turnleft(int i);
+void turnright(int i);
+void rollup();
+void rolldown();
+void shoot();
 int Speedcap = 2;
 int Turncap = 2;
 /* 
@@ -114,4 +121,32 @@ void CompAuto() {
   RollMotor.stop();
 }
 
+void driveforward(int i) {
+  Drivetrain.driveFor(forward,i,inches);
+}
+void driveback(int i) {
+  Drivetrain.driveFor(reverse,i,inches);
+}
+void turnleft(int i) {
+  Drivetrain.turnFor(left,i,degrees);
+}
+void turnright(int i) {
+  Drivetrain.turnFor(right,i,degrees);
+}
+void rollup() {
+  RollMotor.spin(forward);
+  wait(1,seconds);
+  RollMotor.stop();
+}
+void rolldown() {
+  RollMotor.spin(reverse);
+  wait(1,seconds);
+  RollMotor.stop();
+}
+void shoot() {
+  Shoot.spinFor(1,seconds);
+}
+// void intake() {
+  
+// }
 // Don't look down here there isn't anything down here but suffering :)

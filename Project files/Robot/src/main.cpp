@@ -15,6 +15,7 @@
 // RightDrive           motor_group   1, 2            
 // Drivetrain           drivetrain    21, 20, 19, 18  
 // RollMotor            motor         5               
+// Shoot                motor_group   14, 15          
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "v5_apitypes.h"

@@ -143,10 +143,10 @@ void rolldown() {
   wait(1,seconds);
   RollMotor.stop();
 }
-void shoot() {
-  Shoot.spinFor(1,seconds);
+void shoot(int i) {
+  Shoot.spinFor(i,seconds);
 }
-// void intake() {
-  
-// }
+void intake(int i) {
+  Intake.spinFor(i,seconds);
+}
 // Don't look down here there isn't anything down here but suffering :)

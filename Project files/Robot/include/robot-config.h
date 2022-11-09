@@ -8,7 +8,8 @@ extern motor_group LeftDrive;
 extern motor_group RightDrive;
 extern drivetrain Drivetrain;
 extern motor RollMotor;
-extern motor_group ShootMotor;
+extern motor_group ShootMotors;
+extern motor ShootMotor;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

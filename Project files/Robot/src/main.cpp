@@ -15,7 +15,8 @@
 // RightDrive           motor_group   1, 2            
 // Drivetrain           drivetrain    21, 20, 19, 18  
 // RollMotor            motor         5               
-// ShootMotor           motor_group   14, 15          
+// ShootMotors          motor_group   14, 15          
+// ShootMotor           motor         16              
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "v5_apitypes.h"
@@ -47,7 +48,7 @@ int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   ControlStick();
-  ShootMotor.spinFor(10,seconds);
+
   //AceBase();
   //CompAuto();
 }
@@ -105,8 +106,7 @@ void ControlStick() {
     if (Controller1.ButtonA.pressing()){
       break;
     }
-    if (Controller1.ButtonB.pressing() && Brain.Timer.time() == 0){
-    Brain.setTimer(2, seconds);
+    while (Controller1.ButtonB.pressing()){
     shoot(1);
     }
   }
@@ -146,7 +146,7 @@ void rolldown() {
   RollMotor.stop();
 }
 void shoot(int i) {
-  ShootMotor.spinFor(i,seconds);
+  ShootMotors.spinFor(i,seconds);
 }
 // void intake(int i) {
 //   Intake.spinFor(i,seconds);

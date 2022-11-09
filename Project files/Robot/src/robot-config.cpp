@@ -23,7 +23,7 @@ motor rightMotorB = motor(PORT18, ratio18_1, true);
 motor_group RightDriveSmart = motor_group(rightMotorA, rightMotorB);
 drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 295, 40, mm, 1);
 motor RollMotor = motor(PORT5, ratio18_1, false);
-motor ShootMotorMotorA = motor(PORT16, ratio18_1, true);
+motor ShootMotorMotorA = motor(PORT14, ratio18_1, false);
 motor ShootMotorMotorB = motor(PORT15, ratio18_1, true);
 motor_group ShootMotor = motor_group(ShootMotorMotorA, ShootMotorMotorB);
 

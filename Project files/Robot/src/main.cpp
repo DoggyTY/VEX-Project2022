@@ -15,7 +15,7 @@
 // RightDrive           motor_group   1, 2            
 // Drivetrain           drivetrain    21, 20, 19, 18  
 // RollMotor            motor         5               
-// Shoot                motor_group   14, 15          
+// ShootMotor           motor_group   16, 15          
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "v5_apitypes.h"
@@ -105,8 +105,8 @@ void ControlStick() {
       break;
     }
     if (Controller1.ButtonB.pressing() && Brain.Timer.time() == 0){
-      Brain.setTimer(2, seconds);
-      Shoot.spinFor(1,seconds);
+      // Brain.setTimer(2, seconds);
+      // ShootMotor.spinFor(1,seconds);
     }
   }
 }
@@ -145,9 +145,9 @@ void rolldown() {
   RollMotor.stop();
 }
 void shoot(int i) {
-  Shoot.spinFor(i,seconds);
+  ShootMotor.spinFor(i,seconds);
 }
-void intake(int i) {
-  Intake.spinFor(i,seconds);
-}
+// void intake(int i) {
+//   Intake.spinFor(i,seconds);
+// }
 // Don't look down here there isn't anything down here but suffering :)

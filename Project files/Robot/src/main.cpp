@@ -16,7 +16,6 @@
 // Drivetrain           drivetrain    21, 20, 19, 18  
 // RollMotor            motor         5               
 // ShootMotors          motor_group   14, 15          
-// ShootMotor           motor         16              
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "v5_apitypes.h"
@@ -34,7 +33,7 @@ void turnleft(int i);
 void turnright(int i);
 void rollup();
 void rolldown();
-void shoot(int i);
+void shoot(double i);
 int Speedcap = 2;
 int Turncap = 2;
 /* 
@@ -95,7 +94,6 @@ void ControlStick() {
       LeftDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
       RightDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
     }
-
     if (Controller1.ButtonR2.pressing()) {
       RollMotor.spin(forward);
     } else if (Controller1.ButtonR1.pressing()) {
@@ -107,7 +105,10 @@ void ControlStick() {
       break;
     }
     while (Controller1.ButtonB.pressing()){
-    shoot(1);
+    shoot(0.1);
+    }
+    if (Controller1.ButtonX.pressing()) {
+    shoot(2);
     }
   }
 }
@@ -145,7 +146,7 @@ void rolldown() {
   wait(1,seconds);
   RollMotor.stop();
 }
-void shoot(int i) {
+void shoot(double i) {
   ShootMotors.spinFor(i,seconds);
 }
 // void intake(int i) {

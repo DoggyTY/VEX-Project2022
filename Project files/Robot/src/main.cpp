@@ -14,9 +14,8 @@
 // LeftDrive            motor_group   9, 10           
 // RightDrive           motor_group   1, 2            
 // Drivetrain           drivetrain    21, 20, 19, 18  
-// RollMotor            motor         3               
-// IntakeMotor          motor         4               
-// ShootMotors          motor_group   5, 6            
+// IntakeMotor          motor         3               
+// ShootMotors          motor_group   4, 5            
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "v5_apitypes.h"
@@ -25,9 +24,9 @@
 #include "vex_global.h"
 
 using namespace vex;
-void AceBase();
 void Controller();
-void CompAuto();
+void Auto1();
+void Auto2();
 void driveforward(int i);
 void driveback(int i);
 void turnleft(int i);
@@ -36,11 +35,9 @@ void rollup();
 void rolldown();
 void shoot(double i);
 void intake(double i);
-void Auto1();
-void Auto2();
 int Speedcap = 2;
 int Turncap = 2;
-/* 
+/*
 IMPORTANT VARIBLES/UNITS
 
 One tile on the board: 14 inches
@@ -58,7 +55,7 @@ int main() {
 void Controller() {
   LeftDrive.spin(forward);
   RightDrive.spin(forward);
-  RollMotor.setVelocity(100,percent);
+  IntakeMotor.setVelocity(100,percent);
   while (true) {
     if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33) {
       LeftDrive.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
@@ -67,21 +64,14 @@ void Controller() {
       LeftDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
       RightDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
     }
-    if (Controller1.ButtonR2.pressing()) {
-      RollMotor.spin(forward);
-    } else if (Controller1.ButtonR1.pressing()) {
-      RollMotor.spin(reverse);
-    } else {
-      RollMotor.stop();
+    while (Controller1.ButtonL1.pressing()) {
+      intake(0.1);
+    }
+    while (Controller1.ButtonB.pressing()){
+      shoot(0.1);
     }
     if (Controller1.ButtonX.pressing()){
       break;
-    }
-    while (Controller1.ButtonB.pressing()){
-    shoot(0.1);
-    }
-    while (Controller1.ButtonA.pressing()) {
-    intake(0.1);
     }
   }
 }
@@ -97,15 +87,8 @@ void turnleft(int i) {
 void turnright(int i) {
   Drivetrain.turnFor(right,i,degrees);
 }
-void rollup() {
-  RollMotor.spin(forward);
-  wait(1,seconds);
-  RollMotor.stop();
-}
-void rolldown() {
-  RollMotor.spin(reverse);
-  wait(1,seconds);
-  RollMotor.stop();
+void roller(double i) {
+  IntakeMotor.spinFor(i,seconds);
 }
 void shoot(double i) {
   ShootMotors.spinFor(i,seconds);
@@ -114,49 +97,8 @@ void intake(double i) {
   IntakeMotor.spinFor(i,seconds);
 }
 void Auto1() {
-
 }
 void Auto2() {
-  
 }
-// void AceBase() {
-//   Drivetrain.setDriveVelocity(30,percent);
-//   while (true) {
-//     if (Controller1.ButtonUp.pressing()) {
-//       Drivetrain.drive(forward);
-//     } else if (Controller1.ButtonDown.pressing()) {
-//       Drivetrain.drive(reverse);
-//     } else if (Controller1.ButtonLeft.pressing()) {
-//       Drivetrain.turn(left);
-//     } else if(Controller1.ButtonRight.pressing()) {
-//       Drivetrain.turn(right);
-//     } else {
-//       Drivetrain.stop();
-//     }
-//     if (Controller1.ButtonA.pressing()) {
-//       Drivetrain.stop();
-//       break;
-//     }
-//   }
-//   Drivetrain.driveFor(forward,65,inches);
-//   Drivetrain.turnFor(left,73,degrees);
-//   Drivetrain.driveFor(forward,50,inches);
-//   Drivetrain.turnFor(right,73,degrees);
-//   Drivetrain.driveFor(forward,83,inches);
-//   Drivetrain.turnFor(right,73,degrees);
-//   Drivetrain.driveFor(forward,50,inches);
-//   Drivetrain.turnFor(left,73,degrees);
-//   Drivetrain.driveFor(forward,65,inches);
-// }
-// void CompAuto() {
-//   Drivetrain.driveFor(1,inches);
-//   Drivetrain.turnFor(73,degrees);
-//   Drivetrain.driveFor(14,inches);
-//   Drivetrain.turnFor(73,degrees);
-//   Drivetrain.driveFor(2,inches);
-//   RollMotor.spin(forward);
-//   wait(1,seconds);
-//   RollMotor.stop();
-// }
 
 // Don't look down here there isn't anything down here but suffering :)

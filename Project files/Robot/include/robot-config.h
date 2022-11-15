@@ -7,7 +7,6 @@ extern controller Controller1;
 extern motor_group LeftDrive;
 extern motor_group RightDrive;
 extern drivetrain Drivetrain;
-extern motor RollMotor;
 extern motor IntakeMotor;
 extern motor_group ShootMotors;
 

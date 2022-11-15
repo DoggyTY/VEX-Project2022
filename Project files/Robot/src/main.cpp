@@ -16,6 +16,7 @@
 // Drivetrain           drivetrain    21, 20, 19, 18  
 // RollMotor            motor         5               
 // ShootMotors          motor_group   14, 15          
+// IntakeMotor          motor         16              
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "v5_apitypes.h"
@@ -25,7 +26,7 @@
 
 using namespace vex;
 void AceBase();
-void ControlStick();
+void Controller();
 void CompAuto();
 void driveforward(int i);
 void driveback(int i);
@@ -34,6 +35,7 @@ void turnright(int i);
 void rollup();
 void rolldown();
 void shoot(double i);
+void intake(double i);
 int Speedcap = 2;
 int Turncap = 2;
 /* 
@@ -46,10 +48,67 @@ One tile on the board: 14 inches
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-  ControlStick();
+  Controller();
+}
 
-  //AceBase();
-  //CompAuto();
+void Controller() {
+  LeftDrive.spin(forward);
+  RightDrive.spin(forward);
+  RollMotor.setVelocity(100,percent);
+  while (true) {
+    if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33) {
+      LeftDrive.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
+      RightDrive.setVelocity((Controller1.Axis3.position()-Controller1.Axis4.position())/Turncap,percent);
+    } else {
+      LeftDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
+      RightDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
+    }
+    if (Controller1.ButtonR2.pressing()) {
+      RollMotor.spin(forward);
+    } else if (Controller1.ButtonR1.pressing()) {
+      RollMotor.spin(reverse);
+    } else {
+      RollMotor.stop();
+    }
+    if (Controller1.ButtonX.pressing()){
+      break;
+    }
+    while (Controller1.ButtonB.pressing()){
+    shoot(0.1);
+    }
+    while (Controller1.ButtonA.pressing()) {
+    intake(0.1);
+    }
+  }
+}
+
+void driveforward(int i) {
+  Drivetrain.driveFor(forward,i,inches);
+}
+void driveback(int i) {
+  Drivetrain.driveFor(reverse,i,inches);
+}
+void turnleft(int i) {
+  Drivetrain.turnFor(left,i,degrees);
+}
+void turnright(int i) {
+  Drivetrain.turnFor(right,i,degrees);
+}
+void rollup() {
+  RollMotor.spin(forward);
+  wait(1,seconds);
+  RollMotor.stop();
+}
+void rolldown() {
+  RollMotor.spin(reverse);
+  wait(1,seconds);
+  RollMotor.stop();
+}
+void shoot(double i) {
+  ShootMotors.spinFor(i,seconds);
+}
+void intake(double i) {
+  IntakeMotor.spinFor(i,seconds);
 }
 
 void AceBase() {
@@ -81,38 +140,6 @@ void AceBase() {
   Drivetrain.turnFor(left,73,degrees);
   Drivetrain.driveFor(forward,65,inches);
 }
-
-void ControlStick() {
-  LeftDrive.spin(forward);
-  RightDrive.spin(forward);
-  RollMotor.setVelocity(100,percent);
-  while (true) {
-    if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33) {
-      LeftDrive.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
-      RightDrive.setVelocity((Controller1.Axis3.position()-Controller1.Axis4.position())/Turncap,percent);
-    } else {
-      LeftDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
-      RightDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
-    }
-    if (Controller1.ButtonR2.pressing()) {
-      RollMotor.spin(forward);
-    } else if (Controller1.ButtonR1.pressing()) {
-      RollMotor.spin(reverse);
-    } else {
-      RollMotor.stop();
-    }
-    if (Controller1.ButtonA.pressing()){
-      break;
-    }
-    while (Controller1.ButtonB.pressing()){
-    shoot(0.1);
-    }
-    if (Controller1.ButtonX.pressing()) {
-    shoot(2);
-    }
-  }
-}
-
 void CompAuto() {
   Drivetrain.driveFor(1,inches);
   Drivetrain.turnFor(73,degrees);
@@ -123,33 +150,4 @@ void CompAuto() {
   wait(1,seconds);
   RollMotor.stop();
 }
-
-void driveforward(int i) {
-  Drivetrain.driveFor(forward,i,inches);
-}
-void driveback(int i) {
-  Drivetrain.driveFor(reverse,i,inches);
-}
-void turnleft(int i) {
-  Drivetrain.turnFor(left,i,degrees);
-}
-void turnright(int i) {
-  Drivetrain.turnFor(right,i,degrees);
-}
-void rollup() {
-  RollMotor.spin(forward);
-  wait(1,seconds);
-  RollMotor.stop();
-}
-void rolldown() {
-  RollMotor.spin(reverse);
-  wait(1,seconds);
-  RollMotor.stop();
-}
-void shoot(double i) {
-  ShootMotors.spinFor(i,seconds);
-}
-// void intake(int i) {
-//   Intake.spinFor(i,seconds);
-// }
 // Don't look down here there isn't anything down here but suffering :)

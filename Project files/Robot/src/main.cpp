@@ -192,6 +192,5 @@ void Auto3Shoot(){
   ShootMotors.spin(forward);
   IntakeMotor.spinFor(forward,5,seconds);
   ShootMotors.stop();
-
 }
-// Don't look down here there isn't anything down here but suffering :)
+// Don't look down here there isn't anything down here but suffering and Cody's dumb methods XD

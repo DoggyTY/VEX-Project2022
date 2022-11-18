@@ -25,8 +25,12 @@
 
 using namespace vex;
 void Controller();
-void Auto1();
-void Auto2();
+void Auto1Default();
+void Auto1Rollers();
+void Auto1Shoot();
+void Auto3Default();
+void Auto3Rollers();
+void Auto3Shoot();
 void driveforward(int i);
 void driveback(int i);
 void turnleft(double i);
@@ -45,10 +49,15 @@ One tile on the board: 14 inches
 1 degree turn: 0.8111111111111111111111111111111111111 (This is infinite but change it to 8 if you want to)
 */
 int main(){
-  // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-  // Auto1();
-  // Auto2();
+  // Auto1Default();
+  // Auto3Default();
+
+  // Auto1Rollers();
+  // Auto3Rollers();
+
+  // Auto1Shoot();
+  // Auto3Shoot();
   Controller();
 }
 void Controller(){
@@ -96,8 +105,93 @@ void shoot(double i){
 void intake(double i){
   IntakeMotor.spinFor(i,seconds);
 }
-void Auto1(){
+void Auto1Default(){
+  Drivetrain.driveFor(forward,4,inches);
+  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.driveFor(forward,14,inches);
+  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.driveFor(forward,4,inches);
+  IntakeMotor.spinFor(forward,1,seconds);
+  Drivetrain.driveFor(reverse,4,inches);
+  Drivetrain.turnFor(left,73,degrees);
+  IntakeMotor.spin(forward);
+  Drivetrain.driveFor(forward,18,inches);
+  IntakeMotor.stop();
+  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.driveFor(forward,14,inches);
+  Drivetrain.turnFor(left,28,degrees);
+  ShootMotors.spin(forward);
+  IntakeMotor.spinFor(forward,5,seconds);
+  ShootMotors.stop();
 }
-void Auto2(){
+void Auto1Rollers(){
+  Drivetrain.driveFor(forward,4,inches);
+  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.driveFor(forward,14,inches);
+  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.driveFor(forward,4,inches);
+  IntakeMotor.spinFor(forward,1,seconds);
+  Drivetrain.driveFor(reverse,4,inches);
+  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.driveFor(forward,56,inches);
+  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.driveFor(forward,56,inches);
+  Drivetrain.turnFor(right,73,degrees);
+  Drivetrain.driveFor(forward,4,inches);
+  IntakeMotor.spinFor(forward,1,seconds);
+}
+void Auto1Shoot(){
+  IntakeMotor.spin(forward);
+  Drivetrain.driveFor(forward,14,inches);
+  IntakeMotor.stop();
+  Drivetrain.turnFor(left,28,degrees);
+  ShootMotors.spin(forward);
+  IntakeMotor.spinFor(forward,5,seconds);
+  ShootMotors.stop();
+}
+void Auto3Default(){
+  Drivetrain.driveFor(forward,4,inches);
+  Drivetrain.turnFor(right,73,degrees);
+  Drivetrain.driveFor(forward,14,inches);
+  Drivetrain.turnFor(right,73,degrees);
+  Drivetrain.driveFor(forward,4,inches);
+  IntakeMotor.spinFor(forward,1,seconds);
+  Drivetrain.driveFor(reverse,4,inches);
+  Drivetrain.turnFor(right,108,degrees);
+  IntakeMotor.spin(forward);
+  Drivetrain.driveFor(forward,45,inches);
+  IntakeMotor.stop();
+  Drivetrain.turnFor(right,80,degrees);
+  ShootMotors.spin(forward);
+  IntakeMotor.spinFor(forward,5,seconds);
+  ShootMotors.stop();
+}
+void Auto3Rollers(){
+  Drivetrain.driveFor(forward,4,inches);
+  Drivetrain.turnFor(right,73,degrees);
+  Drivetrain.driveFor(forward,14,inches);
+  Drivetrain.turnFor(right,73,degrees);
+  Drivetrain.driveFor(forward,4,inches);
+  IntakeMotor.spinFor(forward,1,seconds);
+  Drivetrain.driveFor(reverse,4,inches);
+  Drivetrain.turnFor(right,73,degrees);
+  Drivetrain.driveFor(forward,56,inches);
+  Drivetrain.turnFor(right,73,degrees);
+  Drivetrain.driveFor(forward,56,inches);
+  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.driveFor(forward,4,inches);
+  IntakeMotor.spinFor(forward,1,seconds);
+}
+void Auto3Shoot(){
+  Drivetrain.driveFor(forward,14,inches);
+  Drivetrain.turnFor(left,108,degrees);
+  IntakeMotor.spin(forward);
+  Drivetrain.driveFor(forward,20,inches);
+  IntakeMotor.stop();
+  Drivetrain.turnFor(right,80,degrees);
+  ShootMotors.spin(forward);
+  IntakeMotor.spinFor(forward,5,seconds);
+  ShootMotors.stop();
+
 }
 // Don't look down here there isn't anything down here but suffering :)

@@ -29,8 +29,8 @@ void Auto1();
 void Auto2();
 void driveforward(int i);
 void driveback(int i);
-void turnleft(int i);
-void turnright(int i);
+void turnleft(double i);
+void turnright(double i);
 void rollup();
 void rolldown();
 void shoot(double i);
@@ -44,27 +44,27 @@ One tile on the board: 14 inches
 90 degree turn: 73 degrees
 1 degree turn: 0.8111111111111111111111111111111111111 (This is infinite but change it to 8 if you want to)
 */
-int main() {
+int main(){
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   // Auto1();
   // Auto2();
   Controller();
 }
-
-void Controller() {
+void Controller(){
   LeftDrive.spin(forward);
   RightDrive.spin(forward);
   IntakeMotor.setVelocity(100,percent);
-  while (true) {
-    if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33) {
+  ShootMotors.setVelocity(75,percent);
+  while (true){
+    if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33){
       LeftDrive.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
       RightDrive.setVelocity((Controller1.Axis3.position()-Controller1.Axis4.position())/Turncap,percent);
-    } else {
+    } else{
       LeftDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
       RightDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
     }
-    while (Controller1.ButtonL1.pressing()) {
+    while (Controller1.ButtonL1.pressing()){
       intake(0.1);
     }
     while (Controller1.ButtonB.pressing()){
@@ -75,30 +75,29 @@ void Controller() {
     }
   }
 }
-void driveforward(int i) {
+void driveforward(int i){
   Drivetrain.driveFor(forward,i,inches);
 }
-void driveback(int i) {
+void driveback(int i){
   Drivetrain.driveFor(reverse,i,inches);
 }
-void turnleft(int i) {
+void turnleft(double i){
   Drivetrain.turnFor(left,i,degrees);
 }
-void turnright(int i) {
+void turnright(double i){
   Drivetrain.turnFor(right,i,degrees);
 }
-void roller(double i) {
+void roller(double i){
   IntakeMotor.spinFor(i,seconds);
 }
-void shoot(double i) {
+void shoot(double i){
   ShootMotors.spinFor(i,seconds);
 }
-void intake(double i) {
+void intake(double i){
   IntakeMotor.spinFor(i,seconds);
 }
-void Auto1() {
+void Auto1(){
 }
-void Auto2() {
+void Auto2(){
 }
-
 // Don't look down here there isn't anything down here but suffering :)

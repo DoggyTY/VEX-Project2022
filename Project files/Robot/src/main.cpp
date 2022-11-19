@@ -35,15 +35,12 @@ void driveforward(int i);
 void driveback(int i);
 void turnleft(double i);
 void turnright(double i);
-void rollup();
-void rolldown();
 void shoot(double i);
 void intake(double i);
 int Speedcap = 2;
 int Turncap = 2;
 /*
 IMPORTANT VARIBLES/UNITS
-
 One tile on the board: 14 inches
 90 degree turn: 73 degrees
 1 degree turn: 0.8111111111111111111111111111111111111 (This is infinite but change it to 8 if you want to)
@@ -55,7 +52,7 @@ int main(){
 
   // Auto1Rollers();
   // Auto3Rollers();
-
+  
   // Auto1Shoot();
   // Auto3Shoot();
   Controller();
@@ -76,7 +73,7 @@ void Controller(){
     while (Controller1.ButtonL1.pressing()){
       intake(0.1);
     }
-    while (Controller1.ButtonB.pressing()){
+    while (Controller1.ButtonR1.pressing()){
       shoot(0.1);
     }
     if (Controller1.ButtonX.pressing()){
@@ -126,6 +123,8 @@ void Auto1Default(){
 }
 void Auto1Rollers(){
   //preload 2 discs
+  //once robot works I have an idea for not needing to preload 
+  //and being able to just pick up 3 discs on the way
   Drivetrain.driveFor(forward,4,inches);
   Drivetrain.turnFor(left,73,degrees);
   Drivetrain.driveFor(forward,14,inches);
@@ -169,6 +168,8 @@ void Auto3Default(){
 }
 void Auto3Rollers(){
   //preload 2 discs
+  //once robot works I have an idea for not needing to preload 
+  //and being able to just pick up 3 discs on the way
   Drivetrain.driveFor(forward,4,inches);
   Drivetrain.turnFor(right,73,degrees);
   Drivetrain.driveFor(forward,14,inches);
@@ -195,4 +196,5 @@ void Auto3Shoot(){
   IntakeMotor.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
-//Don't look down here there isn't anything down here but suffering and Cody's dumb methods XD
+//Don't look down here there isn't anything down here but suffering :)
+//and Cody's dumb methods XD

@@ -114,17 +114,18 @@ void Auto1Default(){
   IntakeMotor.spinFor(forward,1,seconds);
   Drivetrain.driveFor(reverse,4,inches);
   Drivetrain.turnFor(left,73,degrees);
-  IntakeMotor.spin(forward);
   Drivetrain.driveFor(forward,18,inches);
-  IntakeMotor.stop();
   Drivetrain.turnFor(left,73,degrees);
+  IntakeMotor.spin(forward);
   Drivetrain.driveFor(forward,14,inches);
+  IntakeMotor.stop();
   Drivetrain.turnFor(left,28,degrees);
   ShootMotors.spin(forward);
   IntakeMotor.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
 void Auto1Rollers(){
+  //preload 2 discs
   Drivetrain.driveFor(forward,4,inches);
   Drivetrain.turnFor(left,73,degrees);
   Drivetrain.driveFor(forward,14,inches);
@@ -167,6 +168,7 @@ void Auto3Default(){
   ShootMotors.stop();
 }
 void Auto3Rollers(){
+  //preload 2 discs
   Drivetrain.driveFor(forward,4,inches);
   Drivetrain.turnFor(right,73,degrees);
   Drivetrain.driveFor(forward,14,inches);
@@ -193,4 +195,4 @@ void Auto3Shoot(){
   IntakeMotor.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
-// Don't look down here there isn't anything down here but suffering and Cody's dumb methods XD
+//Don't look down here there isn't anything down here but suffering and Cody's dumb methods XD

@@ -36,7 +36,8 @@ void driveback(int i);
 void turnleft(double i);
 void turnright(double i);
 void shoot(double i);
-void intake(double i);
+void intakeup(double i);
+void intakedown(double i);
 int Speedcap = 2;
 int Turncap = 2;
 /*
@@ -71,7 +72,10 @@ void Controller(){
       RightDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
     }
     while (Controller1.ButtonL1.pressing()){
-      intake(0.1);
+      intakeup(0.1);
+    }
+    while (Controller1.ButtonL1.pressing()){
+      intakedown(0.1);
     }
     while (Controller1.ButtonR1.pressing()){
       shoot(0.1);
@@ -99,7 +103,10 @@ void roller(double i){
 void shoot(double i){
   ShootMotors.spinFor(i,seconds);
 }
-void intake(double i){
+void intakeup(double i){
+  IntakeMotor.spinFor(i,seconds);
+}
+void intakedown(double i){
   IntakeMotor.spinFor(i,seconds);
 }
 void Auto1Default(){

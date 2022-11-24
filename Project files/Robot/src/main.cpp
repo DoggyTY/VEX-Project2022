@@ -11,11 +11,9 @@
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
-// LeftDrive            motor_group   9, 10           
-// RightDrive           motor_group   1, 2            
-// Drivetrain           drivetrain    21, 20, 19, 18  
 // IntakeMotor          motor         3               
 // ShootMotors          motor_group   4, 5            
+// Drivetrain           drivetrain    9, 10, 20, 21   
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "v5_apitypes.h"
@@ -56,20 +54,21 @@ int main(){
   
   // Auto1Shoot();
   // Auto3Shoot();
-  Controller();
+  // Controller();
+  Drivetrain.turnFor(left,90,degrees);
 }
 void Controller(){
-  LeftDrive.spin(forward);
-  RightDrive.spin(forward);
+  //LeftDriveSmart.spin(forward);
+  //RightDriveSmart.spin(forward);
   IntakeMotor.setVelocity(100,percent);
   ShootMotors.setVelocity(75,percent);
   while (true){
     if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33){
-      LeftDrive.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
-      RightDrive.setVelocity((Controller1.Axis3.position()-Controller1.Axis4.position())/Turncap,percent);
+      //LeftDriveSmart.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
+      //RightDriveSmart.setVelocity((Controller1.Axis3.position()-Controller1.Axis4.position())/Turncap,percent);
     } else{
-      LeftDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
-      RightDrive.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
+      //LeftDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
+      //RightDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
     }
     while (Controller1.ButtonL1.pressing()){
       intakeup(0.1);

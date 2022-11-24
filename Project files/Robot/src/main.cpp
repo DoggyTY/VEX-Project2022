@@ -11,9 +11,9 @@
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
-// IntakeMotor          motor         3               
-// ShootMotors          motor_group   4, 5            
+// ShootMotors          motor_group   3, 4            
 // Drivetrain           drivetrain    9, 10, 20, 21   
+// IntakeMotors         motor_group   1, 2            
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "v5_apitypes.h"
@@ -54,22 +54,21 @@ int main(){
   
   // Auto1Shoot();
   // Auto3Shoot();
-  // Controller();
-  Drivetrain.turnFor(left,90,degrees);
+  Controller();
 }
 void Controller(){
   //LeftDriveSmart.spin(forward);
   //RightDriveSmart.spin(forward);
-  IntakeMotor.setVelocity(100,percent);
+  IntakeMotors.setVelocity(100,percent);
   ShootMotors.setVelocity(75,percent);
   while (true){
-    if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33){
-      //LeftDriveSmart.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
-      //RightDriveSmart.setVelocity((Controller1.Axis3.position()-Controller1.Axis4.position())/Turncap,percent);
-    } else{
-      //LeftDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
-      //RightDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
-    }
+  //   if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33){
+  //     //LeftDriveSmart.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
+  //     //RightDriveSmart.setVelocity((Controller1.Axis3.position()-Controller1.Axis4.position())/Turncap,percent);
+  //   } else{
+  //     //LeftDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
+  //     //RightDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
+  //   }
     while (Controller1.ButtonL1.pressing()){
       intakeup(0.1);
     }
@@ -97,16 +96,16 @@ void turnright(double i){
   Drivetrain.turnFor(right,i,degrees);
 }
 void roller(double i){
-  IntakeMotor.spinFor(i,seconds);
+  IntakeMotors.spinFor(i,seconds);
 }
 void shoot(double i){
   ShootMotors.spinFor(i,seconds);
 }
 void intakeup(double i){
-  IntakeMotor.spinFor(i,seconds);
+  IntakeMotors.spinFor(forward,i,seconds);
 }
 void intakedown(double i){
-  IntakeMotor.spinFor(i,seconds);
+  IntakeMotors.spinFor(reverse,i,seconds);
 }
 void Auto1Default(){
   Drivetrain.driveFor(forward,4,inches);
@@ -114,17 +113,17 @@ void Auto1Default(){
   Drivetrain.driveFor(forward,14,inches);
   Drivetrain.turnFor(left,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
-  IntakeMotor.spinFor(forward,1,seconds);
+  IntakeMotors.spinFor(forward,1,seconds);
   Drivetrain.driveFor(reverse,4,inches);
   Drivetrain.turnFor(left,90,degrees);
   Drivetrain.driveFor(forward,26,inches);
   Drivetrain.turnFor(left,90,degrees);
-  IntakeMotor.spin(forward);
+  IntakeMotors.spin(forward);
   Drivetrain.driveFor(forward,24,inches);
-  IntakeMotor.stop();
+  IntakeMotors.stop();
   Drivetrain.turnFor(left,35,degrees);
   ShootMotors.spin(forward);
-  IntakeMotor.spinFor(forward,5,seconds);
+  IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
 void Auto1Rollers(){
@@ -136,7 +135,7 @@ void Auto1Rollers(){
   Drivetrain.driveFor(forward,24,inches);
   Drivetrain.turnFor(left,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
-  IntakeMotor.spinFor(forward,1,seconds);
+  IntakeMotors.spinFor(forward,1,seconds);
   Drivetrain.driveFor(reverse,4,inches);
   Drivetrain.turnFor(left,90,degrees);
   Drivetrain.driveFor(forward,96,inches);
@@ -144,15 +143,15 @@ void Auto1Rollers(){
   Drivetrain.driveFor(forward,96,inches);
   Drivetrain.turnFor(right,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
-  IntakeMotor.spinFor(forward,1,seconds);
+  IntakeMotors.spinFor(forward,1,seconds);
 }
 void Auto1Shoot(){
-  IntakeMotor.spin(forward);
+  IntakeMotors.spin(forward);
   Drivetrain.driveFor(forward,24,inches);
-  IntakeMotor.stop();
+  IntakeMotors.stop();
   Drivetrain.turnFor(left,35,degrees);
   ShootMotors.spin(forward);
-  IntakeMotor.spinFor(forward,5,seconds);
+  IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
 void Auto3Default(){
@@ -161,15 +160,15 @@ void Auto3Default(){
   Drivetrain.driveFor(forward,24,inches);
   Drivetrain.turnFor(right,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
-  IntakeMotor.spinFor(forward,1,seconds);
+  IntakeMotors.spinFor(forward,1,seconds);
   Drivetrain.driveFor(reverse,4,inches);
   Drivetrain.turnFor(right,135,degrees);
-  IntakeMotor.spin(forward);
+  IntakeMotors.spin(forward);
   Drivetrain.driveFor(forward,45,inches);
-  IntakeMotor.stop();
+  IntakeMotors.stop();
   Drivetrain.turnFor(right,80,degrees);
   ShootMotors.spin(forward);
-  IntakeMotor.spinFor(forward,5,seconds);
+  IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
 void Auto3Rollers(){
@@ -181,7 +180,7 @@ void Auto3Rollers(){
   Drivetrain.driveFor(forward,24,inches);
   Drivetrain.turnFor(right,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
-  IntakeMotor.spinFor(forward,1,seconds);
+  IntakeMotors.spinFor(forward,1,seconds);
   Drivetrain.driveFor(reverse,4,inches);
   Drivetrain.turnFor(right,90,degrees);
   Drivetrain.driveFor(forward,96,inches);
@@ -189,17 +188,17 @@ void Auto3Rollers(){
   Drivetrain.driveFor(forward,96,inches);
   Drivetrain.turnFor(left,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
-  IntakeMotor.spinFor(forward,1,seconds);
+  IntakeMotors.spinFor(forward,1,seconds);
 }
 void Auto3Shoot(){
   Drivetrain.driveFor(forward,24,inches);
   Drivetrain.turnFor(left,135,degrees);
-  IntakeMotor.spin(forward);
+  IntakeMotors.spin(forward);
   Drivetrain.driveFor(forward,20,inches);
-  IntakeMotor.stop();
+  IntakeMotors.stop();
   Drivetrain.turnFor(right,80,degrees);
   ShootMotors.spin(forward);
-  IntakeMotor.spinFor(forward,5,seconds);
+  IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
 //Don't look down here there isn't anything down here but suffering :)

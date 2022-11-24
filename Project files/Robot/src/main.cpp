@@ -111,19 +111,19 @@ void intakedown(double i){
 }
 void Auto1Default(){
   Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.turnFor(left,90,degrees);
   Drivetrain.driveFor(forward,14,inches);
-  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.turnFor(left,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotor.spinFor(forward,1,seconds);
   Drivetrain.driveFor(reverse,4,inches);
-  Drivetrain.turnFor(left,73,degrees);
-  Drivetrain.driveFor(forward,18,inches);
-  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.driveFor(forward,26,inches);
+  Drivetrain.turnFor(left,90,degrees);
   IntakeMotor.spin(forward);
-  Drivetrain.driveFor(forward,14,inches);
+  Drivetrain.driveFor(forward,24,inches);
   IntakeMotor.stop();
-  Drivetrain.turnFor(left,28,degrees);
+  Drivetrain.turnFor(left,35,degrees);
   ShootMotors.spin(forward);
   IntakeMotor.spinFor(forward,5,seconds);
   ShootMotors.stop();
@@ -133,38 +133,38 @@ void Auto1Rollers(){
   //once robot works I have an idea for not needing to preload 
   //and being able to just pick up 3 discs on the way
   Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(left,73,degrees);
-  Drivetrain.driveFor(forward,14,inches);
-  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.driveFor(forward,24,inches);
+  Drivetrain.turnFor(left,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotor.spinFor(forward,1,seconds);
   Drivetrain.driveFor(reverse,4,inches);
-  Drivetrain.turnFor(left,73,degrees);
-  Drivetrain.driveFor(forward,56,inches);
-  Drivetrain.turnFor(left,73,degrees);
-  Drivetrain.driveFor(forward,56,inches);
-  Drivetrain.turnFor(right,73,degrees);
+  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.driveFor(forward,96,inches);
+  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.driveFor(forward,96,inches);
+  Drivetrain.turnFor(right,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotor.spinFor(forward,1,seconds);
 }
 void Auto1Shoot(){
   IntakeMotor.spin(forward);
-  Drivetrain.driveFor(forward,14,inches);
+  Drivetrain.driveFor(forward,24,inches);
   IntakeMotor.stop();
-  Drivetrain.turnFor(left,28,degrees);
+  Drivetrain.turnFor(left,35,degrees);
   ShootMotors.spin(forward);
   IntakeMotor.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
 void Auto3Default(){
   Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(right,73,degrees);
-  Drivetrain.driveFor(forward,14,inches);
-  Drivetrain.turnFor(right,73,degrees);
+  Drivetrain.turnFor(right,90,degrees);
+  Drivetrain.driveFor(forward,24,inches);
+  Drivetrain.turnFor(right,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotor.spinFor(forward,1,seconds);
   Drivetrain.driveFor(reverse,4,inches);
-  Drivetrain.turnFor(right,108,degrees);
+  Drivetrain.turnFor(right,135,degrees);
   IntakeMotor.spin(forward);
   Drivetrain.driveFor(forward,45,inches);
   IntakeMotor.stop();
@@ -178,23 +178,23 @@ void Auto3Rollers(){
   //once robot works I have an idea for not needing to preload 
   //and being able to just pick up 3 discs on the way
   Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(right,73,degrees);
-  Drivetrain.driveFor(forward,14,inches);
-  Drivetrain.turnFor(right,73,degrees);
+  Drivetrain.turnFor(right,90,degrees);
+  Drivetrain.driveFor(forward,24,inches);
+  Drivetrain.turnFor(right,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotor.spinFor(forward,1,seconds);
   Drivetrain.driveFor(reverse,4,inches);
-  Drivetrain.turnFor(right,73,degrees);
-  Drivetrain.driveFor(forward,56,inches);
-  Drivetrain.turnFor(right,73,degrees);
-  Drivetrain.driveFor(forward,56,inches);
-  Drivetrain.turnFor(left,73,degrees);
+  Drivetrain.turnFor(right,90,degrees);
+  Drivetrain.driveFor(forward,96,inches);
+  Drivetrain.turnFor(right,90,degrees);
+  Drivetrain.driveFor(forward,96,inches);
+  Drivetrain.turnFor(left,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotor.spinFor(forward,1,seconds);
 }
 void Auto3Shoot(){
-  Drivetrain.driveFor(forward,14,inches);
-  Drivetrain.turnFor(left,108,degrees);
+  Drivetrain.driveFor(forward,24,inches);
+  Drivetrain.turnFor(left,135,degrees);
   IntakeMotor.spin(forward);
   Drivetrain.driveFor(forward,20,inches);
   IntakeMotor.stop();

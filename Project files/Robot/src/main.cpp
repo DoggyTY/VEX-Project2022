@@ -74,7 +74,7 @@ void Controller(){
     while (Controller1.ButtonL1.pressing()){
       intakeup(0.1);
     }
-    while (Controller1.ButtonL1.pressing()){
+    while (Controller1.ButtonL2.pressing()){
       intakedown(0.1);
     }
     while (Controller1.ButtonR1.pressing()){

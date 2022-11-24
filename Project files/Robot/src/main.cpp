@@ -11,7 +11,7 @@
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
-// LeftDrive            motor_group   9, 10           
+// LeftDrive            motor_group   11, 12          
 // RightDrive           motor_group   1, 2            
 // Drivetrain           drivetrain    21, 20, 19, 18  
 // ShootMotors          motor_group   5, 6            
@@ -112,7 +112,7 @@ void intakedown(double i){
 void Auto1Default(){
   Drivetrain.driveFor(forward,4,inches);
   Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,14,inches);
+  Drivetrain.driveFor(forward,24,inches);
   Drivetrain.turnFor(left,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);

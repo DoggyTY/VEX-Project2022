@@ -37,7 +37,7 @@ void shoot(double i);
 void intakeup();
 void intakedown();
 int Speedcap = 1;
-int Turncap = 2;
+int Turncap = 1;
 
 int main(){
   vexcodeInit();

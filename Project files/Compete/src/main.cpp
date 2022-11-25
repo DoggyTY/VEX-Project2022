@@ -70,14 +70,7 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
-  // Auto1Default();
-  // Auto3Default();
-
-  //Auto1Rollers();
-   Auto3Rollers();
-  
-  // Auto1Shoot();
-  // Auto3Shoot();
+  Auto();
 }
 
 /*---------------------------------------------------------------------------*/
@@ -169,90 +162,6 @@ void intakedown(){
   IntakeMotors.spin(reverse);
   Intakeon = true;
   wait(0.1, seconds);
-}
-void Auto1Default(){
-  Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,14,inches);
-  Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,4,inches);
-  IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(reverse,4,inches);
-  Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,26,inches);
-  Drivetrain.turnFor(left,90,degrees);
-  IntakeMotors.spin(forward);
-  Drivetrain.driveFor(forward,24,inches);
-  IntakeMotors.stop();
-  Drivetrain.turnFor(left,35,degrees);
-  ShootMotors.spin(forward);
-  IntakeMotors.spinFor(forward,5,seconds);
-  ShootMotors.stop();
-}
-void Auto1Rollers(){
-  //preload 2 discs
-  //once robot works I have an idea for not needing to preload 
-  //and being able to just pick up 3 discs on the way
-  IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(forward,1,inches);
-  Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(right,90,degrees);
-  Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,4,inches);
-  IntakeMotors.spinFor(forward,1,seconds);
-}
-void Auto1Shoot(){
-  IntakeMotors.spin(forward);
-  Drivetrain.driveFor(forward,24,inches);
-  IntakeMotors.stop();
-  Drivetrain.turnFor(left,35,degrees);
-  ShootMotors.spin(forward);
-  IntakeMotors.spinFor(forward,5,seconds);
-  ShootMotors.stop();
-}
-void Auto3Default(){
-  Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(right,90,degrees);
-  Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(right,90,degrees);
-  Drivetrain.driveFor(forward,4,inches);
-  IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(reverse,4,inches);
-  Drivetrain.turnFor(right,135,degrees);
-  IntakeMotors.spin(forward);
-  Drivetrain.driveFor(forward,45,inches);
-  IntakeMotors.stop();
-  Drivetrain.turnFor(right,80,degrees);
-  ShootMotors.spin(forward);
-  IntakeMotors.spinFor(forward,5,seconds);
-  ShootMotors.stop();
-}
-void Auto3Rollers(){
-  //preload 2 discs
-  //once robot works I have an idea for not needing to preload 
-  //and being able to just pick up 3 discs on the way
-  IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(forward,1,inches);
-  Drivetrain.turnFor(right,90,degrees);
-  Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(right,90,degrees);
-  Drivetrain.driveFor(forward,4,inches);
-  IntakeMotors.spinFor(forward,1,seconds);
-}
-void Auto3Shoot(){
-  Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(left,135,degrees);
-  IntakeMotors.spin(forward);
-  Drivetrain.driveFor(forward,20,inches);
-  IntakeMotors.stop();
-  Drivetrain.turnFor(right,80,degrees);
-  ShootMotors.spin(forward);
-  IntakeMotors.spinFor(forward,5,seconds);
-  ShootMotors.stop();
 }
 //Don't look down here there isn't anything down here but suffering :)
 //and Cody's dumb methods XD

@@ -70,19 +70,15 @@ void Controller(){
        LeftDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
        RightDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
      }   
-    if (Controller1.ButtonL1.pressing() && Intakeon == false){
+    if (Controller1.ButtonL1.pressing()){
       intakeup();
-    } else {
+    } else if (!Controller1.ButtonL1.pressing()) {
       IntakeMotors.stop();
-      Intakeon = false;
-      wait(0.1, seconds);
     }
-    if (Controller1.ButtonL2.pressing() && Intakeon == false){
+    if (Controller1.ButtonL2.pressing()){
       intakedown();
-    } else {
+    } else if (!Controller1.ButtonL2.pressing()) {
       IntakeMotors.stop();
-      Intakeon = false;
-      wait(0.1, seconds);
     }
     while (Controller1.ButtonR1.pressing()){
       shoot(0.1);
@@ -109,13 +105,9 @@ void shoot(double i){
 }
 void intakeup(){
   IntakeMotors.spin(forward);
-  Intakeon = true;
-  wait(0.1, seconds);
 }
 void intakedown(){
   IntakeMotors.spin(reverse);
-  Intakeon = true;
-  wait(0.1, seconds);
 }
 void Auto1Default(){
   Drivetrain.driveFor(forward,4,inches);

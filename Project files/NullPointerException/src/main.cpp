@@ -36,7 +36,7 @@ void turnright(double i);
 void shoot(double i);
 void intakeup();
 void intakedown();
-int Speedcap = 2;
+int Speedcap = 1;
 int Turncap = 2;
 
 int main(){
@@ -47,17 +47,17 @@ int main(){
   Controller();
 }
 void Controller(){
-  LeftDriveSmart.spin(reverse);
-  RightDriveSmart.spin(reverse);
+  LeftDriveSmart.spin(forward);
+  RightDriveSmart.spin(forward);
   IntakeMotors.setVelocity(10,percent);
   ShootMotors.setVelocity(75,percent);
   while (true){
      if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33){
-       LeftDriveSmart.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
-       RightDriveSmart.setVelocity((Controller1.Axis3.position()-Controller1.Axis4.position())/Turncap,percent);
+       LeftDriveSmart.setVelocity(((Controller1.Axis3.position()*-1)+Controller1.Axis4.position())/Turncap,percent);
+       RightDriveSmart.setVelocity(((Controller1.Axis3.position()*-1)-Controller1.Axis4.position())/Turncap,percent);
      } else{
-       LeftDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
-       RightDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
+       LeftDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
+       RightDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
      }   
     if (Controller1.ButtonL1.pressing()){
       intakeup();

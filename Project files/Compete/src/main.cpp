@@ -1,9 +1,9 @@
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
-/*    Author:       e2622588                                                  */
-/*    Created:      Wed Sep 28 2022                                           */
-/*    Description:  V5 project                                                */
+/*    Author:       VEX                                                       */
+/*    Created:      Thu Sep 26 2019                                           */
+/*    Description:  Clawbot Competition Template                              */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -11,18 +11,15 @@
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
-// ShootMotors          motor_group   3, 4            
-// Drivetrain           drivetrain    9, 10, 20, 21   
+// Drivetrain           drivetrain    8, 9, 20, 21    
 // IntakeMotors         motor_group   1, 2            
+// ShootMotors          motor_group   3, 4            
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
-#include "v5_apitypes.h"
 #include "vex.h"
-#include "vex_drivetrain.h"
 #include "vex_global.h"
 
 using namespace vex;
-void Controller();
 void Auto1Default();
 void Auto1Rollers();
 void Auto1Shoot();
@@ -39,37 +36,73 @@ void intakedown();
 int Speedcap = 2;
 int Turncap = 2;
 bool Intakeon = false;
-/*
-IMPORTANT VARIBLES/UNITS
-One tile on the board: 14 inches
-90 degree turn: 73 degrees
-1 degree turn: 0.8111111111111111111111111111111111111 (This is infinite but change it to 8 if you want to)
-*/
-int main(){
+// A global instance of competition
+competition Competition;
+
+// define your global instances of motors and other devices here
+
+/*---------------------------------------------------------------------------*/
+/*                          Pre-Autonomous Functions                         */
+/*                                                                           */
+/*  You may want to perform some actions before the competition starts.      */
+/*  Do them in the following function.  You must return from this function   */
+/*  or the autonomous and usercontrol tasks will not be started.  This       */
+/*  function is only called once after the V5 has been powered on and        */
+/*  not every time that the robot is disabled.                               */
+/*---------------------------------------------------------------------------*/
+
+void pre_auton(void) {
+  // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
+  
+  // All activities that occur before the competition starts
+  // Example: clearing encoders, setting servo positions, ...
+}
+
+/*---------------------------------------------------------------------------*/
+/*                                                                           */
+/*                              Autonomous Task                              */
+/*                                                                           */
+/*  This task is used to control your robot during the autonomous phase of   */
+/*  a VEX Competition.                                                       */
+/*                                                                           */
+/*  You must modify the code to add your own robot specific commands here.   */
+/*---------------------------------------------------------------------------*/
+
+void autonomous(void) {
   // Auto1Default();
   // Auto3Default();
 
-  // Auto1Rollers();
-  // Auto3Rollers();
+  //Auto1Rollers();
+   Auto3Rollers();
   
   // Auto1Shoot();
   // Auto3Shoot();
-  Controller();
 }
-void Controller(){
+
+/*---------------------------------------------------------------------------*/
+/*                                                                           */
+/*                              User Control Task                            */
+/*                                                                           */
+/*  This task is used to control your robot during the user control phase of */
+/*  a VEX Competition.                                                       */
+/*                                                                           */
+/*  You must modify the code to add your own robot specific commands here.   */
+/*---------------------------------------------------------------------------*/
+
+void usercontrol(void) {
   LeftDriveSmart.spin(reverse);
   RightDriveSmart.spin(reverse);
-  IntakeMotors.setVelocity(10,percent);
+  IntakeMotors.setVelocity(20,percent);
   ShootMotors.setVelocity(75,percent);
   while (true){
      if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33){
-       LeftDriveSmart.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
-       RightDriveSmart.setVelocity((Controller1.Axis3.position()-Controller1.Axis4.position())/Turncap,percent);
+       LeftDriveSmart.setVelocity((Controller1.Axis3.position()-Controller1.Axis4.position())/Turncap,percent);
+       RightDriveSmart.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
      } else{
        LeftDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
        RightDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
-     }   
+     }
     if (Controller1.ButtonL1.pressing() && Intakeon == false){
       intakeup();
     } else {
@@ -87,11 +120,28 @@ void Controller(){
     while (Controller1.ButtonR1.pressing()){
       shoot(0.1);
     }
-    if (Controller1.ButtonX.pressing()){
-      break;
-    }
+    wait(20, msec); // Sleep the task for a short amount of time to
+                    // prevent wasted resources.
   }
 }
+
+//
+// Main will set up the competition functions and callbacks.
+//
+int main() {
+  // Set up callbacks for autonomous and driver control periods.
+  Competition.autonomous(autonomous);
+  Competition.drivercontrol(usercontrol);
+
+  // Run the pre-autonomous function.
+  pre_auton();
+
+  // Prevent main from exiting with an infinite loop.
+  while (true) {
+    wait(100, msec);
+  }
+}
+
 void driveforward(int i){
   Drivetrain.driveFor(forward,i,inches);
 }
@@ -104,8 +154,11 @@ void turnleft(double i){
 void turnright(double i){
   Drivetrain.turnFor(right,i,degrees);
 }
+void roller(double i){
+  IntakeMotors.spinFor(i,seconds);
+}
 void shoot(double i){
-  ShootMotors.spinFor(forward, i,seconds);
+  ShootMotors.spinFor(i,seconds);
 }
 void intakeup(){
   IntakeMotors.spin(forward);
@@ -120,7 +173,7 @@ void intakedown(){
 void Auto1Default(){
   Drivetrain.driveFor(forward,4,inches);
   Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,24,inches);
+  Drivetrain.driveFor(forward,14,inches);
   Drivetrain.turnFor(left,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
@@ -140,18 +193,13 @@ void Auto1Rollers(){
   //preload 2 discs
   //once robot works I have an idea for not needing to preload 
   //and being able to just pick up 3 discs on the way
-  Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(reverse,4,inches);
+  Drivetrain.driveFor(forward,1,inches);
   Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,96,inches);
-  Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,96,inches);
+  Drivetrain.driveFor(forward,120,inches);
   Drivetrain.turnFor(right,90,degrees);
+  Drivetrain.driveFor(forward,120,inches);
+  Drivetrain.turnFor(left,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
 }
@@ -185,18 +233,13 @@ void Auto3Rollers(){
   //preload 2 discs
   //once robot works I have an idea for not needing to preload 
   //and being able to just pick up 3 discs on the way
-  Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(right,90,degrees);
-  Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(right,90,degrees);
-  Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(reverse,4,inches);
+  Drivetrain.driveFor(forward,1,inches);
   Drivetrain.turnFor(right,90,degrees);
-  Drivetrain.driveFor(forward,96,inches);
-  Drivetrain.turnFor(right,90,degrees);
-  Drivetrain.driveFor(forward,96,inches);
+  Drivetrain.driveFor(forward,120,inches);
   Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.driveFor(forward,120,inches);
+  Drivetrain.turnFor(right,90,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
 }

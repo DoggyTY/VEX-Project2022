@@ -29,15 +29,17 @@ void Auto1Shoot();
 void Auto3Default();
 void Auto3Rollers();
 void Auto3Shoot();
-void driveforward(int i);
-void driveback(int i);
-void turnleft(double i);
-void turnright(double i);
-void shoot(double i);
 void intakeup();
 void intakedown();
+void ShootMode();
 int Speedcap = 1;
+<<<<<<< Updated upstream
 int Turncap = 1;
+=======
+int Turncap = 2;
+int Shootvelo = 20;
+bool IntakeOn = false;
+>>>>>>> Stashed changes
 
 int main(){
   vexcodeInit();
@@ -49,54 +51,87 @@ int main(){
 void Controller(){
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  IntakeMotors.setVelocity(10,percent);
-  ShootMotors.setVelocity(75,percent);
+  IntakeMotors.setVelocity(65,percent);
+  ShootMotors.setVelocity(40,percent);
   while (true){
-     if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33){
-       LeftDriveSmart.setVelocity(((Controller1.Axis3.position()*-1)+Controller1.Axis4.position())/Turncap,percent);
-       RightDriveSmart.setVelocity(((Controller1.Axis3.position()*-1)-Controller1.Axis4.position())/Turncap,percent);
-     } else{
-       LeftDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
-       RightDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
-     }   
-    if (Controller1.ButtonL1.pressing()){
-      intakeup();
-    } else if (!Controller1.ButtonL1.pressing()) {
-      IntakeMotors.stop();
-    }
-    if (Controller1.ButtonL2.pressing()){
-      intakedown();
-    } else if (!Controller1.ButtonL2.pressing()) {
+    if (Controller1.ButtonLeft.pressing()){
+      LeftDriveSmart.setVelocity(-10,percent);
+      RightDriveSmart.setVelocity(10,percent);
+    } else if (Controller1.ButtonRight.pressing()){
+      LeftDriveSmart.setVelocity(10,percent);
+      RightDriveSmart.setVelocity(-10,percent);
+    } else if (Controller1.ButtonUp.pressing()){
+      LeftDriveSmart.setVelocity(-10,percent);
+      RightDriveSmart.setVelocity(-10,percent);
+    } else if (Controller1.ButtonDown.pressing()){
+      LeftDriveSmart.setVelocity(10,percent);
+      RightDriveSmart.setVelocity(10,percent);
+    } else if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33){
+      LeftDriveSmart.setVelocity(((Controller1.Axis3.position()*-1)+Controller1.Axis4.position())/Turncap,percent);
+      RightDriveSmart.setVelocity(((Controller1.Axis3.position()*-1)-Controller1.Axis4.position())/Turncap,percent);
+    } else{
+      LeftDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
+      RightDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
+    }   
+    if (Controller1.ButtonL1.pressing()) {
+      IntakeMotors.spin(forward);
+    } else if (Controller1.ButtonL2.pressing()){
+      IntakeMotors.spin(reverse);
+    } else {
       IntakeMotors.stop();
     }
     while (Controller1.ButtonR1.pressing()){
-      shoot(0.1);
+      ShootMode();
     }
-    if (Controller1.ButtonX.pressing()){
-      break;
-    }
+    ShootMotors.stop();
   }
 }
-void driveforward(int i){
-  Drivetrain.driveFor(forward,i,inches);
-}
-void driveback(int i){
-  Drivetrain.driveFor(reverse,i,inches);
-}
-void turnleft(double i){
-  Drivetrain.turnFor(left,i,degrees);
-}
-void turnright(double i){
-  Drivetrain.turnFor(right,i,degrees);
-}
-void shoot(double i){
-  ShootMotors.spinFor(forward, i,seconds);
-}
-void intakeup(){
-  IntakeMotors.spin(forward);
-}
-void intakedown(){
-  IntakeMotors.spin(reverse);
+void ShootMode() {
+  if (Controller1.ButtonR2.pressing()) {
+    ShootMotors.spin(forward);
+  } else {
+    ShootMotors.stop();
+  }
+  if (Controller1.ButtonL1.pressing()) {
+    IntakeMotors.spin(forward);
+  } else {
+    IntakeMotors.stop();
+  }
+  if (Controller1.ButtonLeft.pressing()){
+    LeftDriveSmart.setVelocity(-10,percent);
+    RightDriveSmart.setVelocity(10,percent);
+  } else if (Controller1.ButtonRight.pressing()){
+    LeftDriveSmart.setVelocity(10,percent);
+    RightDriveSmart.setVelocity(-10,percent);
+  } else if (Controller1.ButtonUp.pressing()){
+    LeftDriveSmart.setVelocity(-10,percent);
+    RightDriveSmart.setVelocity(-10,percent);
+  } else if (Controller1.ButtonDown.pressing()){
+    LeftDriveSmart.setVelocity(10,percent);
+    RightDriveSmart.setVelocity(10,percent);
+  } else {
+    LeftDriveSmart.setVelocity(0,percent);
+    RightDriveSmart.setVelocity(0,percent);
+  }
+  if (Controller1.ButtonB.pressing()) {
+    Shootvelo = abs(Shootvelo - 5);
+    ShootMotors.setVelocity(Shootvelo,percent);
+    wait(0.1,seconds);
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.setCursor(2,0);
+    wait(0.1,seconds);
+    Controller1.Screen.print(Shootvelo);
+    wait(0.1,seconds);
+  } else if (Controller1.ButtonX.pressing()){
+    Shootvelo = abs(Shootvelo + 5);
+    ShootMotors.setVelocity(Shootvelo,percent);
+    wait(0.1,seconds);
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.setCursor(2,0);
+    wait(0.1,seconds);
+    Controller1.Screen.print(Shootvelo);
+    wait(0.1,seconds);
+  }
 }
 //Don't look down here there isn't anything down here but suffering :)
 //and Cody's dumb methods XD

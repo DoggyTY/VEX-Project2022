@@ -33,13 +33,9 @@ void intakeup();
 void intakedown();
 void ShootMode();
 int Speedcap = 1;
-<<<<<<< Updated upstream
 int Turncap = 1;
-=======
-int Turncap = 2;
 int Shootvelo = 20;
 bool IntakeOn = false;
->>>>>>> Stashed changes
 
 int main(){
   vexcodeInit();

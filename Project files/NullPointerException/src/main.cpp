@@ -45,6 +45,8 @@ int main(){
   Controller();
 }
 void Controller(){
+  LeftDriveSmart.setVelocity(0,percent);
+  RightDriveSmart.setVelocity(0,percent);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
   IntakeMotors.setVelocity(65,percent);
@@ -128,6 +130,171 @@ void ShootMode() {
     Controller1.Screen.print(Shootvelo);
     wait(0.1,seconds);
   }
+}
+
+void Auto1Default(){
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value, seconds);
+  LeftDriveSmart.Spin(reverse);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(reverse);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  IntakeMotors.spinFor(forward,1,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(reverse);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);  
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(reverse);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  IntakeMotors.spin(forward);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  IntakeMotors.stop();
+  LeftDriveSmart.Spin(reverse);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  ShootMotors.spin(forward);
+  IntakeMotors.spinFor(forward,5,seconds);
+  ShootMotors.stop();
+}
+void Auto1Rollers(){
+  //preload 2 discs
+  //once robot works I have an idea for not needing to preload 
+  //and being able to just pick up 3 discs on the way
+  IntakeMotors.spinFor(forward,1,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(reverse);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(reverse);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(reverse);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  IntakeMotors.spinFor(forward,1,seconds);
+}
+void Auto1Shoot(){
+  IntakeMotors.spin(forward);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  IntakeMotors.stop();
+  LeftDriveSmart.Spin(reverse);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  ShootMotors.spin(forward);
+  IntakeMotors.spinFor(forward,5,seconds);
+  ShootMotors.stop();
+}
+void Auto3Default(){
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value, seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(reverse);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(reverse);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  IntakeMotors.spinFor(forward,1,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(reverse);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);  
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(reverse);
+  wait(Value,seconds);
+  IntakeMotors.spin(forward);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  IntakeMotors.stop();
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(reverse);
+  wait(Value,seconds);
+  ShootMotors.spin(forward);
+  IntakeMotors.spinFor(forward,5,seconds);
+  ShootMotors.stop();
+}
+void Auto3Rollers(){
+  //preload 2 discs
+  //once robot works I have an idea for not needing to preload 
+  //and being able to just pick up 3 discs on the way
+  IntakeMotors.spinFor(forward,1,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(reverse);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(reverse);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(reverse);
+  wait(Value,seconds);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  IntakeMotors.spinFor(forward,1,seconds);
+}
+void Auto3Shoot(){
+  IntakeMotors.spin(forward);
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(forward);
+  wait(Value,seconds);
+  IntakeMotors.stop();
+  LeftDriveSmart.Spin(forward);
+  RightDriveSmart.Spin(reverse);
+  wait(Value,seconds);
+  ShootMotors.spin(forward);
+  IntakeMotors.spinFor(forward,5,seconds);
+  ShootMotors.stop();
 }
 //Don't look down here there isn't anything down here but suffering :)
 //and Cody's dumb methods XD

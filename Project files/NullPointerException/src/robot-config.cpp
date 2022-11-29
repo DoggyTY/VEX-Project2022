@@ -1,4 +1,5 @@
 #include "vex.h"
+#include "vex_global.h"
 
 using namespace vex;
 using signature = vision::signature;
@@ -16,10 +17,10 @@ motor leftMotorA = motor(PORT9, ratio18_1, false);
 motor leftMotorB = motor(PORT10, ratio18_1, true);
 motor_group LeftDriveSmart = motor_group(leftMotorA, leftMotorB);
 motor rightMotorA = motor(PORT20, ratio18_1, true);
-motor rightMotorB = motor(PORT21, ratio18_1, false);
+motor rightMotorB = motor(PORT19, ratio18_1, false);
 motor_group RightDriveSmart = motor_group(rightMotorA, rightMotorB);
 drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 295, 40, mm, 1);
-motor IntakeMotorsMotorA = motor(PORT19, ratio18_1, false);
+motor IntakeMotorsMotorA = motor(PORT17, ratio18_1, false);
 motor IntakeMotorsMotorB = motor(PORT18, ratio18_1, false);
 motor_group IntakeMotors = motor_group(IntakeMotorsMotorA, IntakeMotorsMotorB);
 

@@ -73,10 +73,10 @@ void Controller(){
       RightDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
     }   
     if (Controller1.ButtonL1.pressing()) {
-    IntakeMotors.setVelocity(25,percent);
+    IntakeMotors.setVelocity(70,percent);
     IntakeMotors.spin(reverse);
-  }else if (Controller1.ButtonL1.pressing()) {
-    IntakeMotors.setVelocity(2,percent);
+  }else if (Controller1.ButtonL2.pressing()) {
+    IntakeMotors.setVelocity(10,percent);
     IntakeMotors.spin(forward); 
   } else {
       IntakeMotors.stop();
@@ -94,10 +94,10 @@ void ShootMode() {
     ShootMotors.stop();
   }
   if (Controller1.ButtonL1.pressing()) {
-    IntakeMotors.setVelocity(25,percent);
+    IntakeMotors.setVelocity(70,percent);
     IntakeMotors.spin(reverse);
-  }else if (Controller1.ButtonL1.pressing()) {
-    IntakeMotors.setVelocity(2,percent);
+  }else if (Controller1.ButtonL2.pressing()) {
+    IntakeMotors.setVelocity(10,percent);
     IntakeMotors.spin(forward); 
   } else {
     IntakeMotors.stop();

@@ -73,10 +73,12 @@ void Controller(){
       RightDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
     }   
     if (Controller1.ButtonL1.pressing()) {
-      IntakeMotors.spin(forward);
-    } else if (Controller1.ButtonL2.pressing()){
-      IntakeMotors.spin(reverse);
-    } else {
+    IntakeMotors.setVelocity(25,percent);
+    IntakeMotors.spin(reverse);
+  }else if (Controller1.ButtonL1.pressing()) {
+    IntakeMotors.setVelocity(2,percent);
+    IntakeMotors.spin(forward); 
+  } else {
       IntakeMotors.stop();
     }
     while (Controller1.ButtonR1.pressing()){
@@ -92,7 +94,11 @@ void ShootMode() {
     ShootMotors.stop();
   }
   if (Controller1.ButtonL1.pressing()) {
-    IntakeMotors.spin(forward);
+    IntakeMotors.setVelocity(25,percent);
+    IntakeMotors.spin(reverse);
+  }else if (Controller1.ButtonL1.pressing()) {
+    IntakeMotors.setVelocity(2,percent);
+    IntakeMotors.spin(forward); 
   } else {
     IntakeMotors.stop();
   }
@@ -113,7 +119,7 @@ void ShootMode() {
     RightDriveSmart.setVelocity(0,percent);
   }
   if (Controller1.ButtonB.pressing()) {
-    Shootvelo = abs(Shootvelo - 5);
+    Shootvelo = abs(Shootvelo - 2);
     ShootMotors.setVelocity(Shootvelo,percent);
     wait(0.1,seconds);
     Controller1.Screen.clearScreen();
@@ -122,7 +128,7 @@ void ShootMode() {
     Controller1.Screen.print(Shootvelo);
     wait(0.1,seconds);
   } else if (Controller1.ButtonX.pressing()){
-    Shootvelo = abs(Shootvelo + 5);
+    Shootvelo = abs(Shootvelo + 2);
     ShootMotors.setVelocity(Shootvelo,percent);
     wait(0.1,seconds);
     Controller1.Screen.clearScreen();

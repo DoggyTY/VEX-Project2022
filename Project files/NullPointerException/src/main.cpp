@@ -40,6 +40,7 @@ int Speedcap = 1;
 int Turncap = 1;
 int Shootvelo = 20;
 bool IntakeOn = false;
+char complaint[] = "nathan blames us for everything smh my head";
 int main(){
   vexcodeInit();
   // Auto1Default();
@@ -50,8 +51,7 @@ void Controller(){
   RightDriveSmart.setVelocity(0,percent);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  IntakeMotors.setVelocity(55,percent);
-  ShootMotors.setVelocity(40,percent);
+  ShootMotors.setVelocity(30,percent);
   while (true){
     if (Controller1.ButtonLeft.pressing()){
       LeftDriveSmart.setVelocity(-10,percent);
@@ -72,13 +72,13 @@ void Controller(){
       LeftDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
       RightDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
     }   
-    if (Controller1.ButtonL1.pressing()) {
-    IntakeMotors.setVelocity(70,percent);
-    IntakeMotors.spin(reverse);
-  }else if (Controller1.ButtonL2.pressing()) {
+    if (Controller1.ButtonL2.pressing()) {
     IntakeMotors.setVelocity(10,percent);
-    IntakeMotors.spin(forward); 
-  } else {
+    IntakeMotors.spin(forward);
+    } else if (Controller1.ButtonL1.pressing()) {
+      IntakeMotors.setVelocity(70,percent);
+      IntakeMotors.spin(reverse); 
+    } else {
       IntakeMotors.stop();
     }
     while (Controller1.ButtonR1.pressing()){
@@ -93,12 +93,12 @@ void ShootMode() {
   } else {
     ShootMotors.stop();
   }
-  if (Controller1.ButtonL1.pressing()) {
-    IntakeMotors.setVelocity(70,percent);
-    IntakeMotors.spin(reverse);
-  }else if (Controller1.ButtonL2.pressing()) {
+  if (Controller1.ButtonL2.pressing()) {
     IntakeMotors.setVelocity(10,percent);
-    IntakeMotors.spin(forward); 
+    IntakeMotors.spin(forward);
+  } else if (Controller1.ButtonL1.pressing()) {
+    IntakeMotors.setVelocity(70,percent);
+    IntakeMotors.spin(reverse); 
   } else {
     IntakeMotors.stop();
   }
@@ -308,3 +308,5 @@ void Auto3DefaultFront(){
 void Auto3RollersFront(){
 
 }
+//Don't look down here there isn't anything down here but suffering :)
+//and Cody's dumb methods XD

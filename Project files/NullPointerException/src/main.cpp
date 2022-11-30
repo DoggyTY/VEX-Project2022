@@ -29,6 +29,10 @@ void Auto1Shoot();
 void Auto3Default();
 void Auto3Rollers();
 void Auto3Shoot();
+void Auto1DefaultFront();
+void Auto1RollersFront();
+void Auto3DefaultFront();
+void Auto3RollersFront();
 void intakeup();
 void intakedown();
 void ShootMode();
@@ -38,9 +42,7 @@ int Shootvelo = 20;
 bool IntakeOn = false;
 int main(){
   vexcodeInit();
-  // Auto Code Start
-
-  // Auto Code End
+  // Auto1Default();
   Controller();
 }
 void Controller(){
@@ -133,40 +135,40 @@ void ShootMode() {
 void Auto1Default(){
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value, seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(reverse);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(reverse);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   IntakeMotors.spinFor(forward,1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(reverse);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);  
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(reverse);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   IntakeMotors.spin(forward);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   IntakeMotors.stop();
   LeftDriveSmart.spin(reverse);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
@@ -178,36 +180,36 @@ void Auto1Rollers(){
   IntakeMotors.spinFor(forward,1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(reverse);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(reverse);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(reverse);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   IntakeMotors.spinFor(forward,1,seconds);
 }
 void Auto1Shoot(){
   IntakeMotors.spin(forward);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   IntakeMotors.stop();
   LeftDriveSmart.spin(reverse);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
@@ -215,40 +217,40 @@ void Auto1Shoot(){
 void Auto3Default(){
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value, seconds);
+  wait(1, seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(reverse);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(reverse);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   IntakeMotors.spinFor(forward,1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(reverse);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);  
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(reverse);
-  wait(Value,seconds);
+  wait(1,seconds);
   IntakeMotors.spin(forward);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   IntakeMotors.stop();
-  LeftDriveSmart.Spin(forward);
+  LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(reverse);
-  wait(Value,seconds);
+  wait(1,seconds);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
@@ -260,39 +262,51 @@ void Auto3Rollers(){
   IntakeMotors.spinFor(forward,1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(reverse);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(reverse);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(reverse);
-  wait(Value,seconds);
+  wait(1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   IntakeMotors.spinFor(forward,1,seconds);
 }
 void Auto3Shoot(){
   IntakeMotors.spin(forward);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  wait(Value,seconds);
+  wait(1,seconds);
   IntakeMotors.stop();
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(reverse);
-  wait(Value,seconds);
+  wait(1,seconds);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
+}
+void Auto1DefaultFront(){
+  
+}
+void Auto1RollersFront(){
+
+}
+void Auto3DefaultFront(){
+
+}
+void Auto3RollersFront(){
+
 }
 //Don't look down here there isn't anything down here but suffering :)
 //and Cody's dumb methods XD

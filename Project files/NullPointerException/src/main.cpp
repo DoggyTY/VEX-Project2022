@@ -48,8 +48,8 @@ void Controller(){
   RightDriveSmart.setVelocity(0,percent);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  IntakeMotors.setVelocity(65,percent);
-  ShootMotors.setVelocity(20,percent);
+  IntakeMotors.setVelocity(55,percent);
+  ShootMotors.setVelocity(40,percent);
   while (true){
     if (Controller1.ButtonLeft.pressing()){
       LeftDriveSmart.setVelocity(-10,percent);

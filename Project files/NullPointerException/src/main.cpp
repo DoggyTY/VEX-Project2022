@@ -180,9 +180,6 @@ void Auto1Default(){
   ShootMotors.stop();
 }
 void Auto1Rollers(){
-  //preload 2 discs
-  //once robot works I have an idea for not needing to preload 
-  //and being able to just pick up 3 discs on the way
   IntakeMotors.spinFor(forward,1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
@@ -262,9 +259,6 @@ void Auto3Default(){
   ShootMotors.stop();
 }
 void Auto3Rollers(){
-  //preload 2 discs
-  //once robot works I have an idea for not needing to preload 
-  //and being able to just pick up 3 discs on the way
   IntakeMotors.spinFor(forward,1,seconds);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
@@ -314,5 +308,3 @@ void Auto3DefaultFront(){
 void Auto3RollersFront(){
 
 }
-//Don't look down here there isn't anything down here but suffering :)
-//and Cody's dumb methods XD

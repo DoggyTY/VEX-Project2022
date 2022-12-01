@@ -45,12 +45,13 @@ char complaint[] = "nathan blames us for everything smh my head";
 /* Important Variables and Stuff
   1.22 degrees for 1 degrees
   1 inche is 1 inche, I know revolutionary
+  70 percent power directly diagonal to goal
+  74 percent power toward 3 disk
 */
 int main(){
   vexcodeInit();
   //Drivetrain.driveFor(reverse,23,inches);
   Controller();
-
 }
 void Controller(){
   LeftDriveSmart.setVelocity(0,percent);
@@ -144,27 +145,26 @@ void ShootMode() {
     wait(0.1,seconds);
   }
 }
-
-void Auto1Default(){
+void Auto3stackDefault(){
   Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,14,inches);
-  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.turnFor(left,110,degrees);
+  Drivetrain.driveFor(forward,24,inches);
+  Drivetrain.turnFor(left,110,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
   Drivetrain.driveFor(reverse,4,inches);
-  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.turnFor(left,110,degrees);
   Drivetrain.driveFor(forward,26,inches);
-  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.turnFor(left,110,degrees);
   IntakeMotors.spin(forward);
   Drivetrain.driveFor(forward,24,inches);
   IntakeMotors.stop();
-  Drivetrain.turnFor(left,35,degrees);
+  Drivetrain.turnFor(left,43,degrees);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
-void Auto1Rollers(){
+void Auto3stackRollers(){
   IntakeMotors.spinFor(forward,1,seconds);
   Drivetrain.driveFor(forward,4,inches);
   Drivetrain.turnFor(right,90,degrees);
@@ -175,7 +175,7 @@ void Auto1Rollers(){
   Drivetrain.driveFor(reverse,4,inches);
   IntakeMotors.spinFor(reverse,1,seconds);
 }
-void Auto1Shoot(){
+void Auto3stackShoot(){
   IntakeMotors.spin(forward);
   Drivetrain.driveFor(forward,24,inches);
   IntakeMotors.stop();
@@ -184,7 +184,7 @@ void Auto1Shoot(){
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
-void Auto3Default(){
+void Auto1stackDefault(){
   Drivetrain.driveFor(forward,4,inches);
   Drivetrain.turnFor(right,90,degrees);
   Drivetrain.driveFor(forward,24,inches);
@@ -201,10 +201,7 @@ void Auto3Default(){
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
-void Auto3Rollers(){
-  //preload 2 discs
-  //once robot works I have an idea for not needing to preload 
-  //and being able to just pick up 3 discs on the way
+void Auto1stackRollers(){
   IntakeMotors.spinFor(forward,1,seconds);
   Drivetrain.driveFor(forward,1,inches);
   Drivetrain.turnFor(right,90,degrees);
@@ -215,7 +212,7 @@ void Auto3Rollers(){
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
 }
-void Auto3Shoot(){
+void Auto1stackShoot(){
   Drivetrain.driveFor(forward,24,inches);
   Drivetrain.turnFor(left,135,degrees);
   IntakeMotors.spin(forward);
@@ -239,5 +236,5 @@ void Auto3RollersFront(){
 
 }
 //Don't look down here there isn't anything down here but suffering :)
-//and Cody's dumb methods XD
-// also vex devices are painful D:
+//and our dumb methods XD
+//also vex devices are painful D:

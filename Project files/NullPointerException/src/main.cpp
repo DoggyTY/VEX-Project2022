@@ -41,10 +41,16 @@ int Turncap = 1;
 int Shootvelo = 20;
 bool IntakeOn = false;
 char complaint[] = "nathan blames us for everything smh my head";
+
+/* Important Variables and Stuff
+  1.22 degrees for 1 degrees
+  1 inche is 1 inche, I know revolutionary
+*/
 int main(){
   vexcodeInit();
-  // Auto1Default();
+  //Drivetrain.driveFor(reverse,23,inches);
   Controller();
+
 }
 void Controller(){
   LeftDriveSmart.setVelocity(0,percent);
@@ -65,7 +71,7 @@ void Controller(){
     } else if (Controller1.ButtonDown.pressing()){
       LeftDriveSmart.setVelocity(10,percent);
       RightDriveSmart.setVelocity(10,percent);
-    } else if (Controller1.Axis4.position() > 15 || Controller1.Axis4.position() < -15){
+    } else if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33){
       LeftDriveSmart.setVelocity(((Controller1.Axis3.position()*-1)+Controller1.Axis4.position())/Turncap,percent);
       RightDriveSmart.setVelocity(((Controller1.Axis3.position()*-1)-Controller1.Axis4.position())/Turncap,percent);
     } else{
@@ -73,10 +79,10 @@ void Controller(){
       RightDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
     }   
     if (Controller1.ButtonL2.pressing()) {
-    IntakeMotors.setVelocity(10,percent);
+    IntakeMotors.setVelocity(70,percent);
     IntakeMotors.spin(forward);
     } else if (Controller1.ButtonL1.pressing()) {
-      IntakeMotors.setVelocity(70,percent);
+      IntakeMotors.setVelocity(10,percent);
       IntakeMotors.spin(reverse); 
     } else {
       IntakeMotors.stop();
@@ -94,10 +100,10 @@ void ShootMode() {
     ShootMotors.stop();
   }
   if (Controller1.ButtonL2.pressing()) {
-    IntakeMotors.setVelocity(10,percent);
+    IntakeMotors.setVelocity(70,percent);
     IntakeMotors.spin(forward);
   } else if (Controller1.ButtonL1.pressing()) {
-    IntakeMotors.setVelocity(70,percent);
+    IntakeMotors.setVelocity(20,percent);
     IntakeMotors.spin(reverse); 
   } else {
     IntakeMotors.stop();
@@ -138,160 +144,84 @@ void ShootMode() {
     wait(0.1,seconds);
   }
 }
+
 void Auto1Default(){
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(reverse);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(reverse);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
+  Drivetrain.driveFor(forward,4,inches);
+  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.driveFor(forward,14,inches);
+  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(reverse);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);  
-  wait(1,seconds);
-  LeftDriveSmart.spin(reverse);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
+  Drivetrain.driveFor(reverse,4,inches);
+  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.driveFor(forward,26,inches);
+  Drivetrain.turnFor(left,90,degrees);
   IntakeMotors.spin(forward);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
+  Drivetrain.driveFor(forward,24,inches);
   IntakeMotors.stop();
-  LeftDriveSmart.spin(reverse);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
+  Drivetrain.turnFor(left,35,degrees);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
 void Auto1Rollers(){
   IntakeMotors.spinFor(forward,1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(reverse);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(reverse);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(reverse);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  IntakeMotors.spinFor(forward,1,seconds);
+  Drivetrain.driveFor(forward,4,inches);
+  Drivetrain.turnFor(right,90,degrees);
+  Drivetrain.driveFor(forward,120,inches);
+  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.driveFor(forward,120,inches);
+  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.driveFor(reverse,4,inches);
+  IntakeMotors.spinFor(reverse,1,seconds);
 }
 void Auto1Shoot(){
   IntakeMotors.spin(forward);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
+  Drivetrain.driveFor(forward,24,inches);
   IntakeMotors.stop();
-  LeftDriveSmart.spin(reverse);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
+  Drivetrain.turnFor(left,35,degrees);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
 void Auto3Default(){
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1, seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(reverse);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(reverse);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
+  Drivetrain.driveFor(forward,4,inches);
+  Drivetrain.turnFor(right,90,degrees);
+  Drivetrain.driveFor(forward,24,inches);
+  Drivetrain.turnFor(right,90,degrees);
+  Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(reverse);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);  
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(reverse);
-  wait(1,seconds);
+  Drivetrain.driveFor(reverse,4,inches);
+  Drivetrain.turnFor(right,135,degrees);
   IntakeMotors.spin(forward);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
+  Drivetrain.driveFor(forward,45,inches);
   IntakeMotors.stop();
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(reverse);
-  wait(1,seconds);
+  Drivetrain.turnFor(right,80,degrees);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
 void Auto3Rollers(){
+  //preload 2 discs
+  //once robot works I have an idea for not needing to preload 
+  //and being able to just pick up 3 discs on the way
   IntakeMotors.spinFor(forward,1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(reverse);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(reverse);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(reverse);
-  wait(1,seconds);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
+  Drivetrain.driveFor(forward,1,inches);
+  Drivetrain.turnFor(right,90,degrees);
+  Drivetrain.driveFor(forward,120,inches);
+  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.driveFor(forward,120,inches);
+  Drivetrain.turnFor(right,90,degrees);
+  Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
 }
 void Auto3Shoot(){
+  Drivetrain.driveFor(forward,24,inches);
+  Drivetrain.turnFor(left,135,degrees);
   IntakeMotors.spin(forward);
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(forward);
-  wait(1,seconds);
+  Drivetrain.driveFor(forward,20,inches);
   IntakeMotors.stop();
-  LeftDriveSmart.spin(forward);
-  RightDriveSmart.spin(reverse);
-  wait(1,seconds);
+  Drivetrain.turnFor(right,80,degrees);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
@@ -310,3 +240,4 @@ void Auto3RollersFront(){
 }
 //Don't look down here there isn't anything down here but suffering :)
 //and Cody's dumb methods XD
+// also vex devices are painful D:

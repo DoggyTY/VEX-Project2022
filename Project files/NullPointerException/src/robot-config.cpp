@@ -1,5 +1,7 @@
 #include "vex.h"
 #include "vex_global.h"
+#include "vex_rotation.h"
+#include "vex_triport.h"
 
 using namespace vex;
 using signature = vision::signature;
@@ -23,6 +25,8 @@ drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 295,
 motor IntakeMotorsMotorA = motor(PORT17, ratio18_1, false);
 motor IntakeMotorsMotorB = motor(PORT18, ratio18_1, false);
 motor_group IntakeMotors = motor_group(IntakeMotorsMotorA, IntakeMotorsMotorB);
+digital_out Expand = digital_out(Brain.ThreeWirePort.A);
+rotation Rotation = rotation(PORT21);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

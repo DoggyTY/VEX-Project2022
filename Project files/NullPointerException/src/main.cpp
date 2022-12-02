@@ -29,10 +29,10 @@ void Auto1Shoot();
 void Auto3Default();
 void Auto3Rollers();
 void Auto3Shoot();
-void Auto1DefaultFront();
-void Auto1RollersFront();
-void Auto3DefaultFront();
-void Auto3RollersFront();
+void Auto1stackDefaultFront();
+void Auto1stackRollersFront();
+void Auto3stackDefaultFront();
+void Auto3stackRollersFront();
 void intakeup();
 void intakedown();
 void ShootMode();
@@ -91,6 +91,9 @@ void Controller(){
     while (Controller1.ButtonR1.pressing()){
       ShootMode();
     }
+    if (Controller1.ButtonA.pressing() && Controller1.ButtonX.pressing() && Controller1.ButtonY.pressing() && Controller1.ButtonB.pressing()) {
+      Expand.set(true);
+    }
     ShootMotors.stop();
   }
 }
@@ -147,15 +150,15 @@ void ShootMode() {
 }
 void Auto3stackDefault(){
   Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(left,110,degrees);
+  Drivetrain.turnFor(left,109.8,degrees);
   Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(left,110,degrees);
+  Drivetrain.turnFor(left,109.8,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
   Drivetrain.driveFor(reverse,4,inches);
-  Drivetrain.turnFor(left,110,degrees);
+  Drivetrain.turnFor(left,109.8,degrees);
   Drivetrain.driveFor(forward,26,inches);
-  Drivetrain.turnFor(left,110,degrees);
+  Drivetrain.turnFor(left,109.8,degrees);
   IntakeMotors.spin(forward);
   Drivetrain.driveFor(forward,24,inches);
   IntakeMotors.stop();
@@ -165,15 +168,11 @@ void Auto3stackDefault(){
   ShootMotors.stop();
 }
 void Auto3stackRollers(){
-  IntakeMotors.spinFor(forward,1,seconds);
   Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(right,110,degrees);
-  Drivetrain.driveFor(forward,96,inches);
-  Drivetrain.turnFor(left,110,degrees);
-  Drivetrain.driveFor(forward,96,inches);
-  Drivetrain.turnFor(left,110,degrees);
+  Drivetrain.turnFor(right,109.8,degrees);
+  Drivetrain.driveFor(forward,24,inches);
+  Drivetrain.turnFor(right,109.8,degrees);
   Drivetrain.driveFor(reverse,4,inches);
-  IntakeMotors.spinFor(reverse,1,seconds);
 }
 void Auto3stackShoot(){
   IntakeMotors.spin(forward);
@@ -186,54 +185,95 @@ void Auto3stackShoot(){
 }
 void Auto1stackDefault(){
   Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(right,90,degrees);
+  Drivetrain.turnFor(right,109.8,degrees);
   Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(right,90,degrees);
-  Drivetrain.driveFor(forward,4,inches);
+  Drivetrain.turnFor(right,109.8,degrees);
+  Drivetrain.driveFor(reverse,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
   Drivetrain.driveFor(reverse,4,inches);
-  Drivetrain.turnFor(right,135,degrees);
+  Drivetrain.turnFor(right,164.7,degrees);
   IntakeMotors.spin(forward);
   Drivetrain.driveFor(forward,45,inches);
   IntakeMotors.stop();
-  Drivetrain.turnFor(right,80,degrees);
+  Drivetrain.turnFor(right,97.6,degrees);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
 void Auto1stackRollers(){
+  Drivetrain.driveFor(forward,4,inches);
+  Drivetrain.turnFor(right,109.8,degrees);
+  Drivetrain.driveFor(forward,24,inches);
+  Drivetrain.turnFor(right,109.8,degrees);
+  Drivetrain.driveFor(reverse,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
   Drivetrain.driveFor(forward,1,inches);
-  Drivetrain.turnFor(right,90,degrees);
+  Drivetrain.turnFor(right,109.8,degrees);
   Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.turnFor(left,109.8,degrees);
   Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(right,90,degrees);
+  Drivetrain.turnFor(right,109.8,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
 }
 void Auto1stackShoot(){
   Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(left,135,degrees);
+  Drivetrain.turnFor(left,164.7,degrees);
   IntakeMotors.spin(forward);
   Drivetrain.driveFor(forward,20,inches);
   IntakeMotors.stop();
-  Drivetrain.turnFor(right,80,degrees);
+  Drivetrain.turnFor(right,97.6,degrees);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
-void Auto1DefaultFront(){
-  
+void Auto1stackDefaultFront(){
+  IntakeMotors.spinFor(forward,1,seconds);
+  Drivetrain.driveFor(reverse,4,inches);
+  Drivetrain.turnFor(right,164.7,degrees);
+  IntakeMotors.spin(forward);
+  Drivetrain.driveFor(forward,45,inches);
+  IntakeMotors.stop();
+  Drivetrain.turnFor(right,97.6,degrees);
+  ShootMotors.spin(forward);
+  IntakeMotors.spinFor(forward,5,seconds);
+  ShootMotors.stop();
 }
-void Auto1RollersFront(){
-
+void Auto1stackRollersFront(){
+  IntakeMotors.spinFor(forward,1,seconds);
+  Drivetrain.driveFor(forward,1,inches);
+  Drivetrain.turnFor(right,109.8,degrees);
+  Drivetrain.driveFor(forward,120,inches);
+  Drivetrain.turnFor(left,109.8,degrees);
+  Drivetrain.driveFor(forward,120,inches);
+  Drivetrain.turnFor(right,109.8,degrees);
+  Drivetrain.driveFor(forward,4,inches);
+  IntakeMotors.spinFor(forward,1,seconds);
 }
-void Auto3DefaultFront(){
-
+void Auto3stackDefaultFront(){
+  IntakeMotors.spinFor(forward,1,seconds);
+  Drivetrain.driveFor(reverse,4,inches);
+  Drivetrain.turnFor(left,109.8,degrees);
+  Drivetrain.driveFor(forward,26,inches);
+  Drivetrain.turnFor(left,109.8,degrees);
+  IntakeMotors.spin(forward);
+  Drivetrain.driveFor(forward,24,inches);
+  IntakeMotors.stop();
+  Drivetrain.turnFor(left,43,degrees);
+  ShootMotors.spin(forward);
+  IntakeMotors.spinFor(forward,5,seconds);
+  ShootMotors.stop();
 }
-void Auto3RollersFront(){
-
+void Auto3stackRollersFront(){
+  IntakeMotors.spinFor(forward,1,seconds);
+  Drivetrain.driveFor(forward,4,inches);
+  Drivetrain.turnFor(right,109.8,degrees);
+  Drivetrain.driveFor(forward,96,inches);
+  Drivetrain.turnFor(left,109.8,degrees);
+  Drivetrain.driveFor(forward,96,inches);
+  Drivetrain.turnFor(left,109.8,degrees);
+  Drivetrain.driveFor(reverse,4,inches);
+  IntakeMotors.spinFor(reverse,1,seconds);
 }
 //Don't look down here there isn't anything down here but suffering :)
 //and our dumb methods XD

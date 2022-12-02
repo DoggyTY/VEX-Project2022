@@ -167,11 +167,11 @@ void Auto3stackDefault(){
 void Auto3stackRollers(){
   IntakeMotors.spinFor(forward,1,seconds);
   Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(right,90,degrees);
-  Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(left,90,degrees);
-  Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(left,90,degrees);
+  Drivetrain.turnFor(right,110,degrees);
+  Drivetrain.driveFor(forward,96,inches);
+  Drivetrain.turnFor(left,110,degrees);
+  Drivetrain.driveFor(forward,96,inches);
+  Drivetrain.turnFor(left,110,degrees);
   Drivetrain.driveFor(reverse,4,inches);
   IntakeMotors.spinFor(reverse,1,seconds);
 }
@@ -179,7 +179,7 @@ void Auto3stackShoot(){
   IntakeMotors.spin(forward);
   Drivetrain.driveFor(forward,24,inches);
   IntakeMotors.stop();
-  Drivetrain.turnFor(left,35,degrees);
+  Drivetrain.turnFor(left,43,degrees);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();

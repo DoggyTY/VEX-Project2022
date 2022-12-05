@@ -1,4 +1,5 @@
 #include "vex_motorgroup.h"
+#include "vex_rotation.h"
 #include "vex_triport.h"
 using namespace vex;
 
@@ -12,6 +13,7 @@ extern motor_group IntakeMotors;
 extern motor_group LeftDriveSmart;
 extern motor_group RightDriveSmart;
 extern digital_out Expand;
+extern rotation Rotation;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

@@ -20,22 +20,26 @@
 #include "vex_global.h"
 
 using namespace vex;
-void Auto1Default();
-void Auto1Rollers();
-void Auto1Shoot();
-void Auto3Default();
-void Auto3Rollers();
-void Auto3Shoot();
-void driveforward(int i);
-void driveback(int i);
-void turnleft(double i);
-void turnright(double i);
-void shoot(double i);
+void Controller();
+void Auto1stackDefault();
+void Auto1stackRollers();
+void Auto1stackShoot();
+void Auto3stackDefault();
+void Auto3stackRollers();
+void Auto3stackShoot();
+void Auto1stackDefaultFront();
+void Auto1stackRollersFront();
+void Auto3stackDefaultFront();
+void Auto3stackRollersFront();
 void intakeup();
 void intakedown();
-int Speedcap = 2;
-int Turncap = 2;
-bool Intakeon = false;
+void ShootMode();
+int Speedcap = 1;
+int Turncap = 1;
+int Shootvelo = 60;
+bool IntakeOn = false;
+char complaint[] = "nathan blames us for everything smh my head";
+void Position();
 // A global instance of competition
 competition Competition;
 
@@ -70,9 +74,78 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
-  Auto();
+  // Drivetrain.driveFor(reverse,6,inches);
+  // Drivetrain.turnFor(right,109.8,degrees);
+  // Drivetrain.driveFor(reverse,26,inches);
+  // Drivetrain.turnFor(right,109.8,degrees);
+  IntakeMotors.spin(forward);
+  Drivetrain.driveFor(reverse,14,inches);
+  wait(1,seconds);
+  IntakeMotors.stop();
+  // Drivetrain.driveFor(forward,6,inches);
+  // Drivetrain.turnFor(right,160,degrees);
+  // Drivetrain.driveFor(reverse,24,inches);
+  // Drivetrain.turnFor(left,109.8,degrees);
+  // ShootMotors.setVelocity(65,percent);
+  // ShootMotors.spin(forward);
+  // wait(0.5,seconds);
+  // IntakeMotors.spinFor(forward,5,seconds);
+  // ShootMotors.stop();
+  // IntakeMotors.stop();
 }
-
+  // Drivetrain.driveFor(reverse,4,inches);
+  // Drivetrain.turnFor(right,109.8,degrees);
+  // Drivetrain.driveFor(reverse,24,inches);
+  // Drivetrain.turnFor(right,109.8,degrees);
+  // IntakeMotors.spin(forward);
+  // Drivetrain.driveFor(reverse,4,inches);
+  // wait(0.5,seconds);
+  // IntakeMotors.stop();
+  // Drivetrain.driveFor(forward,4,inches);
+  // Drivetrain.turnFor(right,164.7,degrees);
+  // Drivetrain.driveFor(forward,48,inches);
+  // Drivetrain.turnFor(right,42.7,degrees);
+  // ShootMotors.setVelocity(74,percent);
+  // ShootMotors.spin(forward);
+  // wait(0.5,seconds);
+  // IntakeMotors.spinFor(forward,5,seconds);
+  // ShootMotors.stop();
+  //
+  // Drivetrain.driveFor(reverse,4,inches);
+  // Drivetrain.turnFor(left,109.8,degrees);
+  // Drivetrain.driveFor(reverse,24,inches);
+  // Drivetrain.turnFor(left,109.8,degrees);
+  // IntakeMotors.spin(forward);
+  // Drivetrain.driveFor(reverse,10,inches);
+  // wait(0.5,seconds);
+  // IntakeMotors.stop();
+  // Drivetrain.turnFor(left,54.9,degrees);
+  // Drivetrain.spinFor(reverse,120,inches);
+  // Drivetrain.turnFor(left,109.8,degrees);
+  // Drivetrain.spinFor(reverse,120,inches);
+  // Drivetrain.turnFor(right,109.8,degrees);
+  // IntakeMotors.spin(forward);
+  // Drivetrain.driveFor(reverse,10,inches);
+  // wait(0.5,seconds);
+  // IntakeMotors.stop();
+  //
+  // Drivetrain.driveFor(reverse,4,inches);
+  // Drivetrain.turnFor(right,109.8,degrees);
+  // Drivetrain.driveFor(reverse,24,inches);
+  // Drivetrain.turnFor(right,109.8,degrees);
+  // IntakeMotors.spin(forward);
+  // Drivetrain.driveFor(reverse,10,inches);
+  // wait(0.5,seconds);
+  // IntakeMotors.stop();
+  // Drivetrain.turnFor(right,54.9,degrees);
+  // Drivetrain.spinFor(reverse,120,inches);
+  // Drivetrain.turnFor(right,109.8,degrees);
+  // Drivetrain.spinFor(reverse,120,inches);
+  // Drivetrain.turnFor(left,109.8,degrees);
+  // IntakeMotors.spin(forward);
+  // Drivetrain.driveFor(reverse,10,inches);
+  // wait(0.5,seconds);
+  // IntakeMotors.stop();
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*                              User Control Task                            */
@@ -84,43 +157,101 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
-  LeftDriveSmart.spin(reverse);
-  RightDriveSmart.spin(reverse);
-  IntakeMotors.setVelocity(20,percent);
-  ShootMotors.setVelocity(75,percent);
+  Controller();
+}
+void Controller(){
+  LeftDriveSmart.setVelocity(0,percent);
+  RightDriveSmart.setVelocity(0,percent);
+  LeftDriveSmart.spin(forward);
+  RightDriveSmart.spin(forward);
+  ShootMotors.setVelocity(60,percent);
   while (true){
-     if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33){
-       LeftDriveSmart.setVelocity((Controller1.Axis3.position()-Controller1.Axis4.position())/Turncap,percent);
-       RightDriveSmart.setVelocity((Controller1.Axis3.position()+Controller1.Axis4.position())/Turncap,percent);
-     } else{
-       LeftDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
-       RightDriveSmart.setVelocity(Controller1.Axis3.position()/Speedcap,percent);
-     }
-    if (Controller1.ButtonL1.pressing() && Intakeon == false){
-      intakeup();
+    if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33){
+      LeftDriveSmart.setVelocity(((Controller1.Axis3.position()*-1)+Controller1.Axis4.position())/Turncap,percent);
+      RightDriveSmart.setVelocity(((Controller1.Axis3.position()*-1)-Controller1.Axis4.position())/Turncap,percent);
+    } else{
+      LeftDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
+      RightDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
+    }   
+    if (Controller1.ButtonL2.pressing()) {
+      IntakeMotors.setVelocity(70,percent);
+      IntakeMotors.spin(forward);
+    } else if (Controller1.ButtonL1.pressing()) {
+      IntakeMotors.setVelocity(70,percent);
+      IntakeMotors.spin(reverse); 
+    } else if (Controller1.ButtonDown.pressing()){
+      IntakeMotors.setVelocity(10,percent);
+      IntakeMotors.spin(reverse); 
+    } else if (Controller1.ButtonUp.pressing()){
+      IntakeMotors.setVelocity(10,percent);
+      IntakeMotors.spin(forward);
     } else {
       IntakeMotors.stop();
-      Intakeon = false;
-      wait(0.1, seconds);
-    }
-    if (Controller1.ButtonL2.pressing() && Intakeon == false){
-      intakedown();
-    } else {
-      IntakeMotors.stop();
-      Intakeon = false;
-      wait(0.1, seconds);
     }
     while (Controller1.ButtonR1.pressing()){
-      shoot(0.1);
+      ShootMode();
     }
-    wait(20, msec); // Sleep the task for a short amount of time to
-                    // prevent wasted resources.
+    if (Controller1.ButtonA.pressing() && Controller1.ButtonX.pressing() && Controller1.ButtonY.pressing() && Controller1.ButtonB.pressing()) {
+      Expand.set(true);
+    }
+    ShootMotors.stop();
   }
 }
-
-//
-// Main will set up the competition functions and callbacks.
-//
+void ShootMode() {
+  ShootMotors.setVelocity(Shootvelo,percent);
+  if (Controller1.ButtonR2.pressing()) {
+    ShootMotors.spin(forward);
+  } else {
+    ShootMotors.stop();
+  }
+  if (Controller1.ButtonL2.pressing()) {
+    IntakeMotors.setVelocity(70,percent);
+    IntakeMotors.spin(forward);
+  } else if (Controller1.ButtonL1.pressing()) {
+    IntakeMotors.setVelocity(20,percent);
+    IntakeMotors.spin(reverse); 
+  } else if (Controller1.ButtonA.pressing()) {
+    IntakeMotors.setVelocity(30,percent);
+    IntakeMotors.spin(forward);
+    }else {
+    IntakeMotors.stop();
+  }
+  if (Controller1.ButtonLeft.pressing()){
+    LeftDriveSmart.setVelocity(-10,percent);
+    RightDriveSmart.setVelocity(10,percent);
+  } else if (Controller1.ButtonRight.pressing()){
+    LeftDriveSmart.setVelocity(10,percent);
+    RightDriveSmart.setVelocity(-10,percent);
+  } else if (Controller1.ButtonUp.pressing()){
+    LeftDriveSmart.setVelocity(-10,percent);
+    RightDriveSmart.setVelocity(-10,percent);
+  } else if (Controller1.ButtonDown.pressing()){
+    LeftDriveSmart.setVelocity(10,percent);
+    RightDriveSmart.setVelocity(10,percent);
+  } else {
+    LeftDriveSmart.setVelocity(0,percent);
+    RightDriveSmart.setVelocity(0,percent);
+  } 
+  if (Controller1.ButtonB.pressing()) {
+    Shootvelo = abs(Shootvelo - 5);
+    ShootMotors.setVelocity(Shootvelo,percent);
+    wait(0.1,seconds);
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.setCursor(2,0);
+    wait(0.1,seconds);
+    Controller1.Screen.print(Shootvelo);
+    wait(0.1,seconds);
+  } else if (Controller1.ButtonX.pressing()){
+    Shootvelo = abs(Shootvelo + 5);
+    ShootMotors.setVelocity(Shootvelo,percent);
+    wait(0.1,seconds);
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.setCursor(2,0);
+    wait(0.1,seconds);
+    Controller1.Screen.print(Shootvelo);
+    wait(0.1,seconds);
+  }
+}
 int main() {
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);
@@ -134,34 +265,12 @@ int main() {
     wait(100, msec);
   }
 }
-
-void driveforward(int i){
-  Drivetrain.driveFor(forward,i,inches);
-}
-void driveback(int i){
-  Drivetrain.driveFor(reverse,i,inches);
-}
-void turnleft(double i){
-  Drivetrain.turnFor(left,i,degrees);
-}
-void turnright(double i){
-  Drivetrain.turnFor(right,i,degrees);
-}
-void roller(double i){
-  IntakeMotors.spinFor(i,seconds);
-}
-void shoot(double i){
-  ShootMotors.spinFor(i,seconds);
-}
-void intakeup(){
-  IntakeMotors.spin(forward);
-  Intakeon = true;
-  wait(0.1, seconds);
-}
-void intakedown(){
-  IntakeMotors.spin(reverse);
-  Intakeon = true;
-  wait(0.1, seconds);
-}
 //Don't look down here there isn't anything down here but suffering :)
 //and Cody's dumb methods XD
+//We're on strike ;p
+
+void Position(){
+  Rotation.velocity(dps);
+  int Xcord;
+  int Zcord;
+}

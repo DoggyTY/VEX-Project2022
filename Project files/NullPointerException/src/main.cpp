@@ -23,12 +23,12 @@
 
 using namespace vex;
 void Controller();
-void Auto1Default();
-void Auto1Rollers();
-void Auto1Shoot();
-void Auto3Default();
-void Auto3Rollers();
-void Auto3Shoot();
+void Auto1stackDefault();
+void Auto1stackRollers();
+void Auto1stackShoot();
+void Auto3stackDefault();
+void Auto3stackRollers();
+void Auto3stackShoot();
 void Auto1stackDefaultFront();
 void Auto1stackRollersFront();
 void Auto3stackDefaultFront();
@@ -38,7 +38,7 @@ void intakedown();
 void ShootMode();
 int Speedcap = 1;
 int Turncap = 1;
-int Shootvelo = 20;
+int Shootvelo = 60;
 bool IntakeOn = false;
 char complaint[] = "nathan blames us for everything smh my head";
 
@@ -50,7 +50,22 @@ char complaint[] = "nathan blames us for everything smh my head";
 */
 int main(){
   vexcodeInit();
-  //Drivetrain.driveFor(reverse,23,inches);
+  Drivetrain.driveFor(reverse,6,inches);
+  Drivetrain.turnFor(right,109.8,degrees);
+  Drivetrain.driveFor(reverse,26,inches);
+  Drivetrain.turnFor(right,109.8,degrees);
+  IntakeMotors.spin(forward);
+  Drivetrain.driveFor(reverse,14,inches);
+  // Drivetrain.driveFor(forward,6,inches);
+  // Drivetrain.turnFor(right,160,degrees);
+  // Drivetrain.driveFor(reverse,24,inches);
+  // Drivetrain.turnFor(left,109.8,degrees);
+  // ShootMotors.setVelocity(65,percent);
+  // ShootMotors.spin(forward);
+  wait(2,seconds);
+  // IntakeMotors.spinFor(forward,5,seconds);
+  // ShootMotors.stop();
+  IntakeMotors.stop();
   Controller();
 }
 void Controller(){
@@ -58,23 +73,11 @@ void Controller(){
   RightDriveSmart.setVelocity(0,percent);
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
-  ShootMotors.setVelocity(30,percent);
+  ShootMotors.setVelocity(60,percent);
   while (true){
     if (Controller1.ButtonLeft.pressing()){
       LeftDriveSmart.setVelocity(-10,percent);
       RightDriveSmart.setVelocity(10,percent);
-    } else if (Controller1.ButtonRight.pressing()){
-      LeftDriveSmart.setVelocity(10,percent);
-      RightDriveSmart.setVelocity(-10,percent);
-    } else if (Controller1.ButtonUp.pressing()){
-      LeftDriveSmart.setVelocity(-10,percent);
-      RightDriveSmart.setVelocity(-10,percent);
-    } else if (Controller1.ButtonDown.pressing()){
-      LeftDriveSmart.setVelocity(10,percent);
-      RightDriveSmart.setVelocity(10,percent);
-    } else if (Controller1.Axis4.position() > 33 || Controller1.Axis4.position() < -33){
-      LeftDriveSmart.setVelocity(((Controller1.Axis3.position()*-1)+Controller1.Axis4.position())/Turncap,percent);
-      RightDriveSmart.setVelocity(((Controller1.Axis3.position()*-1)-Controller1.Axis4.position())/Turncap,percent);
     } else{
       LeftDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
       RightDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
@@ -83,9 +86,16 @@ void Controller(){
     IntakeMotors.setVelocity(70,percent);
     IntakeMotors.spin(forward);
     } else if (Controller1.ButtonL1.pressing()) {
+      IntakeMotors.setVelocity(70,percent);
+      IntakeMotors.spin(reverse); 
+    } else if (Controller1.ButtonDown.pressing()){
       IntakeMotors.setVelocity(10,percent);
       IntakeMotors.spin(reverse); 
-    } else {
+    } else if (Controller1.ButtonUp.pressing()){
+      IntakeMotors.setVelocity(10,percent);
+      IntakeMotors.spin(forward);
+    }
+    else {
       IntakeMotors.stop();
     }
     while (Controller1.ButtonR1.pressing()){
@@ -98,6 +108,7 @@ void Controller(){
   }
 }
 void ShootMode() {
+  ShootMotors.setVelocity(Shootvelo,percent);
   if (Controller1.ButtonR2.pressing()) {
     ShootMotors.spin(forward);
   } else {
@@ -148,42 +159,53 @@ void ShootMode() {
     wait(0.1,seconds);
   }
 }
-void Auto3stackDefault(){
+void Auto1stackDefault(){
+  Drivetrain.driveFor(forward,4,inches);
+  Drivetrain.turnFor(right,109.8,degrees);
+  Drivetrain.driveFor(forward,24,inches);
+  Drivetrain.turnFor(left,109.8,degrees);
+  Drivetrain.driveFor(reverse,4,inches);
+  IntakeMotors.spinFor(forward,1,seconds);
   Drivetrain.driveFor(forward,4,inches);
   Drivetrain.turnFor(left,109.8,degrees);
   Drivetrain.driveFor(forward,24,inches);
   Drivetrain.turnFor(left,109.8,degrees);
+  IntakeMotors.spin(forward);
+  Drivetrain.driveFor(reverse,24,inches);
+  IntakeMotors.stop();
+  Drivetrain.turnFor(right,43,degrees);
+  ShootMotors.setVelocity(70,percent);
+  ShootMotors.spin(forward);
+  IntakeMotors.spinFor(forward,5,seconds);
+  ShootMotors.stop();
+}
+void Auto1stackRollers(){
+  Drivetrain.driveFor(forward,4,inches);
+  Drivetrain.turnFor(left,109.8,degrees);
+  Drivetrain.driveFor(forward,24,inches);
+  Drivetrain.turnFor(right,109.8,degrees);
+  Drivetrain.driveFor(reverse,4,inches);
+  IntakeMotors.spinFor(forward,1,seconds);
+  Drivetrain.driveFor(forward,1,inches);
+  Drivetrain.turnFor(right,109.8,degrees);
+  Drivetrain.driveFor(forward,120,inches);
+  Drivetrain.turnFor(left,109.8,degrees);
+  Drivetrain.driveFor(forward,120,inches);
+  Drivetrain.turnFor(right,109.8,degrees);
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(reverse,4,inches);
-  Drivetrain.turnFor(left,109.8,degrees);
-  Drivetrain.driveFor(forward,26,inches);
-  Drivetrain.turnFor(left,109.8,degrees);
+}
+void Auto1stackShoot(){
   IntakeMotors.spin(forward);
-  Drivetrain.driveFor(forward,24,inches);
+  Drivetrain.driveFor(reverse,24,inches);
   IntakeMotors.stop();
   Drivetrain.turnFor(left,43,degrees);
+  ShootMotors.setVelocity(70,percent);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
-void Auto3stackRollers(){
-  Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(reverse,4,inches);
-}
-void Auto3stackShoot(){
-  IntakeMotors.spin(forward);
-  Drivetrain.driveFor(forward,24,inches);
-  IntakeMotors.stop();
-  Drivetrain.turnFor(left,43,degrees);
-  ShootMotors.spin(forward);
-  IntakeMotors.spinFor(forward,5,seconds);
-  ShootMotors.stop();
-}
-void Auto1stackDefault(){
+void Auto3stackDefault(){
   Drivetrain.driveFor(forward,4,inches);
   Drivetrain.turnFor(right,109.8,degrees);
   Drivetrain.driveFor(forward,24,inches);
@@ -196,11 +218,12 @@ void Auto1stackDefault(){
   Drivetrain.driveFor(forward,45,inches);
   IntakeMotors.stop();
   Drivetrain.turnFor(right,97.6,degrees);
+  ShootMotors.setVelocity(74,percent);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
 }
-void Auto1stackRollers(){
+void Auto3stackRollers(){
   Drivetrain.driveFor(forward,4,inches);
   Drivetrain.turnFor(right,109.8,degrees);
   Drivetrain.driveFor(forward,24,inches);
@@ -216,13 +239,14 @@ void Auto1stackRollers(){
   Drivetrain.driveFor(forward,4,inches);
   IntakeMotors.spinFor(forward,1,seconds);
 }
-void Auto1stackShoot(){
+void Auto3stackShoot(){
   Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(left,164.7,degrees);
+  Drivetrain.turnFor(right,164.7,degrees);
   IntakeMotors.spin(forward);
   Drivetrain.driveFor(forward,20,inches);
   IntakeMotors.stop();
-  Drivetrain.turnFor(right,97.6,degrees);
+  Drivetrain.turnFor(left,97.6,degrees);
+  ShootMotors.setVelocity(74,percent);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
@@ -235,6 +259,7 @@ void Auto1stackDefaultFront(){
   Drivetrain.driveFor(forward,45,inches);
   IntakeMotors.stop();
   Drivetrain.turnFor(right,97.6,degrees);
+  ShootMotors.setVelocity(70,percent);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();
@@ -260,6 +285,7 @@ void Auto3stackDefaultFront(){
   Drivetrain.driveFor(forward,24,inches);
   IntakeMotors.stop();
   Drivetrain.turnFor(left,43,degrees);
+  ShootMotors.setVelocity(74,percent);
   ShootMotors.spin(forward);
   IntakeMotors.spinFor(forward,5,seconds);
   ShootMotors.stop();

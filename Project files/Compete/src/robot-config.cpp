@@ -9,19 +9,21 @@ brain  Brain;
 
 // VEXcode device constructors
 controller Controller1 = controller(primary);
-motor leftMotorA = motor(PORT8, ratio18_1, true);
-motor leftMotorB = motor(PORT9, ratio18_1, false);
+motor ShootMotorsMotorA = motor(PORT7, ratio6_1, false);
+motor ShootMotorsMotorB = motor(PORT8, ratio6_1, false);
+motor_group ShootMotors = motor_group(ShootMotorsMotorA, ShootMotorsMotorB);
+motor leftMotorA = motor(PORT9, ratio18_1, false);
+motor leftMotorB = motor(PORT10, ratio18_1, true);
 motor_group LeftDriveSmart = motor_group(leftMotorA, leftMotorB);
-motor rightMotorA = motor(PORT20, ratio18_1, false);
-motor rightMotorB = motor(PORT21, ratio18_1, true);
+motor rightMotorA = motor(PORT20, ratio18_1, true);
+motor rightMotorB = motor(PORT19, ratio18_1, false);
 motor_group RightDriveSmart = motor_group(rightMotorA, rightMotorB);
 drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 295, 40, mm, 1);
-motor IntakeMotorsMotorA = motor(PORT1, ratio18_1, false);
-motor IntakeMotorsMotorB = motor(PORT2, ratio18_1, false);
+motor IntakeMotorsMotorA = motor(PORT17, ratio18_1, false);
+motor IntakeMotorsMotorB = motor(PORT18, ratio18_1, false);
 motor_group IntakeMotors = motor_group(IntakeMotorsMotorA, IntakeMotorsMotorB);
-motor ShootMotorsMotorA = motor(PORT3, ratio18_1, false);
-motor ShootMotorsMotorB = motor(PORT4, ratio18_1, false);
-motor_group ShootMotors = motor_group(ShootMotorsMotorA, ShootMotorsMotorB);
+digital_out Expand = digital_out(Brain.ThreeWirePort.A);
+rotation Rotation = rotation(PORT21);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

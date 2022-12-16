@@ -36,6 +36,8 @@ void Auto3stackRollersFront();
 void intakeup();
 void intakedown();
 void ShootMode();
+
+void gps();
 int Speedcap = 1;
 int Turncap = 1;
 int Shootvelo = 60;
@@ -300,6 +302,10 @@ void Auto3stackRollersFront(){
   Drivetrain.turnFor(left,109.8,degrees);
   Drivetrain.driveFor(reverse,4,inches);
   IntakeMotors.spinFor(reverse,1,seconds);
+}
+
+void gps() {
+  
 }
 //Don't look down here there isn't anything down here but suffering :)
 //and our dumb methods XD

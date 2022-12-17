@@ -13,7 +13,8 @@ extern motor_group IntakeMotors;
 extern motor_group LeftDriveSmart;
 extern motor_group RightDriveSmart;
 extern digital_out Expand;
-extern rotation Rotation;
+extern rotation Xrotation;
+extern rotation Yrotation;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

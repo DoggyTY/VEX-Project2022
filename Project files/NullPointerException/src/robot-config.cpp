@@ -28,6 +28,7 @@ motor_group IntakeMotors = motor_group(IntakeMotorsMotorA, IntakeMotorsMotorB);
 digital_out Expand = digital_out(Brain.ThreeWirePort.A);
 rotation Xrotation = rotation(PORT5);
 rotation Yrotation = rotation(PORT6);
+inertial heading = inertial(PORT4);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

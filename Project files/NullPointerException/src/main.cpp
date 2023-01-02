@@ -358,23 +358,18 @@ void Auto3stackRollersFront(){
 void gps() {
   // This is all prototype code and none of it really can fuction well, all theoretical
   // Also need to rewrite some of it to make sure that its correctly formatting gps, with x and y.
-  Xrpm = Xrotation.velocity(rpm) / 60; // divide by 60 to get rps, which would be useful later... also need to convert it to a smaller number, like 0.01 millisecond because brain processes things at 1.3 trillion inputs a seconds
-  Yrpm = Yrotation.velocity(rpm) / 60;
+  double LocalXrpm = Xrotation.velocity(rpm); // divide by 60 to get rps, which would be useful later... also need to convert it to a smaller number, like 0.01 millisecond because brain processes things at 1.3 trillion inputs a seconds
+  double LocalYrpm = Yrotation.velocity(rpm);
   if (Xrpm == 0 and Yrpm == 0){
     return NULL;
   }
+  double Rotation = heading.heading(deg);
+  Xrpm = (sin(Rotation)*LocalYrpm) + (sin(Rotation+90)*LocalXrpm);
+  Yrpm = (cos(Rotation)*LocalYrpm) + (cos(Rotation+90)*LocalXrpm);
   Xdis = Xrpm * dpr;
   Ydis = Yrpm * dpr;
   VectorRPM = sqrt(pow(Xrpm,2) + pow(Yrpm,2));
   VectorDis = sqrt(pow(Xdis,2) + pow(Ydis,2));
-  if(Yrpm < 0) {
-    Left = true;
-  }
-  Yrpm = abs(Yrpm);
-  Anglelooking = acos(Xrpm/VectorRPM);
-  if (Left) {
-    Anglelooking = Anglelooking + 180;
-  }
   Xaxis = Xaxis + Xdis;
   Yaxis = Yaxis + Ydis;
   if (Xaxis > FieldX or Yaxis > FieldY){

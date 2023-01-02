@@ -15,7 +15,7 @@ extern motor_group RightDriveSmart;
 extern digital_out Expand;
 extern rotation Xrotation;
 extern rotation Yrotation;
-
+extern inertial heading;
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  * 

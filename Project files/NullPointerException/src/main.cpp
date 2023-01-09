@@ -38,16 +38,15 @@ void intakedown();
 void ShootMode();
 void gps();
 void Shootsetup();
-
 int Speedcap = 1;
 int Turncap = 1;
 int Shootvelo = 60;
 bool IntakeOn = false;
-char complaint[] = "nathan blames us for everything smh my head";
+char complaint[] = "nathan blames us for everything smh my head"; 
 
 // Global GPS vars
 double Anglelooking = 0;
-dpr = 3; //Distance per rotation, need to test numbers, also should be in mm, because else it would break resulting in Robot Position Fault
+double dpr = 3.0; //Distance per rotation, need to test numbers, also should be in mm, because else it would break resulting in Robot Position Fault
 bool Left = false;
 bool PosFault = false; // This is something to use if having problems with robot going to far that it gps goes out the arena, making any system that uses gps disable until problem is resolved.
 double Xrpm; 
@@ -98,6 +97,7 @@ int main(){
   Controller();
 }
 void Controller(){
+  timer.reset(); // Make sure timer is perfect no matter the system timer
   LeftDriveSmart.setVelocity(0,percent);
   RightDriveSmart.setVelocity(0,percent);
   LeftDriveSmart.spin(forward);
@@ -377,7 +377,7 @@ void gps() {
     Controller1.Screen.print("Robot Position Fault"); // Making it known to driver of PosFault, Should do this with other things but yeah
     PosFault = true;
   } else {
-    Controller1.Screen.ClearScreen();
+    Controller1.Screen.clearLine(2,3);
     PosFault = false;
   }
   Controller1.Screen.setCursor(0,0); // Mainly for trouble shooting but could be useful for other things

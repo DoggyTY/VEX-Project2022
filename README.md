@@ -9,3 +9,6 @@
  1. We turn the closest roller
  2. Get the two or three disks nearest to the robot
  3. Shoot the disks into high goal from predetermand position.
+
+ So we haven't really done anything here but basically we've wrote two files one for competition and another for testing, when we need to we port over the testing one to competetion
+ for all intents and purposes the NullPointerException is the testing Folder and the Compete Folder is the final code

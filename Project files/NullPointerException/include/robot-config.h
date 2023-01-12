@@ -1,3 +1,4 @@
+#include "vex_imu.h"
 #include "vex_motorgroup.h"
 #include "vex_rotation.h"
 #include "vex_triport.h"
@@ -16,6 +17,11 @@ extern digital_out Expand;
 extern rotation Xrotation;
 extern rotation Yrotation;
 extern inertial heading;
+extern motor leftDriveMotorA;
+extern motor leftDriveMotorB;
+extern motor rightDriveMotorA;
+extern motor rightDriveMotorB;
+extern inertial inertialSensor;
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  * 

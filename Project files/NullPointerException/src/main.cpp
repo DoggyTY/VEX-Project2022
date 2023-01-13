@@ -41,15 +41,15 @@ bool gpsupdate();
 bool Shootsetup();
 void ScreenAnime();
 int PID();
-int Speedcap = 1;
-int Turncap = 1;
+float Speedcap = 0.8;
+float Turncap = 0.8;
 int Shootvelo = 80;
 bool IntakeOn = false;
 char complaint[] = "nathan blames us for everything smh my head"; 
 
 // Global GPS vars
 double Anglelooking = 0;
-double dpr = 3.0; //Distance per rotation, need to test numbers, also should be in mm, because else it would break resulting in Robot Position Fault
+double dpr = 299.236700254; //Distance per rotation, need to test numbers, also should be in mm, because else it would break resulting in Robot Position Fault
 bool Left = false;
 bool PosFault = false; // This is something to use if having problems with robot going to far that it gps goes out the arena, making any system that uses gps disable until problem is resolved.
 double Xrpm; 
@@ -884,13 +884,13 @@ int Connections[664][2] = { // 0 -> 367, but this ones worse... than the one abo
 */
 int main(){
   vexcodeInit();
-  // heading.calibrate();
-  // wait(2,seconds);
-  // Controller();
-  while(true){
-  ScreenAnime();
-  wait(1,seconds);
-  }
+  heading.calibrate();
+  wait(2,seconds);
+  Controller();
+  //while(true){
+  //ScreenAnime();
+  //wait(1,seconds);
+  //}
 }
 void Controller(){
   Brain.Timer.reset(); // Make sure timer is perfect no matter the system timer
@@ -900,12 +900,12 @@ void Controller(){
   RightDriveSmart.spin(forward);
   ShootMotors.setVelocity(60,percent);
   while (true){
-    if (Controller1.ButtonLeft.pressing()){
-      LeftDriveSmart.setVelocity(-10,percent);
-      RightDriveSmart.setVelocity(10,percent);
+    if (Controller1.Axis4.position() > 10 || Controller1.Axis4.position() < -10){
+      LeftDriveSmart.setVelocity(((Controller1.Axis3.position())+Controller1.Axis4.position()*-1)*Turncap,percent);
+      RightDriveSmart.setVelocity(((Controller1.Axis3.position())-Controller1.Axis4.position()*-1)*Turncap,percent);
     } else{
-      LeftDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
-      RightDriveSmart.setVelocity((Controller1.Axis3.position()*-1)/Speedcap,percent);
+      LeftDriveSmart.setVelocity((Controller1.Axis3.position())*Speedcap,percent);
+      RightDriveSmart.setVelocity((Controller1.Axis3.position())*Speedcap,percent);
     }   
     if (Controller1.ButtonL2.pressing()) {
     IntakeMotors.setVelocity(70,percent);
@@ -971,17 +971,17 @@ void ShootMode() {
     IntakeMotors.stop();
   }
   if (Controller1.ButtonLeft.pressing()){
-    LeftDriveSmart.setVelocity(-10,percent);
-    RightDriveSmart.setVelocity(10,percent);
+    LeftDriveSmart.setVelocity(10,percent);
+    RightDriveSmart.setVelocity(-10,percent);
   } else if (Controller1.ButtonRight.pressing()){
-    LeftDriveSmart.setVelocity(10,percent);
-    RightDriveSmart.setVelocity(-10,percent);
-  } else if (Controller1.ButtonUp.pressing()){
     LeftDriveSmart.setVelocity(-10,percent);
-    RightDriveSmart.setVelocity(-10,percent);
-  } else if (Controller1.ButtonDown.pressing()){
+    RightDriveSmart.setVelocity(10,percent);
+  } else if (Controller1.ButtonUp.pressing()){
     LeftDriveSmart.setVelocity(10,percent);
     RightDriveSmart.setVelocity(10,percent);
+  } else if (Controller1.ButtonDown.pressing()){
+    LeftDriveSmart.setVelocity(-10,percent);
+    RightDriveSmart.setVelocity(-10,percent);
   } else {
     LeftDriveSmart.setVelocity(0,percent);
     RightDriveSmart.setVelocity(0,percent);
@@ -1007,148 +1007,6 @@ void ShootMode() {
   }
   //gpsupdate();
 }
-void Auto1stackDefault(){
-  Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(left,109.8,degrees);
-  Drivetrain.driveFor(reverse,4,inches);
-  IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(left,109.8,degrees);
-  Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(left,109.8,degrees);
-  IntakeMotors.spin(forward);
-  Drivetrain.driveFor(reverse,24,inches);
-  IntakeMotors.stop();
-  Drivetrain.turnFor(right,43,degrees);
-  ShootMotors.setVelocity(70,percent);
-  ShootMotors.spin(forward);
-  IntakeMotors.spinFor(forward,5,seconds);
-  ShootMotors.stop();
-}
-void Auto1stackRollers(){
-  Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(left,109.8,degrees);
-  Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(reverse,4,inches);
-  IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(forward,1,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(left,109.8,degrees);
-  Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(forward,4,inches);
-  IntakeMotors.spinFor(forward,1,seconds);
-}
-void Auto1stackShoot(){
-  IntakeMotors.spin(forward);
-  Drivetrain.driveFor(reverse,24,inches);
-  IntakeMotors.stop();
-  Drivetrain.turnFor(left,43,degrees);
-  ShootMotors.setVelocity(70,percent);
-  ShootMotors.spin(forward);
-  IntakeMotors.spinFor(forward,5,seconds);
-  ShootMotors.stop();
-}
-void Auto3stackDefault(){
-  Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(reverse,4,inches);
-  IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(reverse,4,inches);
-  Drivetrain.turnFor(right,164.7,degrees);
-  IntakeMotors.spin(forward);
-  Drivetrain.driveFor(forward,45,inches);
-  IntakeMotors.stop();
-  Drivetrain.turnFor(right,97.6,degrees);
-  ShootMotors.setVelocity(74,percent);
-  ShootMotors.spin(forward);
-  IntakeMotors.spinFor(forward,5,seconds);
-  ShootMotors.stop();
-}
-void Auto3stackRollers(){
-  Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(reverse,4,inches);
-  IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(forward,1,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(left,109.8,degrees);
-  Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(forward,4,inches);
-  IntakeMotors.spinFor(forward,1,seconds);
-}
-void Auto3stackShoot(){
-  Drivetrain.driveFor(forward,24,inches);
-  Drivetrain.turnFor(right,164.7,degrees);
-  IntakeMotors.spin(forward);
-  Drivetrain.driveFor(forward,20,inches);
-  IntakeMotors.stop();
-  Drivetrain.turnFor(left,97.6,degrees);
-  ShootMotors.setVelocity(74,percent);
-  ShootMotors.spin(forward);
-  IntakeMotors.spinFor(forward,5,seconds);
-  ShootMotors.stop();
-}
-void Auto1stackDefaultFront(){
-  IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(reverse,4,inches);
-  Drivetrain.turnFor(right,164.7,degrees);
-  IntakeMotors.spin(forward);
-  Drivetrain.driveFor(forward,45,inches);
-  IntakeMotors.stop();
-  Drivetrain.turnFor(right,97.6,degrees);
-  ShootMotors.setVelocity(70,percent);
-  ShootMotors.spin(forward);
-  IntakeMotors.spinFor(forward,5,seconds);
-  ShootMotors.stop();
-}
-void Auto1stackRollersFront(){
-  IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(forward,1,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(left,109.8,degrees);
-  Drivetrain.driveFor(forward,120,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(forward,4,inches);
-  IntakeMotors.spinFor(forward,1,seconds);
-}
-void Auto3stackDefaultFront(){
-  IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(reverse,4,inches);
-  Drivetrain.turnFor(left,109.8,degrees);
-  Drivetrain.driveFor(forward,26,inches);
-  Drivetrain.turnFor(left,109.8,degrees);
-  IntakeMotors.spin(forward);
-  Drivetrain.driveFor(forward,24,inches);
-  IntakeMotors.stop();
-  Drivetrain.turnFor(left,43,degrees);
-  ShootMotors.setVelocity(74,percent);
-  ShootMotors.spin(forward);
-  IntakeMotors.spinFor(forward,5,seconds);
-  ShootMotors.stop();
-}
-void Auto3stackRollersFront(){
-  IntakeMotors.spinFor(forward,1,seconds);
-  Drivetrain.driveFor(forward,4,inches);
-  Drivetrain.turnFor(right,109.8,degrees);
-  Drivetrain.driveFor(forward,96,inches);
-  Drivetrain.turnFor(left,109.8,degrees);
-  Drivetrain.driveFor(forward,96,inches);
-  Drivetrain.turnFor(left,109.8,degrees);
-  Drivetrain.driveFor(reverse,4,inches);
-  IntakeMotors.spinFor(reverse,1,seconds);
-}
 
 bool gpsupdate() {
   // This is all prototype code and none of it really can fuction well, all theoretical
@@ -1159,7 +1017,7 @@ bool gpsupdate() {
   if (Xrpm == 0 and Yrpm == 0){
     return false;
   }
-  double Rotation = heading.heading(deg);
+  double Rotation = heading.roll(deg);
   Xrpm = (((sin(Rotation)*LocalYrpm) + (sin(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;
   Yrpm = (((cos(Rotation)*LocalYrpm) + (cos(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;
   Xdis = Xrpm * dpr;

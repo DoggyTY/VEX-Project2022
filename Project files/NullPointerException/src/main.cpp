@@ -901,8 +901,13 @@ void Controller(){
   ShootMotors.setVelocity(60,percent);
   while (true){
     if (Controller1.Axis4.position() > 10 || Controller1.Axis4.position() < -10){
-      LeftDriveSmart.setVelocity(((Controller1.Axis3.position())+Controller1.Axis4.position()*-1)*Turncap,percent);
-      RightDriveSmart.setVelocity(((Controller1.Axis3.position())-Controller1.Axis4.position()*-1)*Turncap,percent);
+      if (Controller1.Axis4.position() > 0){
+        LeftDriveSmart.setVelocity(Controller1.Axis3.position()+Controller1.Axis4.position()*-1,percent);
+        RightDriveSmart.setVelocity(Controller1.Axis3.position()*-1,percent);
+      } else {
+        LeftDriveSmart.setVelocity(Controller1.Axis3.position()*-1,percent);
+        RightDriveSmart.setVelocity(Controller1.Axis3.position()+Controller1.Axis4.position()*-1,percent);
+      }
     } else{
       LeftDriveSmart.setVelocity((Controller1.Axis3.position())*Speedcap,percent);
       RightDriveSmart.setVelocity((Controller1.Axis3.position())*Speedcap,percent);

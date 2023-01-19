@@ -18,9 +18,13 @@
 
 #include "v5_apitypes.h"
 #include "vex.h"
+#include "vex_brain.h"
 #include "vex_drivetrain.h"
 #include "vex_global.h"
 #include "vex_task.h"
+#include "vex_timer.h"
+#include "vex_units.h"
+#include <cmath>
 
 using namespace vex;
 void Controller();
@@ -58,16 +62,17 @@ double Xdis;
 double Ydis;
 double VectorRPM;
 double VectorDis;
+double prevoustimer = 0;
 // Measured in mm by default
-double Xaxis;
-double Yaxis;
-double FieldX = 3650; // 12 feet, if need inches/feet. Position 0 is the corner of own low goal
-double FieldY = 3650;
-double LowGoal = 1200; // 1 Tile is 600 by 600, or 24 by 24 inches
-double LowGoalHeight = 543.56; // 21.4 inches
-double HeighGoalX = 3050;
-double HeightGoalY = 3050;
-int XDistoGoal, YDistoGoal, VectorDistoGoal,AngleToGoal,DisAngleGoal,VelocityToGoal; //All Varibles to support Shoot Setup Modular
+double Xaxis = 1;
+double Yaxis = 1;
+double FieldX = 3650*0.23333333333333333333333333333333333333333; // 12 feet, if need inches/feet. Position 0 is the corner of own low goal
+double FieldY = 3650*0.23333333333333333333333333333333333333333;
+double LowGoal = 1200*0.23333333333333333333333333333333333333333; // 1 Tile is 600 by 600, or 24 by 24 inches
+double LowGoalHeight = 543.56*0.23333333333333333333333333333333333333333; // 21.4 inches
+double HeighGoalX = 3050*0.23333333333333333333333333333333333333333;
+double HeightGoalY = 3050*0.23333333333333333333333333333333333333333;
+double XDistoGoal, YDistoGoal, VectorDistoGoal,AngleToGoal,DisAngleGoal,VelocityToGoal; //All Varibles to support Shoot Setup Modular
 double ShootAngleFault = 300;
 int zAnimation = 15;
 int BackzAnimation = 30;
@@ -102,15 +107,8 @@ int maxTurnIntegral = 20; // These cap the integrals
 int maxIntegral = 3000;
 int integralBound = 3; //If error is outside the bounds, then apply the integral. This is a buffer with +-integralBound degrees
 
-
-//Pasted from a C++ resource
-double signnum_c(double x) {
-  if (x > 0.0) return 1.0;
-  if (x < 0.0) return -1.0;
-  return x;
-}
-double RotationMatrix[2][2] = {{0.98480775301,-0.1736481776},
-                                 {0.1736481776, 0.98480775301}};
+double RotationMatrix[2][2] ={{0.98480775301,-0.1736481776},
+                              {0.1736481776, 0.98480775301}};
   int Entry = 0;
   int FocalLength = 30;
   double ProjectedXY[368][2]; // Need amount of verties
@@ -893,7 +891,7 @@ int main(){
   //}
 }
 void Controller(){
-  Brain.Timer.reset(); // Make sure timer is perfect no matter the system timer
+  vex::timer::systemHighResolution(); // Make sure timer is perfect no matter the system timer
   LeftDriveSmart.setVelocity(0,percent);
   RightDriveSmart.setVelocity(0,percent);
   LeftDriveSmart.spin(forward);
@@ -901,13 +899,8 @@ void Controller(){
   ShootMotors.setVelocity(60,percent);
   while (true){
     if (Controller1.Axis4.position() > 10 || Controller1.Axis4.position() < -10){
-      if (Controller1.Axis4.position() > 0){
-        LeftDriveSmart.setVelocity(Controller1.Axis3.position()+Controller1.Axis4.position()*-1,percent);
-        RightDriveSmart.setVelocity(Controller1.Axis3.position()*-1,percent);
-      } else {
-        LeftDriveSmart.setVelocity(Controller1.Axis3.position()*-1,percent);
-        RightDriveSmart.setVelocity(Controller1.Axis3.position()+Controller1.Axis4.position()*-1,percent);
-      }
+      LeftDriveSmart.setVelocity(((Controller1.Axis3.position())+Controller1.Axis4.position()*-1)*Turncap,percent);
+      RightDriveSmart.setVelocity(((Controller1.Axis3.position())-Controller1.Axis4.position()*-1)*Turncap,percent);
     } else{
       LeftDriveSmart.setVelocity((Controller1.Axis3.position())*Speedcap,percent);
       RightDriveSmart.setVelocity((Controller1.Axis3.position())*Speedcap,percent);
@@ -936,8 +929,8 @@ void Controller(){
       Expand.set(true);
     }
     ShootMotors.stop();
+    gpsupdate();
   }
-  //gpsupdate();
 }
 bool Shootsetup() {
   if (PosFault == true){
@@ -949,8 +942,8 @@ bool Shootsetup() {
   if(XDistoGoal < 0) {
     Left = true;
   }
-  XDistoGoal = abs(XDistoGoal);
-  AngleToGoal = acos(YDistoGoal/VectorDistoGoal);
+  XDistoGoal = std::abs(XDistoGoal);
+  AngleToGoal = acos(YDistoGoal/VectorDistoGoal) * 180/3.1415;
   if (Left == true){
     AngleToGoal = AngleToGoal + 180;
   }
@@ -1010,27 +1003,47 @@ void ShootMode() {
     Controller1.Screen.print(Shootvelo);
     wait(0.1,seconds);
   }
-  //gpsupdate();
+  gpsupdate();
 }
 
 bool gpsupdate() {
   // This is all prototype code and none of it really can fuction well, all theoretical
   // Also need to rewrite some of it to make sure that its correctly formatting gps, with x and y.
-  double timebetweengps = Brain.Timer.value();
+  double timebetweengps = vex::timer::systemHighResolution() - prevoustimer;
   double LocalXrpm = Xrotation.velocity(rpm) / 60; // divide by 60 to get rps, which would be useful later... also need to convert it to a smaller number, like 0.01 millisecond because brain processes things at 1.3 trillion inputs a seconds
   double LocalYrpm = Yrotation.velocity(rpm) / 60;
-  if (Xrpm == 0 and Yrpm == 0){
-    return false;
-  }
-  double Rotation = heading.roll(deg);
+  double Rotation = (heading.heading(deg)) * (M_PI /180);
   Xrpm = (((sin(Rotation)*LocalYrpm) + (sin(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;
   Yrpm = (((cos(Rotation)*LocalYrpm) + (cos(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;
   Xdis = Xrpm * dpr;
   Ydis = Yrpm * dpr;
-  VectorRPM = sqrt(pow(Xrpm,2) + pow(Yrpm,2));
-  VectorDis = sqrt(pow(Xdis,2) + pow(Ydis,2));
+  // VectorRPM = sqrt(pow(Xrpm,2) + pow(Yrpm,2));
+  // VectorDis = sqrt(pow(Xdis,2) + pow(Ydis,2));
   Xaxis = Xaxis + Xdis;
   Yaxis = Yaxis + Ydis;
+
+  // Brain.Screen.setCursor(1,1); // Mainly for trouble shooting but could be useful for other things
+  // Brain.Screen.print(Xaxis);
+  // Brain.Screen.setCursor(5,15);
+  // Brain.Screen.print(Yaxis);
+
+  Brain.Screen.clearScreen();
+  Brain.Screen.setCursor(1, 1);
+  Brain.Screen.print(Xaxis);
+  Brain.Screen.newLine();
+  Brain.Screen.print(Yaxis);
+  Brain.Screen.newLine();
+  Brain.Screen.print(Xdis);
+  Brain.Screen.newLine();
+  Brain.Screen.print(Ydis);
+  Brain.Screen.newLine();
+  Brain.Screen.print(Rotation);
+  Brain.Screen.newLine();
+  Brain.Screen.print(Yrpm);
+  Brain.Screen.newLine();
+  Brain.Screen.print(Xrpm);
+  Brain.Screen.newLine();
+
   if (Xaxis > FieldX or Yaxis > FieldY){
     Controller1.Screen.setCursor(2,3);
     Controller1.Screen.print("Robot Position Fault"); // Making it known to driver of PosFault, Should do this with other things but yeah
@@ -1040,11 +1053,7 @@ bool gpsupdate() {
     Controller1.Screen.clearLine();
     PosFault = false;
   }
-  Controller1.Screen.setCursor(0,0); // Mainly for trouble shooting but could be useful for other things
-  Controller1.Screen.print(Xaxis);
-  Controller1.Screen.setCursor(0,1);
-  Controller1.Screen.print(Yaxis);
-  Brain.Timer.reset();
+  prevoustimer = vex::timer::systemHighResolution();
   return true;
 }
 int PID() {
@@ -1098,7 +1107,7 @@ int PID() {
     //totalError += error;
 
     //This would cap the integral
-    totalError = abs(totalError) > maxIntegral ? signnum_c(totalError) * maxIntegral : totalError;
+    totalError = abs(totalError) > maxIntegral ? -1*(totalError) * maxIntegral : totalError;
 
     // Calculate motor power
     double lateralMotorPower = (error * kP) + (derivative * kD) + (totalError * kI); 
@@ -1134,7 +1143,7 @@ int PID() {
     //totalError += error;
 
     //This would cap the integral
-    turnTotalError = abs(turnTotalError) > maxTurnIntegral ? signnum_c(turnTotalError) * maxTurnIntegral : turnTotalError;
+    turnTotalError = abs(turnTotalError) > maxTurnIntegral ? -1*(turnTotalError) * maxTurnIntegral : turnTotalError;
 
     // Calculate motor power
     double turnMotorPower = (turnError * turnkP) + (turnDerivative * turnkD) + (turnTotalError * turnkI); 
@@ -1168,15 +1177,15 @@ void ScreenAnime() {
     row[2] = (row[2] * RotationMatrix[1][0]) + (row[2] * RotationMatrix[1][1]);
   }
   for (auto& row: XYZ){
-    ProjectedXY[Entry][0] = (FocalLength * row[0]) / (FocalLength + row[2]);
-    ProjectedXY[Entry][1] = (FocalLength * row[1]) / (FocalLength + row[2]);
+    ProjectedXY[Entry][0] = (FocalLength * (row[0] * 5)) / (FocalLength + (row[2] * 5));
+    ProjectedXY[Entry][1] = (FocalLength * (row[1] * 5)) / (FocalLength + (row[2] * 5));
     Entry = Entry + 1;
   }
   Brain.Screen.clearScreen();
   for (auto& combo: Connections) {
     Brain.Screen.drawLine(ProjectedXY[combo[0]][0], ProjectedXY[combo[0]][1], ProjectedXY[combo[1]][0], ProjectedXY[combo[1]][1]);
   }
-  Brain.Screen.setCursor(1,1);
+  Brain.Screen.setCursor(12,40);
   Brain.Screen.print(starttimer - vex::timer::system());
 }
 //Don't look down here there isn't anything down here but suffering :)

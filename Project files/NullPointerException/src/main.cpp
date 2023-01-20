@@ -891,7 +891,6 @@ int main(){
   //}
 }
 void Controller(){
-  vex::timer::systemHighResolution(); // Make sure timer is perfect no matter the system timer
   LeftDriveSmart.setVelocity(0,percent);
   RightDriveSmart.setVelocity(0,percent);
   LeftDriveSmart.spin(forward);
@@ -933,6 +932,7 @@ void Controller(){
   }
 }
 bool Shootsetup() {
+  Left = false;
   if (PosFault == true){
     return false;
   }
@@ -944,11 +944,12 @@ bool Shootsetup() {
   }
   XDistoGoal = std::abs(XDistoGoal);
   AngleToGoal = acos(YDistoGoal/VectorDistoGoal) * 180/3.1415;
-  if (Left == true){
-    AngleToGoal = AngleToGoal + 180;
-  }
   DisAngleGoal = Anglelooking - DisAngleGoal;
-  Drivetrain.turnFor(left,DisAngleGoal,degrees);
+  if (Left){
+    Drivetrain.turnFor(left,DisAngleGoal,degrees);
+  } else{
+    Drivetrain.turnFor(right,DisAngleGoal,degrees);
+  }
   // Velocity setup is next but is too hard to finish now, Rain don't do it, it needs to be specific to other varibles as we talked about.
   return true;
 }
@@ -1012,6 +1013,9 @@ bool gpsupdate() {
   double timebetweengps = vex::timer::systemHighResolution() - prevoustimer;
   double LocalXrpm = Xrotation.velocity(rpm) / 60; // divide by 60 to get rps, which would be useful later... also need to convert it to a smaller number, like 0.01 millisecond because brain processes things at 1.3 trillion inputs a seconds
   double LocalYrpm = Yrotation.velocity(rpm) / 60;
+  if (LocalXrpm == LocalYrpm){
+    return false;
+  }
   double Rotation = (heading.heading(deg)) * (M_PI /180);
   Xrpm = (((sin(Rotation)*LocalYrpm) + (sin(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;
   Yrpm = (((cos(Rotation)*LocalYrpm) + (cos(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;

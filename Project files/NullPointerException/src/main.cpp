@@ -41,7 +41,7 @@ void Auto3stackRollersFront();
 void intakeup();
 void intakedown();
 void ShootMode();
-bool gpsupdate();
+int PTU();
 bool Shootsetup();
 void ScreenAnime();
 int PID();
@@ -56,14 +56,8 @@ double Anglelooking = 0;
 double dpr = 299.236700254; //Distance per rotation, need to test numbers, also should be in mm, because else it would break resulting in Robot Position Fault
 bool Left = false;
 bool PosFault = false; // This is something to use if having problems with robot going to far that it gps goes out the arena, making any system that uses gps disable until problem is resolved.
-double Xrpm; 
-double Yrpm;
-double Xdis;
-double Ydis;
-double VectorRPM;
-double VectorDis;
 double prevoustimer = 0;
-// Measured in mm by default
+double Xrpm, Yrpm, Xdis, Ydis, rotationchange;
 double Xaxis = 1;
 double Yaxis = 1;
 double FieldX = 3650*0.23333333333333333333333333333333333333333; // 12 feet, if need inches/feet. Position 0 is the corner of own low goal
@@ -871,8 +865,6 @@ int Connections[664][2] = { // 0 -> 367, but this ones worse... than the one abo
 {183,367},
 };
 
-
-
 /* Important Variables and Stuff
   1 Rotation is __ distance
   1.22 degrees for 1 degrees
@@ -884,6 +876,8 @@ int main(){
   vexcodeInit();
   heading.calibrate();
   wait(2,seconds);
+  task PTUupdate = task(PTU);
+  task sPID = task(PID);
   Controller();
   //while(true){
   //ScreenAnime();
@@ -928,7 +922,6 @@ void Controller(){
       Expand.set(true);
     }
     ShootMotors.stop();
-    gpsupdate();
   }
 }
 bool Shootsetup() {
@@ -1004,33 +997,26 @@ void ShootMode() {
     Controller1.Screen.print(Shootvelo);
     wait(0.1,seconds);
   }
-  gpsupdate();
+  PTU();
 }
 
-bool gpsupdate() {
+int PTU() {
   // This is all prototype code and none of it really can fuction well, all theoretical
   // Also need to rewrite some of it to make sure that its correctly formatting gps, with x and y.
   double timebetweengps = vex::timer::systemHighResolution() - prevoustimer;
   double LocalXrpm = Xrotation.velocity(rpm) / 60; // divide by 60 to get rps, which would be useful later... also need to convert it to a smaller number, like 0.01 millisecond because brain processes things at 1.3 trillion inputs a seconds
   double LocalYrpm = Yrotation.velocity(rpm) / 60;
   if (LocalXrpm == LocalYrpm){
-    return false;
+    return -1;
   }
   double Rotation = (heading.heading(deg)) * (M_PI /180);
-  Xrpm = (((sin(Rotation)*LocalYrpm) + (sin(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;
-  Yrpm = (((cos(Rotation)*LocalYrpm) + (cos(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;
-  Xdis = Xrpm * dpr;
-  Ydis = Yrpm * dpr;
-  // VectorRPM = sqrt(pow(Xrpm,2) + pow(Yrpm,2));
-  // VectorDis = sqrt(pow(Xdis,2) + pow(Ydis,2));
+  rotationchange = Rotation - rotationchange;
+  Xrpm = (2 * sin(rotationchange / 2)) * (LocalXrpm / rotationchange);
+  Yrpm = (2 * sin(rotationchange / 2)) * (LocalYrpm / rotationchange);
+  Xdis = ((Xrpm / 1000) * timebetweengps) * dpr;
+  Ydis = ((Xrpm / 1000) * timebetweengps) * dpr;
   Xaxis = Xaxis + Xdis;
   Yaxis = Yaxis + Ydis;
-
-  // Brain.Screen.setCursor(1,1); // Mainly for trouble shooting but could be useful for other things
-  // Brain.Screen.print(Xaxis);
-  // Brain.Screen.setCursor(5,15);
-  // Brain.Screen.print(Yaxis);
-
   Brain.Screen.clearScreen();
   Brain.Screen.setCursor(1, 1);
   Brain.Screen.print(Xaxis);
@@ -1048,6 +1034,7 @@ bool gpsupdate() {
   Brain.Screen.print(Xrpm);
   Brain.Screen.newLine();
 
+
   if (Xaxis > FieldX or Yaxis > FieldY){
     Controller1.Screen.setCursor(2,3);
     Controller1.Screen.print("Robot Position Fault"); // Making it known to driver of PosFault, Should do this with other things but yeah
@@ -1058,7 +1045,7 @@ bool gpsupdate() {
     PosFault = false;
   }
   prevoustimer = vex::timer::systemHighResolution();
-  return true;
+  return 1;
 }
 int PID() {
   // float  pidSensorCurrentValue;

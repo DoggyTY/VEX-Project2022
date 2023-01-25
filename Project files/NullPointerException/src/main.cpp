@@ -878,6 +878,8 @@ int main(){
   wait(2,seconds);
   task PTUupdate = task(PTU);
   task sPID = task(PID);
+  PTUupdate.setPriority(vex::task::taskPriorityHigh);
+  sPID.setPriority(vex::task::taskPriorityNormal);
   Controller();
   //while(true){
   //ScreenAnime();
@@ -997,7 +999,6 @@ void ShootMode() {
     Controller1.Screen.print(Shootvelo);
     wait(0.1,seconds);
   }
-  PTU();
 }
 
 int PTU() {

@@ -101,8 +101,7 @@ int maxTurnIntegral = 20; // These cap the integrals
 int maxIntegral = 3000;
 int integralBound = 3; //If error is outside the bounds, then apply the integral. This is a buffer with +-integralBound degrees
 
-double RotationMatrix[2][2] ={{0.98480775301,-0.1736481776},
-                              {0.1736481776, 0.98480775301}};
+  int degree = 10;
   int Entry = 0;
   int FocalLength = 30;
   double ProjectedXY[368][2]; // Need amount of verties
@@ -873,18 +872,18 @@ int Connections[664][2] = { // 0 -> 367, but this ones worse... than the one abo
   74 percent power toward 3 disk
 */
 int main(){
-  vexcodeInit();
-  heading.calibrate();
-  wait(2,seconds);
-  task PTUupdate = task(PTU);
-  task sPID = task(PID);
-  PTUupdate.setPriority(vex::task::taskPriorityHigh);
-  sPID.setPriority(vex::task::taskPriorityNormal);
-  Controller();
-  //while(true){
-  //ScreenAnime();
-  //wait(1,seconds);
-  //}
+  //vexcodeInit();
+  //heading.calibrate();
+  //wait(2,seconds);
+  //task PTUupdate = task(PTU);
+  //task sPID = task(PID);
+  //PTUupdate.setPriority(vex::task::taskPriorityHigh);
+  //sPID.setPriority(vex::task::taskPriorityNormal);
+  //Controller();
+  while(true){
+  ScreenAnime();
+  wait(1,seconds);
+  }
 }
 void Controller(){
   LeftDriveSmart.setVelocity(0,percent);
@@ -1165,12 +1164,8 @@ void ScreenAnime() {
   double starttimer = vex::timer::system();
   Entry = 0;
   for (auto& row: XYZ){
-    row[0] = (row[0] * RotationMatrix[0][1]) + (row[0] * RotationMatrix[0][1]);
-    row[2] = (row[2] * RotationMatrix[1][0]) + (row[2] * RotationMatrix[1][1]);
-  }
-  for (auto& row: XYZ){
-    ProjectedXY[Entry][0] = (FocalLength * (row[0] * 5)) / (FocalLength + (row[2] * 5));
-    ProjectedXY[Entry][1] = (FocalLength * (row[1] * 5)) / (FocalLength + (row[2] * 5));
+    ProjectedXY[Entry][0] = abs(((FocalLength * ((row[0] * -sin(degree%360 * 180/M_PI)) + (row[0] * cos(degree%360 * 180/M_PI)) * 5))) / (FocalLength + (row[2] * sin(degree%360 * 180/M_PI)) + (row[2] * cos(degree%360 * 180/M_PI))) * 5);
+    ProjectedXY[Entry][1] = abs((FocalLength * (row[1] * 5)) / (((FocalLength + (row[2] * sin(degree%360 * 180/M_PI)) + (row[2] * cos(degree%360 * 180/M_PI))) * 5)));
     Entry = Entry + 1;
   }
   Brain.Screen.clearScreen();
@@ -1179,7 +1174,9 @@ void ScreenAnime() {
   }
   Brain.Screen.setCursor(12,40);
   Brain.Screen.print(starttimer - vex::timer::system());
+  degree += 10;
 }
 //Don't look down here there isn't anything down here but suffering :)
 //and our dumb methods XD
 //also vex devices are painful D:
+//Lines 110 - 864 are definitly useful, yep definitly ;p

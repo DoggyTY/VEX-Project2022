@@ -1164,8 +1164,8 @@ void ScreenAnime() {
   double starttimer = vex::timer::system();
   Entry = 0;
   for (auto& row: XYZ){
-    ProjectedXY[Entry][0] = abs(((FocalLength * ((row[0] * -sin(degree%360 * 180/M_PI)) + (row[0] * cos(degree%360 * 180/M_PI)) * 5))) / (FocalLength + (row[2] * sin(degree%360 * 180/M_PI)) + (row[2] * cos(degree%360 * 180/M_PI))) * 5);
-    ProjectedXY[Entry][1] = abs((FocalLength * (row[1] * 5)) / (((FocalLength + (row[2] * sin(degree%360 * 180/M_PI)) + (row[2] * cos(degree%360 * 180/M_PI))) * 5)));
+    ProjectedXY[Entry][0] = abs(((FocalLength * ((row[0] * -sin(degree%360 * 180/M_PI)) + (row[0] * cos(degree%360 * 180/M_PI)) ))) / (FocalLength + (row[2] * sin(degree%360 * 180/M_PI)) + (row[2] * cos(degree%360 * 180/M_PI))));
+    ProjectedXY[Entry][1] = abs((FocalLength * (row[1])) / (((FocalLength + (row[2] * sin(degree%360 * 180/M_PI)) + (row[2] * cos(degree%360 * 180/M_PI))))));
     Entry = Entry + 1;
   }
   Brain.Screen.clearScreen();
@@ -1178,5 +1178,5 @@ void ScreenAnime() {
 }
 //Don't look down here there isn't anything down here but suffering :)
 //and our dumb methods XD
-//also vex devices are painful D:
-//Lines 110 - 864 are definitly useful, yep definitly ;p
+//also vex devices are painful D
+//Lines 110 - 864 (754 lines worth :D) are definitly useful, yep definitly ;p

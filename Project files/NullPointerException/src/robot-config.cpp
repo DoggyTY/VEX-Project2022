@@ -41,5 +41,5 @@ bool RemoteControlCodeEnabled = true;
  * This should be called at the start of your int main function.
  */
 void vexcodeInit( void ) {
-  // nothing to initialize
+  // nothing to initialize except happiness
 }

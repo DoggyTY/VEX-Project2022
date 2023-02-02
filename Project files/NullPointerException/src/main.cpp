@@ -22,6 +22,7 @@
 #include "vex_drivetrain.h"
 #include "vex_global.h"
 #include "vex_task.h"
+#include "vex_thread.h"
 #include "vex_timer.h"
 #include "vex_units.h"
 #include <cmath>
@@ -45,6 +46,7 @@ int PTU();
 bool Shootsetup();
 void ScreenAnime();
 int PID();
+void gotoPTD(int x, int y);
 float Speedcap = 0.8;
 float Turncap = 0.8;
 int Shootvelo = 80;
@@ -872,20 +874,21 @@ int Connections[664][2] = { // 0 -> 367, but this ones worse... than the one abo
   74 percent power toward 3 disk
 */
 int main(){
-  //vexcodeInit();
-  //heading.calibrate();
-  //wait(2,seconds);
-  //task PTUupdate = task(PTU);
-  //task sPID = task(PID);
-  //PTUupdate.setPriority(vex::task::taskPriorityHigh);
-  //sPID.setPriority(vex::task::taskPriorityNormal);
-  //Controller();
-  while(true){
-  ScreenAnime();
-  wait(1,seconds);
-  }
+  vexcodeInit();
+  heading.calibrate();
+  wait(2,seconds);
+  task PTUupdate = task(PTU);
+  thread sPID = thread(PID);
+  PTUupdate.setPriority(vex::task::taskPriorityHigh);
+  sPID.setPriority(vex::task::taskPriorityNormal);
+  Controller();
+  //while(true){
+  //ScreenAnime();
+  //wait(1,seconds);
+  //}
 }
 void Controller(){
+  enablePID = false;
   LeftDriveSmart.setVelocity(0,percent);
   RightDriveSmart.setVelocity(0,percent);
   LeftDriveSmart.spin(forward);
@@ -999,10 +1002,22 @@ void ShootMode() {
     wait(0.1,seconds);
   }
 }
+void gotoPTD(double x, double y){
+  enablePID = true;
+  double differencex = Xaxis - x;
+  double differencey = Xaxis - x;
+  double diffencevector = sqrt(pow(differencex,2) + pow(differencey,2));
+  double angleofblank = asin(differencey/diffencevector);
+  if (differencex < 0){
+    angleofblank += M_PI;
+  }
+  
+}
 
 int PTU() {
   // This is all prototype code and none of it really can fuction well, all theoretical
   // Also need to rewrite some of it to make sure that its correctly formatting gps, with x and y.
+  while(true){
   double timebetweengps = vex::timer::systemHighResolution() - prevoustimer;
   double LocalXrpm = Xrotation.velocity(rpm) / 60; // divide by 60 to get rps, which would be useful later... also need to convert it to a smaller number, like 0.01 millisecond because brain processes things at 1.3 trillion inputs a seconds
   double LocalYrpm = Yrotation.velocity(rpm) / 60;
@@ -1045,6 +1060,7 @@ int PTU() {
     PosFault = false;
   }
   prevoustimer = vex::timer::systemHighResolution();
+  }
   return 1;
 }
 int PID() {

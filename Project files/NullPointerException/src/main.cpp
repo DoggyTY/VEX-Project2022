@@ -52,6 +52,7 @@ float Turncap = 0.8;
 int Shootvelo = 80;
 bool IntakeOn = false;
 char complaint[] = "nathan blames us for everything smh my head"; 
+bool PTUactive = true;
 
 // Global GPS vars
 double Anglelooking = 0;
@@ -876,12 +877,16 @@ int Connections[664][2] = { // 0 -> 367, but this ones worse... than the one abo
 int main(){
   vexcodeInit();
   heading.calibrate();
-  wait(2,seconds);
-  task PTUupdate = task(PTU);
-  thread sPID = thread(PID);
-  PTUupdate.setPriority(vex::task::taskPriorityHigh);
-  sPID.setPriority(vex::task::taskPriorityNormal);
-  Controller();
+  wait(2,seconds); 
+  //Threads
+  thread PTUupdate = thread(PTU);
+  // thread sPID = thread(PID);
+  thread control = thread(Controller);
+  control.detach();
+  PTUupdate.detach();
+  while(true){
+    wait(25,msec);
+  }
   //while(true){
   //ScreenAnime();
   //wait(1,seconds);
@@ -926,6 +931,7 @@ void Controller(){
       Expand.set(true);
     }
     ShootMotors.stop();
+    this_thread::sleep_for(25);
   }
 }
 bool Shootsetup() {
@@ -948,6 +954,7 @@ bool Shootsetup() {
     Drivetrain.turnFor(right,DisAngleGoal,degrees);
   }
   // Velocity setup is next but is too hard to finish now, Rain don't do it, it needs to be specific to other varibles as we talked about.
+  this_thread::sleep_for(25);
   return true;
 }
 void ShootMode() {
@@ -1001,17 +1008,25 @@ void ShootMode() {
     Controller1.Screen.print(Shootvelo);
     wait(0.1,seconds);
   }
+  this_thread::sleep_for(25);
 }
 void gotoPTD(double x, double y){
-  enablePID = true;
+  while(true){
   double differencex = Xaxis - x;
-  double differencey = Xaxis - x;
+  double differencey = Yaxis - y;
   double diffencevector = sqrt(pow(differencex,2) + pow(differencey,2));
   double angleofblank = asin(differencey/diffencevector);
   if (differencex < 0){
     angleofblank += M_PI;
   }
-  
+  thread PIDcontrol = thread(PID);
+  PIDcontrol.detach();
+  Drivetrain.turnFor(angleofblank * 180/M_PI,deg);
+  Drivetrain.driveFor(diffencevector/0.23333333333333333,mm);
+  this_thread::sleep_for(50);
+  PIDcontrol.interrupt();
+  // if(Xaxis )
+  }
 }
 
 int PTU() {
@@ -1021,15 +1036,13 @@ int PTU() {
   double timebetweengps = vex::timer::systemHighResolution() - prevoustimer;
   double LocalXrpm = Xrotation.velocity(rpm) / 60; // divide by 60 to get rps, which would be useful later... also need to convert it to a smaller number, like 0.01 millisecond because brain processes things at 1.3 trillion inputs a seconds
   double LocalYrpm = Yrotation.velocity(rpm) / 60;
-  if (LocalXrpm == LocalYrpm){
-    return -1;
-  }
   double Rotation = (heading.heading(deg)) * (M_PI /180);
-  rotationchange = Rotation - rotationchange;
-  Xrpm = (2 * sin(rotationchange / 2)) * (LocalXrpm / rotationchange);
-  Yrpm = (2 * sin(rotationchange / 2)) * (LocalYrpm / rotationchange);
-  Xdis = ((Xrpm / 1000) * timebetweengps) * dpr;
-  Ydis = ((Xrpm / 1000) * timebetweengps) * dpr;
+  Xrpm = (((sin(Rotation)*LocalYrpm) + (sin(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;
+  Yrpm = (((cos(Rotation)*LocalYrpm) + (cos(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;
+  Xdis = Xrpm * dpr;
+  Ydis = Yrpm * dpr;
+  // VectorRPM = sqrt(pow(Xrpm,2) + pow(Yrpm,2));
+  // VectorDis = sqrt(pow(Xdis,2) + pow(Ydis,2));
   Xaxis = Xaxis + Xdis;
   Yaxis = Yaxis + Ydis;
   Brain.Screen.clearScreen();
@@ -1049,7 +1062,6 @@ int PTU() {
   Brain.Screen.print(Xrpm);
   Brain.Screen.newLine();
 
-
   if (Xaxis > FieldX or Yaxis > FieldY){
     Controller1.Screen.setCursor(2,3);
     Controller1.Screen.print("Robot Position Fault"); // Making it known to driver of PosFault, Should do this with other things but yeah
@@ -1060,15 +1072,16 @@ int PTU() {
     PosFault = false;
   }
   prevoustimer = vex::timer::systemHighResolution();
+  this_thread::sleep_for(100);
   }
-  return 1;
+  return 0;
 }
 int PID() {
   // float  pidSensorCurrentValue;
   // float  pidError;
   // float  pidDrive;
 
-  while (enablePID) {
+  while (true) {
     if (resetEncoders) {
       resetEncoders = false;
       leftDriveMotorA.setPosition(0, deg);
@@ -1105,7 +1118,7 @@ int PID() {
     derivative =  error - prevError; //may need to flip
 
     // Velocity -> Position -> Absement // Integral
-    //Integral
+    // Integral
     if(abs(error) < integralBound){
     totalError+=error; 
     }  else {
@@ -1169,7 +1182,7 @@ int PID() {
     prevError = error;
     turnPrevError = turnError;
     // Don't hog cpu
-    vex::task::sleep(20);
+    this_thread::sleep_for(20);
   }
 
   return 0;
@@ -1180,8 +1193,8 @@ void ScreenAnime() {
   double starttimer = vex::timer::system();
   Entry = 0;
   for (auto& row: XYZ){
-    ProjectedXY[Entry][0] = abs(((FocalLength * ((row[0] * -sin(degree%360 * 180/M_PI)) + (row[0] * cos(degree%360 * 180/M_PI)) ))) / (FocalLength + (row[2] * sin(degree%360 * 180/M_PI)) + (row[2] * cos(degree%360 * 180/M_PI))));
-    ProjectedXY[Entry][1] = abs((FocalLength * (row[1])) / (((FocalLength + (row[2] * sin(degree%360 * 180/M_PI)) + (row[2] * cos(degree%360 * 180/M_PI))))));
+    ProjectedXY[Entry][0] = std::abs(((FocalLength * ((row[0] * -sin(degree%360 * 180/M_PI)) + (row[0] * cos(degree%360 * 180/M_PI)) ))) / (FocalLength + (row[2] * sin(degree%360 * 180/M_PI)) + (row[2] * cos(degree%360 * 180/M_PI))));
+    ProjectedXY[Entry][1] = std::abs((FocalLength * (row[1])) / (((FocalLength + (row[2] * sin(degree%360 * 180/M_PI)) + (row[2] * cos(degree%360 * 180/M_PI))))));
     Entry = Entry + 1;
   }
   Brain.Screen.clearScreen();

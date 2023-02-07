@@ -26,8 +26,8 @@ motor IntakeMotorsMotorA = motor(PORT16, ratio18_1, false);
 motor IntakeMotorsMotorB = motor(PORT18, ratio18_1, false);
 motor_group IntakeMotors = motor_group(IntakeMotorsMotorA, IntakeMotorsMotorB);
 digital_out Expand = digital_out(Brain.ThreeWirePort.A);
-rotation Xrotation = rotation(PORT5);
-rotation Yrotation = rotation(PORT6);
+rotation Yrotation = rotation(PORT5);
+rotation Xrotation = rotation(PORT6);
 inertial heading = inertial(PORT4);
 inertial inertialSensor = inertial(PORT3);
 

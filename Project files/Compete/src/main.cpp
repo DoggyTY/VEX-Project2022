@@ -156,9 +156,6 @@ void autonomous(void) {
 /*  You must modify the code to add your own robot specific commands here.   */
 /*---------------------------------------------------------------------------*/
 
-void usercontrol(void) {
-  Controller();
-}
 void Controller(){
   LeftDriveSmart.setVelocity(0,percent);
   RightDriveSmart.setVelocity(0,percent);
@@ -255,8 +252,7 @@ void ShootMode() {
 int main() {
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);
-  Competition.drivercontrol(usercontrol);
-
+  Competition.drivercontrol(Controller);
   // Run the pre-autonomous function.
   pre_auton();
 

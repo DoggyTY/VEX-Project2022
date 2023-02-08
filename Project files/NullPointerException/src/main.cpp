@@ -56,6 +56,7 @@ bool PTUactive = true;
 
 // Global GPS vars
 double Anglelooking = 0;
+double Rotation = 0;
 double dpr = 299.236700254; //Distance per rotation, need to test numbers, also should be in mm, because else it would break resulting in Robot Position Fault
 bool Left = false;
 bool PosFault = false; // This is something to use if having problems with robot going to far that it gps goes out the arena, making any system that uses gps disable until problem is resolved.
@@ -953,7 +954,9 @@ bool Shootsetup() {
   } else{
     Drivetrain.turnFor(right,DisAngleGoal,degrees);
   }
+
   // Velocity setup is next but is too hard to finish now, Rain don't do it, it needs to be specific to other varibles as we talked about.
+
   this_thread::sleep_for(25);
   return true;
 }
@@ -1025,7 +1028,9 @@ void gotoPTD(double x, double y){
   Drivetrain.driveFor(diffencevector/0.23333333333333333,mm);
   this_thread::sleep_for(50);
   PIDcontrol.interrupt();
-  // if(Xaxis )
+  if((Xaxis < x+1 && Xaxis > x-1) && (Yaxis < y+1 && Yaxis> y-1)){
+    break;
+  }
   }
 }
 
@@ -1036,7 +1041,10 @@ int PTU() {
   double timebetweengps = vex::timer::systemHighResolution() - prevoustimer;
   double LocalXrpm = Xrotation.velocity(rpm) / 60; // divide by 60 to get rps, which would be useful later... also need to convert it to a smaller number, like 0.01 millisecond because brain processes things at 1.3 trillion inputs a seconds
   double LocalYrpm = Yrotation.velocity(rpm) / 60;
-  double Rotation = (heading.heading(deg)) * (M_PI /180);
+  if (Rotation != heading.heading(deg)){
+    continue;
+  }
+  Rotation = (heading.heading(deg)) * (M_PI /180);
   Xrpm = (((sin(Rotation)*LocalYrpm) + (sin(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;
   Yrpm = (((cos(Rotation)*LocalYrpm) + (cos(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;
   Xdis = Xrpm * dpr;
@@ -1076,29 +1084,19 @@ int PTU() {
   }
   return 0;
 }
+
 int PID() {
   // float  pidSensorCurrentValue;
   // float  pidError;
   // float  pidDrive;
 
   while (true) {
-    if (resetEncoders) {
-      resetEncoders = false;
-      leftDriveMotorA.setPosition(0, deg);
-      rightDriveMotorA.setPosition(0, deg);
-      leftDriveMotorB.setPosition(0, deg);
-      rightDriveMotorB.setPosition(0, deg);
-      inertialSensor.resetRotation();
-    }
-
     float calculatedDesiredValue = 360 * desiredValue/(2*M_PI*0.0508);
 
 
     // Get motor positions
-    int frontLeftMotorPosition = leftDriveMotorA.position(deg);
-    int frontRightMotorPosition = rightDriveMotorA.position(deg);
-    int backLeftMotorPosition = leftDriveMotorB.position(deg);
-    int backRightMotorPosition = rightDriveMotorB.position(deg);
+    int frontLeftMotorPosition = Xrotation.position(deg);
+    int backRightMotorPosition = Yrotation.position(deg);
 
     // pidSensorCurrentValue = rotationRight.position(rotationUnits::deg);
 
@@ -1108,7 +1106,7 @@ int PID() {
     ///////////////////////////////////
 
     // Get average motor positions
-    int averagePosition = (frontLeftMotorPosition + frontRightMotorPosition + backLeftMotorPosition + backRightMotorPosition)/4;
+    int averagePosition = (frontLeftMotorPosition + backRightMotorPosition)/4;
         
     // Potential 
     error = calculatedDesiredValue - averagePosition; //may need to flip
@@ -1143,7 +1141,7 @@ int PID() {
     // Turning Movement PID
     ///////////////////////////////////
     // Get average motor positions
-    int turnDifference = (frontLeftMotorPosition + backLeftMotorPosition) - (frontRightMotorPosition + backRightMotorPosition);
+    double turnDifference = frontLeftMotorPosition - backRightMotorPosition;
         
     // Potential 
     // turnError = desiredTurnValue - turnDifference;
@@ -1204,6 +1202,7 @@ void ScreenAnime() {
   Brain.Screen.setCursor(12,40);
   Brain.Screen.print(starttimer - vex::timer::system());
   degree += 10;
+  this_thread::sleep_for(20);
 }
 //Don't look down here there isn't anything down here but suffering :)
 //and our dumb methods XD

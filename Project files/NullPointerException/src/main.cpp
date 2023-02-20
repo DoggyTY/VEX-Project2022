@@ -29,16 +29,7 @@
 
 using namespace vex;
 void Controller();
-void Auto1stackDefault();
-void Auto1stackRollers();
-void Auto1stackShoot();
-void Auto3stackDefault();
-void Auto3stackRollers();
-void Auto3stackShoot();
-void Auto1stackDefaultFront();
-void Auto1stackRollersFront();
-void Auto3stackDefaultFront();
-void Auto3stackRollersFront();
+void AutoDefault();
 void intakeup();
 void intakedown();
 void ShootMode();
@@ -79,7 +70,7 @@ int BackzAnimation = 30;
 bool enablePID = true;
 bool resetEncoders = false;
 
-float kP = 0.32;  //0.5 might be better // or 0.25
+float kP = 0.32; //0.32;  //0.5 might be better // or 0.25
 float kI = 0.0; //0.00025 might be better // or 0.00125
 float kD = 0.0; //0.005 might be better //or 0.0025
 float turnkP = 1; // 0.1 is really nice, at least for only P values and no intertial 
@@ -868,23 +859,22 @@ int Connections[664][2] = { // 0 -> 367, but this ones worse... than the one abo
 {183,367},
 };
 
-/* Important Variables and Stuff
-  1 Rotation is __ distance
-  1.22 degrees for 1 degrees
-  1 inche is 1 inche, I know revolutionary
-  70 percent power directly diagonal to goal
-  74 percent power toward 3 disk
-*/
+/* Important Variables and Stuff*/
+
 int main(){
   vexcodeInit();
   heading.calibrate();
+  inertialSensor.calibrate();
   wait(2,seconds); 
-  //Threads
-  thread PTUupdate = thread(PTU);
-  // thread sPID = thread(PID);
-  thread control = thread(Controller);
-  control.detach();
-  PTUupdate.detach();
+  // //Threads
+  // thread PTUupdate = thread(PTU);
+  thread sPID = thread(PID);
+  // thread control = thread(Controller);
+  // control.detach();
+  // PTUupdate.detach();
+  
+  AutoDefault();
+
   while(true){
     wait(25,msec);
   }
@@ -893,6 +883,7 @@ int main(){
   //wait(1,seconds);
   //}
 }
+
 void Controller(){
   enablePID = false;
   LeftDriveSmart.setVelocity(0,percent);
@@ -1091,25 +1082,24 @@ int PID() {
   // float  pidDrive;
 
   while (true) {
-    float calculatedDesiredValue = 360 * desiredValue/(2*M_PI*0.0508);
-
+    float calculatedDesiredValue = 360 * desiredValue*100/(0.1*M_PI);
+    // In cm now
 
     // Get motor positions
-    int frontLeftMotorPosition = Xrotation.position(deg);
-    int backRightMotorPosition = Yrotation.position(deg);
+    
+    // int backRightMotorPosition = Yrotation.position(deg);
 
     // pidSensorCurrentValue = rotationRight.position(rotationUnits::deg);
 
+
+    int averageMotorPosition = (leftDriveMotorA.position(deg) + leftDriveMotorB.position(deg) + rightDriveMotorA.position(deg) + rightDriveMotorB.position(deg))/4;
 
     ///////////////////////////////////
     // Lateral Movement PID
     ///////////////////////////////////
 
-    // Get average motor positions
-    int averagePosition = (frontLeftMotorPosition + backRightMotorPosition)/4;
-        
     // Potential 
-    error = calculatedDesiredValue - averagePosition; //may need to flip
+    error = calculatedDesiredValue - averageMotorPosition; //may need to flip
     // pidError =  pidRequestedValue - pidSensorCurrentValue;
 
     // Derivative 
@@ -1141,11 +1131,11 @@ int PID() {
     // Turning Movement PID
     ///////////////////////////////////
     // Get average motor positions
-    double turnDifference = frontLeftMotorPosition - backRightMotorPosition;
+    // double turnDifference = frontLeftMotorPosition - backRightMotorPosition;
         
     // Potential 
     // turnError = desiredTurnValue - turnDifference;
-    turnError = desiredTurnValue - inertialSensor.rotation();
+    turnError = desiredTurnValue - heading.rotation();
     // pidError =  pidRequestedValue - pidSensorCurrentValue;
 
     // Derivative 
@@ -1172,20 +1162,54 @@ int PID() {
     if( turnMotorPower < (-40) )
         turnMotorPower = (-40);
 
-    leftDriveMotorA.spin(fwd, lateralMotorPower - turnMotorPower, velocityUnits::pct); // could use voltage
-    leftDriveMotorB.spin(fwd, lateralMotorPower - turnMotorPower, velocityUnits::pct); // could use voltage
-    rightDriveMotorA.spin(fwd, lateralMotorPower + turnMotorPower, velocityUnits::pct); // could use voltage
-    rightDriveMotorB.spin(fwd, lateralMotorPower + turnMotorPower, velocityUnits::pct); // could use voltage
+    leftDriveMotorA.spin(forward, lateralMotorPower - turnMotorPower, velocityUnits::pct); // could use voltage
+    leftDriveMotorB.spin(forward, lateralMotorPower - turnMotorPower, velocityUnits::pct); // could use voltage
+    rightDriveMotorA.spin(forward, lateralMotorPower + turnMotorPower, velocityUnits::pct); // could use voltage
+    rightDriveMotorB.spin(forward, lateralMotorPower + turnMotorPower, velocityUnits::pct); // could use voltage
 
     prevError = error;
     turnPrevError = turnError;
+
+    printf("\n Turn Error %d", turnError);
+    printf("\n Drive Error %d", error);
+    printf("\n Inertial Sensor %f", heading.rotation());
+
     // Don't hog cpu
     this_thread::sleep_for(20);
   }
 
   return 0;
 }
-
+void AutoDefault(){
+  IntakeMotors.setVelocity(30,pct);
+  IntakeMotors.spin(forward);
+  desiredValue -= 10;
+  wait(1,sec);
+  desiredValue += 20;
+  IntakeMotors.spinFor(reverse,0.5,sec);
+  wait(0.5,sec);
+  desiredTurnValue = 90;
+ // Shoot
+  IntakeMotors.spin(forward);
+  ShootMotors.stop();
+  desiredTurnValue += 135;
+  desiredValue -= 100;
+  wait(1,sec);
+  desiredTurnValue = 45;
+  IntakeMotors.stop();
+  IntakeMotors.spinFor(reverse,0.2,sec);
+  wait(0.8,sec);
+  //Shoot
+  IntakeMotors.spin(forward);
+  desiredTurnValue = 225;
+  desiredValue -= 100;
+  desiredTurnValue = 90;
+  IntakeMotors.stop();
+  IntakeMotors.spinFor(reverse,0.2,sec);
+  wait(0.5,sec);
+  //Shoot
+  IntakeMotors.spin(forward);
+}
 // this is just for the animation on the screen it has no use other than that :D
 void ScreenAnime() {
   double starttimer = vex::timer::system();

@@ -29,7 +29,7 @@
 
 using namespace vex;
 void Controller();
-void AutoDefault();
+void AutoSkills();
 void intakeup();
 void intakedown();
 void ShootMode();
@@ -868,12 +868,13 @@ int main(){
   wait(2,seconds); 
   // //Threads
   // thread PTUupdate = thread(PTU);
-  thread sPID = thread(PID);
-  // thread control = thread(Controller);
+  // thread sPID = thread(PID);
+  // LeftDriveSmart.setStopping(coast);
+  // RightDriveSmart.setStopping(coast);
+  ShootMotors.setStopping(coast);
+  thread control = thread(Controller);
   // control.detach();
   // PTUupdate.detach();
-  
-  AutoDefault();
 
   while(true){
     wait(25,msec);
@@ -921,6 +922,13 @@ void Controller(){
     }
     if (Controller1.ButtonA.pressing() && Controller1.ButtonX.pressing() && Controller1.ButtonY.pressing() && Controller1.ButtonB.pressing()) {
       Expand.set(true);
+    }
+    if (Controller1.ButtonUp.pressing()){
+      Speedcap = 1;
+      Turncap = 1;
+    } else {
+      Speedcap = 0.7;
+      Turncap = 0.7;
     }
     ShootMotors.stop();
     this_thread::sleep_for(25);
@@ -1092,7 +1100,7 @@ int PID() {
     // pidSensorCurrentValue = rotationRight.position(rotationUnits::deg);
 
 
-    int averageMotorPosition = (leftDriveMotorA.position(deg) + leftDriveMotorB.position(deg) + rightDriveMotorA.position(deg) + rightDriveMotorB.position(deg))/4;
+    int averageMotorPosition = (Yrotation.position(deg) + Xrotation.position(deg))/2;
 
     ///////////////////////////////////
     // Lateral Movement PID
@@ -1180,36 +1188,81 @@ int PID() {
 
   return 0;
 }
-void AutoDefault(){
-  IntakeMotors.setVelocity(30,pct);
+
+void AutoSkills(){
+  IntakeMotors.setVelocity(50,pct);
   IntakeMotors.spin(forward);
-  desiredValue -= 10;
+  desiredValue -= 20;
   wait(1,sec);
-  desiredValue += 20;
+  desiredValue += 40;
+  wait(1,sec);
   IntakeMotors.spinFor(reverse,0.5,sec);
-  wait(0.5,sec);
   desiredTurnValue = 90;
+  wait(0.5,sec);
  // Shoot
   IntakeMotors.spin(forward);
   ShootMotors.stop();
-  desiredTurnValue += 135;
-  desiredValue -= 100;
+  desiredTurnValue = 225;
   wait(1,sec);
-  desiredTurnValue = 45;
+  desiredValue -= 180;
+  wait(1,sec);
+  desiredTurnValue += 90;
   IntakeMotors.stop();
   IntakeMotors.spinFor(reverse,0.2,sec);
   wait(0.8,sec);
   //Shoot
   IntakeMotors.spin(forward);
-  desiredTurnValue = 225;
-  desiredValue -= 100;
-  desiredTurnValue = 90;
+  wait(0.5,sec);
+  desiredTurnValue -= 90;
+  wait(2,sec);
+  desiredValue -= 180;
+  wait(2,sec);
+  desiredTurnValue = 270;
   IntakeMotors.stop();
   IntakeMotors.spinFor(reverse,0.2,sec);
   wait(0.5,sec);
   //Shoot
   IntakeMotors.spin(forward);
+  wait(0.5,sec);
+  desiredValue -= 20;
+  wait(1,sec);
+  desiredValue += 70;
+  wait(1,sec);
+  desiredTurnValue = 180;
+  wait(1,sec);
+  desiredValue -= 80;
+  wait(1,sec);
+  desiredValue += 40;
+  wait(1,sec);
+  desiredTurnValue = 45;
+  wait(2,sec);
+  desiredValue -= 180;
+  wait(3,sec);
+  IntakeMotors.stop();
+  desiredTurnValue = 135;
+  IntakeMotors.spinFor(reverse,0.2,sec);
+  wait(0.8,sec);
+  //Shoot
+  IntakeMotors.spin(forward);
+  wait(0.5,sec);
+  desiredTurnValue = 45;
+  wait(1,sec);
+  desiredValue -= 180;
+  wait(1,sec);
+  IntakeMotors.stop();
+  desiredTurnValue = 90;
+  IntakeMotors.spinFor(reverse,0.2,sec);
+  wait(0.8,sec);
+  //Shoot
+  IntakeMotors.spin(forward);
+  wait(0.5,sec);
+  desiredValue -= 40;
+  wait(0.1, sec);
+  desiredValue += 40;
+  desiredTurnValue = 315;
+  //Expand
 }
+
 // this is just for the animation on the screen it has no use other than that :D
 void ScreenAnime() {
   double starttimer = vex::timer::system();

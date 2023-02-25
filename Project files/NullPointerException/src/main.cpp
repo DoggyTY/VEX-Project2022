@@ -96,7 +96,7 @@ int maxTurnIntegral = 20; // These cap the integrals
 int maxIntegral = 3000;
 int integralBound = 3; //If error is outside the bounds, then apply the integral. This is a buffer with +-integralBound degrees
 
-  int degree = 10;
+  float Raidan = 0.0f;
   int Entry = 0;
   int FocalLength = 30;
   double ProjectedXY[368][2]; // Need amount of verties
@@ -478,9 +478,9 @@ int Connections[664][2] = { // 0 -> 367, but this ones worse... than the one abo
 {60+86,61+86},
 // 1
 {164,165},
-{165,166},
-{166,167},
-{167,164},
+{167,166},
+{166,164},
+{167,165},
 // J
 {168,169}, {168,176},
 {169,170}, {169,177},
@@ -655,9 +655,9 @@ int Connections[664][2] = { // 0 -> 367, but this ones worse... than the one abo
 {60+86+184,61+86+184},
 // 1
 {164+184,165+184},
-{165+184,166+184},
-{166+184,167+184},
-{167+184,164+184},
+{167+184,166+184},
+{166+184,164+184},
+{167+184,165+184},
 // J
 {168+184,169+184}, {168+184,176+184},
 {169+184,170+184}, {169+184,177+184},
@@ -1281,21 +1281,40 @@ void AutoSkills(){
 
 // this is just for the animation on the screen it has no use other than that :D
 void ScreenAnime() {
+  while (true){
   double starttimer = vex::timer::system();
   Entry = 0;
-  for (auto& row: XYZ){
-    ProjectedXY[Entry][0] = std::abs(((FocalLength * ((row[0] * -sin(degree%360 * 180/M_PI)) + (row[0] * cos(degree%360 * 180/M_PI)) ))) / (FocalLength + (row[2] * sin(degree%360 * 180/M_PI)) + (row[2] * cos(degree%360 * 180/M_PI))));
-    ProjectedXY[Entry][1] = std::abs((FocalLength * (row[1])) / (((FocalLength + (row[2] * sin(degree%360 * 180/M_PI)) + (row[2] * cos(degree%360 * 180/M_PI))))));
-    Entry = Entry + 1;
-  }
   Brain.Screen.clearScreen();
-  for (auto& combo: Connections) {
-    Brain.Screen.drawLine(ProjectedXY[combo[0]][0], ProjectedXY[combo[0]][1], ProjectedXY[combo[1]][0], ProjectedXY[combo[1]][1]);
+  for (int i = 0; i <368; i++){
+    float x0 = XYZ[i][0];
+        float y0 = XYZ[i][1];
+        float z0 = XYZ[i][2];
+        float x1 = x0;
+        float y1 = y0;
+        float z1 = y0 * sin(Raidan) + z0 * cos(Raidan);
+        x0 = x1;
+        y0 = y1;
+        z0 = -z1 * sin(Raidan) + z1 * cos(Raidan);
+        XYZ[i][0] = x0;
+        XYZ[i][1] = y0;
+        XYZ[i][2] = z0;
   }
+  for (int i = 0; i < 664; i++) {
+        int x0 = XYZ[Connections[i][0]][0];
+        int y0 = XYZ[Connections[i][0]][1];
+        int x1 = XYZ[Connections[i][1]][0];
+        int y1 = XYZ[Connections[i][1]][1];
+        Brain.Screen.drawLine(x0, y0, x1, y1);
+    }
+  
   Brain.Screen.setCursor(12,40);
   Brain.Screen.print(starttimer - vex::timer::system());
-  degree += 10;
-  this_thread::sleep_for(20);
+  Raidan += 0.001f;
+  if(Raidan >= 2*M_PI){
+    Raidan -= 2*M_PI;
+  }
+  this_thread::sleep_for(50);
+  }
 }
 //Don't look down here there isn't anything down here but suffering :)
 //and our dumb methods XD

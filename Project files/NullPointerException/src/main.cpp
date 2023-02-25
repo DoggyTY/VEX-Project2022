@@ -80,7 +80,7 @@ float turnkI = 0.0;
 float turnkD = 0.0; //might be better to have this low so that it does zig zag when driving straight (worth testing though)
 
 float desiredValue = 0;
-float desiredTurnValue = 0;
+int desiredTurnValue = 180;
 
 int error; //Desired Value - Sensor Value: Position
 int prevError = 0; //Position 20ms ago
@@ -865,17 +865,15 @@ int main(){
   vexcodeInit();
   heading.calibrate();
   inertialSensor.calibrate();
+  ShootMotors.setStopping(coast);
   wait(2,seconds); 
+  
   // //Threads
   // thread PTUupdate = thread(PTU);
   // thread sPID = thread(PID);
-  // LeftDriveSmart.setStopping(coast);
-  // RightDriveSmart.setStopping(coast);
-  ShootMotors.setStopping(coast);
-  thread control = thread(Controller);
-  // control.detach();
-  // PTUupdate.detach();
-
+  // AutoSkills();
+  // thread control = thread(Controller);
+  thread Logo = thread(ScreenAnime);
   while(true){
     wait(25,msec);
   }
@@ -916,9 +914,13 @@ void Controller(){
     }
     if(Controller1.ButtonR1.pressing()){
       //Shootsetup(); haven't finished
+      LeftDriveSmart.stop();
+      RightDriveSmart.stop();
     while (Controller1.ButtonR1.pressing()){
       ShootMode();
     }
+    LeftDriveSmart.spin(forward);
+    RightDriveSmart.spin(forward);
     }
     if (Controller1.ButtonA.pressing() && Controller1.ButtonX.pressing() && Controller1.ButtonY.pressing() && Controller1.ButtonB.pressing()) {
       Expand.set(true);
@@ -967,7 +969,7 @@ void ShootMode() {
     ShootMotors.stop();
   }
   if (Controller1.ButtonL2.pressing()) {
-    IntakeMotors.setVelocity(50,percent);
+    IntakeMotors.setVelocity(80,percent);
     IntakeMotors.spin(forward);
   } else if (Controller1.ButtonL1.pressing()) {
     IntakeMotors.setVelocity(20,percent);
@@ -978,18 +980,28 @@ void ShootMode() {
   if (Controller1.ButtonLeft.pressing()){
     LeftDriveSmart.setVelocity(10,percent);
     RightDriveSmart.setVelocity(-10,percent);
+    LeftDriveSmart.spin(forward);
+    RightDriveSmart.spin(forward);
   } else if (Controller1.ButtonRight.pressing()){
     LeftDriveSmart.setVelocity(-10,percent);
     RightDriveSmart.setVelocity(10,percent);
+    LeftDriveSmart.spin(forward);
+    RightDriveSmart.spin(forward);
   } else if (Controller1.ButtonUp.pressing()){
     LeftDriveSmart.setVelocity(10,percent);
     RightDriveSmart.setVelocity(10,percent);
+    LeftDriveSmart.spin(forward);
+    RightDriveSmart.spin(forward);
   } else if (Controller1.ButtonDown.pressing()){
     LeftDriveSmart.setVelocity(-10,percent);
     RightDriveSmart.setVelocity(-10,percent);
+    LeftDriveSmart.spin(forward);
+    RightDriveSmart.spin(forward);
   } else {
     LeftDriveSmart.setVelocity(0,percent);
     RightDriveSmart.setVelocity(0,percent);
+    LeftDriveSmart.stop();
+    RightDriveSmart.stop();
   }
   if (Controller1.ButtonB.pressing()) {
     Shootvelo = abs(Shootvelo - 2);
@@ -1090,7 +1102,7 @@ int PID() {
   // float  pidDrive;
 
   while (true) {
-    float calculatedDesiredValue = 360 * desiredValue*100/(0.1*M_PI);
+    float calculatedDesiredValue = 360 * desiredValue/100/(0.1*M_PI);
     // In cm now
 
     // Get motor positions
@@ -1143,7 +1155,7 @@ int PID() {
         
     // Potential 
     // turnError = desiredTurnValue - turnDifference;
-    turnError = desiredTurnValue - heading.rotation();
+    turnError = desiredTurnValue + 180 - heading.rotation();
     // pidError =  pidRequestedValue - pidSensorCurrentValue;
 
     // Derivative 
@@ -1190,77 +1202,81 @@ int PID() {
 }
 
 void AutoSkills(){
-  IntakeMotors.setVelocity(50,pct);
+  IntakeMotors.setVelocity(80,pct);
   IntakeMotors.spin(forward);
   desiredValue -= 20;
-  wait(1,sec);
+  wait(3,sec);
   desiredValue += 40;
-  wait(1,sec);
+  wait(3,sec);
   IntakeMotors.spinFor(reverse,0.5,sec);
-  desiredTurnValue = 90;
-  wait(0.5,sec);
- // Shoot
+  desiredTurnValue = 270;
+  wait(3,sec);
+  //Shoot
   IntakeMotors.spin(forward);
+  wait(3,sec);
   ShootMotors.stop();
-  desiredTurnValue = 225;
-  wait(1,sec);
+  desiredTurnValue -= 135;
+  wait(3,sec);
   desiredValue -= 180;
-  wait(1,sec);
+  wait(3,sec);
   desiredTurnValue += 90;
   IntakeMotors.stop();
   IntakeMotors.spinFor(reverse,0.2,sec);
-  wait(0.8,sec);
+  wait(3,sec);
   //Shoot
   IntakeMotors.spin(forward);
-  wait(0.5,sec);
+  wait(3,sec);
   desiredTurnValue -= 90;
-  wait(2,sec);
+  wait(3,sec);
   desiredValue -= 180;
-  wait(2,sec);
-  desiredTurnValue = 270;
+  wait(3,sec);
+  desiredTurnValue -= 45;
   IntakeMotors.stop();
   IntakeMotors.spinFor(reverse,0.2,sec);
-  wait(0.5,sec);
+  wait(3,sec);
   //Shoot
   IntakeMotors.spin(forward);
-  wait(0.5,sec);
+  wait(3,sec);
   desiredValue -= 20;
-  wait(1,sec);
+  wait(3,sec);
   desiredValue += 70;
-  wait(1,sec);
-  desiredTurnValue = 180;
-  wait(1,sec);
+  wait(3,sec);
+  desiredTurnValue += 90;
+  wait(3,sec);
   desiredValue -= 80;
-  wait(1,sec);
+  wait(3,sec);
   desiredValue += 40;
-  wait(1,sec);
-  desiredTurnValue = 45;
-  wait(2,sec);
+  wait(3,sec);
+  desiredTurnValue -= 90;
+  wait(3,sec);
   desiredValue -= 180;
   wait(3,sec);
   IntakeMotors.stop();
-  desiredTurnValue = 135;
-  IntakeMotors.spinFor(reverse,0.2,sec);
-  wait(0.8,sec);
-  //Shoot
-  IntakeMotors.spin(forward);
-  wait(0.5,sec);
   desiredTurnValue = 45;
-  wait(1,sec);
-  desiredValue -= 180;
-  wait(1,sec);
-  IntakeMotors.stop();
-  desiredTurnValue = 90;
   IntakeMotors.spinFor(reverse,0.2,sec);
-  wait(0.8,sec);
+  wait(3,sec);
   //Shoot
   IntakeMotors.spin(forward);
-  wait(0.5,sec);
+  wait(3,sec);
+  desiredTurnValue += 270;
+  wait(3,sec);
+  desiredValue -= 180;
+  wait(3,sec);
+  IntakeMotors.stop();
+  desiredTurnValue = 270;
+  IntakeMotors.spinFor(reverse,0.2,sec);
+  wait(3,sec);
+  //Shoot
+  IntakeMotors.spin(forward);
+  wait(3,sec);
   desiredValue -= 40;
-  wait(0.1, sec);
+  wait(3, sec);
   desiredValue += 40;
   desiredTurnValue = 315;
   //Expand
+  while(true){
+    this_thread::sleep_for(25);
+  }
 }
 
 // this is just for the animation on the screen it has no use other than that :D

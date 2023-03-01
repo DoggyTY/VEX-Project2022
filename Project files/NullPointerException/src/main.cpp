@@ -70,9 +70,9 @@ int BackzAnimation = 30;
 bool enablePID = true;
 bool resetEncoders = false;
 
-float kP = 0.32; //0.32;  //0.5 might be better // or 0.25
-float kI = 0.0; //0.00025 might be better // or 0.00125
-float kD = 0.0; //0.005 might be better //or 0.0025
+float kP = 0.32;   //0.5 might be better // or 0.25
+float kI = 0.000025; //0.00025 might be better // or 0.00125
+float kD = 0.00005; //0.005 might be better //or 0.0025
 float turnkP = 1; // 0.1 is really nice, at least for only P values and no intertial 
                   //0.5 or 0.6 seems to work for only P values with intertial but you need to add +1 to your angle
                   //2 also work for intertial for turning
@@ -96,10 +96,11 @@ int maxTurnIntegral = 20; // These cap the integrals
 int maxIntegral = 3000;
 int integralBound = 3; //If error is outside the bounds, then apply the integral. This is a buffer with +-integralBound degrees
 
-  float Raidan = 0.0f;
-  int Entry = 0;
-  int FocalLength = 30;
-  double ProjectedXY[368][2]; // Need amount of verties
+// The table of numbers below is not relevent to the competition
+float Raidan = 0.0f;
+int Entry = 0;
+int FocalLength = 30;
+double ProjectedXY[368][2]; // Need amount of verties
 int XYZ[368][3] = { // this was a pain to write out, took me like 2 hours
 // First 8 Top
 {50,20,zAnimation},{70,20,zAnimation},
@@ -859,21 +860,24 @@ int Connections[664][2] = { // 0 -> 367, but this ones worse... than the one abo
 {183,367},
 };
 
-/* Important Variables and Stuff*/
+//If you tink that I will annotate my code I won't. have fun 
 
 int main(){
   vexcodeInit();
   heading.calibrate();
   inertialSensor.calibrate();
   ShootMotors.setStopping(coast);
+  Yrotation.resetPosition();
+  Xrotation.resetPosition();
+  Expand.set(false);
   wait(2,seconds); 
-  
+  heading.resetRotation();
   // //Threads
   // thread PTUupdate = thread(PTU);
   // thread sPID = thread(PID);
   // AutoSkills();
-  // thread control = thread(Controller);
-  thread Logo = thread(ScreenAnime);
+  thread control = thread(Controller);
+  // thread Logo = thread(ScreenAnime);
   while(true){
     wait(25,msec);
   }
@@ -903,9 +907,7 @@ void Controller(){
     IntakeMotors.spin(forward);
     } else if (Controller1.ButtonL1.pressing()) {
       IntakeMotors.setVelocity(70,percent);
-      IntakeMotors.spin(reverse); 
-    } else if (Controller1.ButtonDown.pressing()){
-      
+      IntakeMotors.spin(reverse);
     } else if (Controller1.ButtonA.pressing()){
       IntakeMotors.spinTo(180,degrees,false);
     }
@@ -1202,17 +1204,18 @@ int PID() {
 }
 
 void AutoSkills(){
-  IntakeMotors.setVelocity(80,pct);
-  IntakeMotors.spin(forward);
+  wait(50,sec);
+  // IntakeMotors.setVelocity(80,pct);
+  // IntakeMotors.spin(forward);
   desiredValue -= 20;
   wait(3,sec);
   desiredValue += 40;
   wait(3,sec);
-  IntakeMotors.spinFor(reverse,0.5,sec);
-  desiredTurnValue = 270;
+  // IntakeMotors.spinFor(reverse,0.5,sec);
+  desiredTurnValue = 90;
   wait(3,sec);
   //Shoot
-  IntakeMotors.spin(forward);
+  // IntakeMotors.spin(forward);
   wait(3,sec);
   ShootMotors.stop();
   desiredTurnValue -= 135;
@@ -1220,22 +1223,22 @@ void AutoSkills(){
   desiredValue -= 180;
   wait(3,sec);
   desiredTurnValue += 90;
-  IntakeMotors.stop();
-  IntakeMotors.spinFor(reverse,0.2,sec);
+  // IntakeMotors.stop();
+  // IntakeMotors.spinFor(reverse,0.2,sec);
   wait(3,sec);
   //Shoot
-  IntakeMotors.spin(forward);
+  // IntakeMotors.spin(forward);
   wait(3,sec);
   desiredTurnValue -= 90;
   wait(3,sec);
   desiredValue -= 180;
   wait(3,sec);
   desiredTurnValue -= 45;
-  IntakeMotors.stop();
-  IntakeMotors.spinFor(reverse,0.2,sec);
+  // IntakeMotors.stop();
+  // IntakeMotors.spinFor(reverse,0.2,sec);
   wait(3,sec);
   //Shoot
-  IntakeMotors.spin(forward);
+  // IntakeMotors.spin(forward);
   wait(3,sec);
   desiredValue -= 20;
   wait(3,sec);
@@ -1251,28 +1254,28 @@ void AutoSkills(){
   wait(3,sec);
   desiredValue -= 180;
   wait(3,sec);
-  IntakeMotors.stop();
-  desiredTurnValue = 45;
-  IntakeMotors.spinFor(reverse,0.2,sec);
+  // IntakeMotors.stop();
+  desiredTurnValue = 225;
+  // IntakeMotors.spinFor(reverse,0.2,sec);
   wait(3,sec);
   //Shoot
-  IntakeMotors.spin(forward);
+  // IntakeMotors.spin(forward);
   wait(3,sec);
   desiredTurnValue += 270;
   wait(3,sec);
   desiredValue -= 180;
   wait(3,sec);
   IntakeMotors.stop();
-  desiredTurnValue = 270;
-  IntakeMotors.spinFor(reverse,0.2,sec);
+  desiredTurnValue = 90;
+  // IntakeMotors.spinFor(reverse,0.2,sec);
   wait(3,sec);
   //Shoot
-  IntakeMotors.spin(forward);
+  // IntakeMotors.spin(forward);
   wait(3,sec);
   desiredValue -= 40;
   wait(3, sec);
   desiredValue += 40;
-  desiredTurnValue = 315;
+  desiredTurnValue = 135;
   //Expand
   while(true){
     this_thread::sleep_for(25);

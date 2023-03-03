@@ -1,11 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/*    Module:       main.cpp                                                  */
-/*    Author:       e2622588                                                  */
-/*    Created:      Wed Sep 28 2022                                           */
-/*    Description:  V5 project                                                */
-/*                                                                            */
-/*----------------------------------------------------------------------------*/
 
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
@@ -70,17 +62,17 @@ int BackzAnimation = 30;
 bool enablePID = true;
 bool resetEncoders = false;
 
-float kP = 0.32;   //0.5 might be better // or 0.25
-float kI = 0.000025; //0.00025 might be better // or 0.00125
-float kD = 0.00005; //0.005 might be better //or 0.0025
-float turnkP = 1; // 0.1 is really nice, at least for only P values and no intertial 
+float kP = 0.05;   //0.5 might be better // or 0.25
+float kI = 0.00125; //0.00025 might be better // or 0.00125
+float kD = 0.005; //0.005 might be better //or 0.0025
+float turnkP = 0.2; // 0.1 is really nice, at least for only P values and no intertial 
                   //0.5 or 0.6 seems to work for only P values with intertial but you need to add +1 to your angle
                   //2 also work for intertial for turning
-float turnkI = 0.0; 
-float turnkD = 0.0; //might be better to have this low so that it does zig zag when driving straight (worth testing though)
+float turnkI = 0.0005; 
+float turnkD = 0.00005; //might be better to have this low so that it does zig zag when driving straight (worth testing though)
 
 float desiredValue = 0;
-int desiredTurnValue = 180;
+int desiredTurnValue = 0;
 
 int error; //Desired Value - Sensor Value: Position
 int prevError = 0; //Position 20ms ago
@@ -95,7 +87,8 @@ int turnTotalError = 0; // totalError += error : Integral
 int maxTurnIntegral = 20; // These cap the integrals
 int maxIntegral = 3000;
 int integralBound = 3; //If error is outside the bounds, then apply the integral. This is a buffer with +-integralBound degrees
-
+float TurnSpeed = 1;
+float LaderalSpeed = 1;
 // The table of numbers below is not relevent to the competition
 float Raidan = 0.0f;
 int Entry = 0;
@@ -874,9 +867,9 @@ int main(){
   heading.resetRotation();
   // //Threads
   // thread PTUupdate = thread(PTU);
-  // thread sPID = thread(PID);
-  // AutoSkills();
-  thread control = thread(Controller);
+  thread sPID = thread(PID);
+  AutoSkills();
+  // thread control = thread(Controller);
   // thread Logo = thread(ScreenAnime);
   while(true){
     wait(25,msec);
@@ -924,7 +917,7 @@ void Controller(){
     LeftDriveSmart.spin(forward);
     RightDriveSmart.spin(forward);
     }
-    if (Controller1.ButtonA.pressing() && Controller1.ButtonX.pressing() && Controller1.ButtonY.pressing() && Controller1.ButtonB.pressing()) {
+    if (Controller1.ButtonR2.pressing() && Controller1.ButtonA.pressing()) {
       Expand.set(true);
     }
     if (Controller1.ButtonUp.pressing()){
@@ -1099,22 +1092,13 @@ int PTU() {
 }
 
 int PID() {
-  // float  pidSensorCurrentValue;
-  // float  pidError;
-  // float  pidDrive;
-
   while (true) {
-    float calculatedDesiredValue = 360 * desiredValue/100/(0.1*M_PI);
+    float calculatedDesiredValue = desiredValue*(dpr/10);
     // In cm now
 
     // Get motor positions
-    
-    // int backRightMotorPosition = Yrotation.position(deg);
 
-    // pidSensorCurrentValue = rotationRight.position(rotationUnits::deg);
-
-
-    int averageMotorPosition = (Yrotation.position(deg) + Xrotation.position(deg))/2;
+    int averageMotorPosition = (Yrotation.position(deg) - Xrotation.position(deg))/2;
 
     ///////////////////////////////////
     // Lateral Movement PID
@@ -1140,15 +1124,14 @@ int PID() {
     totalError = abs(totalError) > maxIntegral ? -1*(totalError) * maxIntegral : totalError;
 
     // Calculate motor power
-    double lateralMotorPower = (error * kP) + (derivative * kD) + (totalError * kI); 
+    double lateralMotorPower = ((error * kP) + (derivative * kD) + (totalError * kI))*LaderalSpeed; 
     //   pidDrive = (pid_Kp * pidError);
 
     // limit drive
     if( lateralMotorPower > 60 )
         lateralMotorPower = 60;
-    if( lateralMotorPower < (-60) )
-        lateralMotorPower = (-60);
-
+    if( lateralMotorPower < -60)
+        lateralMotorPower = -60;
     ///////////////////////////////////
     // Turning Movement PID
     ///////////////////////////////////
@@ -1157,7 +1140,7 @@ int PID() {
         
     // Potential 
     // turnError = desiredTurnValue - turnDifference;
-    turnError = desiredTurnValue + 180 - heading.rotation();
+    turnError = desiredTurnValue - heading.rotation();
     // pidError =  pidRequestedValue - pidSensorCurrentValue;
 
     // Derivative 
@@ -1176,13 +1159,13 @@ int PID() {
     turnTotalError = abs(turnTotalError) > maxTurnIntegral ? -1*(turnTotalError) * maxTurnIntegral : turnTotalError;
 
     // Calculate motor power
-    double turnMotorPower = (turnError * turnkP) + (turnDerivative * turnkD) + (turnTotalError * turnkI); 
+    double turnMotorPower = ((turnError * turnkP) + (turnDerivative * turnkD) + (turnTotalError * turnkI)) * TurnSpeed;
 
     // limit drive
-    if( turnMotorPower > 40 )
-        turnMotorPower = 40;
-    if( turnMotorPower < (-40) )
-        turnMotorPower = (-40);
+    if( turnMotorPower > 60 )
+        turnMotorPower = 60;
+    if( turnMotorPower < -60 )
+        turnMotorPower = -60;
 
     leftDriveMotorA.spin(forward, lateralMotorPower - turnMotorPower, velocityUnits::pct); // could use voltage
     leftDriveMotorB.spin(forward, lateralMotorPower - turnMotorPower, velocityUnits::pct); // could use voltage
@@ -1194,6 +1177,9 @@ int PID() {
 
     printf("\n Turn Error %d", turnError);
     printf("\n Drive Error %d", error);
+    printf("\n Calculated Desired Value %f", calculatedDesiredValue);
+    printf("\n Average Motor Position %d", averageMotorPosition);
+    printf("\n Ypos, %f, Xpos, %f", Yrotation.position(deg), Xrotation.position(deg));
     printf("\n Inertial Sensor %f", heading.rotation());
 
     // Don't hog cpu
@@ -1204,76 +1190,79 @@ int PID() {
 }
 
 void AutoSkills(){
-  wait(50,sec);
-  // IntakeMotors.setVelocity(80,pct);
-  // IntakeMotors.spin(forward);
-  desiredValue -= 20;
-  wait(3,sec);
-  desiredValue += 40;
-  wait(3,sec);
-  // IntakeMotors.spinFor(reverse,0.5,sec);
-  desiredTurnValue = 90;
-  wait(3,sec);
+  wait(5,sec);
+  IntakeMotors.setVelocity(80,pct);
+  IntakeMotors.spin(forward);
+  LaderalSpeed = 0.1;
+  desiredValue = -20;
+  wait(5,sec);
+  LaderalSpeed = 1; 
+  desiredValue += 25;
+  wait(5,sec);
+  IntakeMotors.spinFor(reverse,0.5,sec);
+  desiredTurnValue = 270;
+  wait(10,sec);
   //Shoot
-  // IntakeMotors.spin(forward);
-  wait(3,sec);
+  IntakeMotors.spin(forward);
+  wait(5,sec);
   ShootMotors.stop();
   desiredTurnValue -= 135;
-  wait(3,sec);
-  desiredValue -= 180;
-  wait(3,sec);
+  wait(5,sec);
+  desiredValue -= 175;
+  wait(5,sec);
   desiredTurnValue += 90;
-  // IntakeMotors.stop();
-  // IntakeMotors.spinFor(reverse,0.2,sec);
-  wait(3,sec);
-  //Shoot
-  // IntakeMotors.spin(forward);
-  wait(3,sec);
-  desiredTurnValue -= 90;
-  wait(3,sec);
-  desiredValue -= 180;
-  wait(3,sec);
-  desiredTurnValue -= 45;
-  // IntakeMotors.stop();
-  // IntakeMotors.spinFor(reverse,0.2,sec);
-  wait(3,sec);
-  //Shoot
-  // IntakeMotors.spin(forward);
-  wait(3,sec);
-  desiredValue -= 20;
-  wait(3,sec);
-  desiredValue += 70;
-  wait(3,sec);
-  desiredTurnValue += 90;
-  wait(3,sec);
-  desiredValue -= 80;
-  wait(3,sec);
-  desiredValue += 40;
-  wait(3,sec);
-  desiredTurnValue -= 90;
-  wait(3,sec);
-  desiredValue -= 180;
-  wait(3,sec);
-  // IntakeMotors.stop();
-  desiredTurnValue = 225;
-  // IntakeMotors.spinFor(reverse,0.2,sec);
-  wait(3,sec);
-  //Shoot
-  // IntakeMotors.spin(forward);
-  wait(3,sec);
-  desiredTurnValue += 270;
-  wait(3,sec);
-  desiredValue -= 180;
-  wait(3,sec);
   IntakeMotors.stop();
-  desiredTurnValue = 90;
-  // IntakeMotors.spinFor(reverse,0.2,sec);
-  wait(3,sec);
+  IntakeMotors.spinFor(reverse,0.2,sec);
+  wait(5,sec);
   //Shoot
-  // IntakeMotors.spin(forward);
-  wait(3,sec);
+  IntakeMotors.spin(forward);
+  wait(5,sec);
+  desiredTurnValue -= 90;
+  wait(5,sec);
+  desiredValue -= 175;
+  wait(5,sec);
+  desiredTurnValue -= 45;
+  IntakeMotors.stop();
+  IntakeMotors.spinFor(reverse,0.2,sec);
+  wait(5,sec);
+  //Shoot
+  IntakeMotors.spin(forward);
+  wait(5,sec);
+  LaderalSpeed = 0.1;
+  desiredValue -= 35;
+  wait(5,sec);
+  desiredValue += 75;
+  wait(5,sec);
+  desiredTurnValue += 90;
+  wait(5,sec);
+  desiredValue -= 75;
+  wait(5,sec);
+  desiredValue += 50;
+  wait(5,sec);
+  desiredTurnValue += 135;
+  wait(5,sec);
+  desiredValue -= 175;
+  wait(5,sec);
+  IntakeMotors.stop();
+  desiredTurnValue = 45+180;
+  IntakeMotors.spinFor(reverse,0.2,sec);
+  wait(5,sec);
+  //Shoot
+  IntakeMotors.spin(forward);
+  wait(5,sec);
+  desiredTurnValue += 270;
+  wait(5,sec);
+  desiredValue -= 180;
+  wait(5,sec);
+  IntakeMotors.stop();
+  desiredTurnValue = 270+180;
+  IntakeMotors.spinFor(reverse,0.2,sec);
+  wait(5,sec);
+  //Shoot
+  IntakeMotors.spin(forward);
+  wait(5,sec);
   desiredValue -= 40;
-  wait(3, sec);
+  wait(5, sec);
   desiredValue += 40;
   desiredTurnValue = 135;
   //Expand

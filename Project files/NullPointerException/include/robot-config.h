@@ -13,7 +13,7 @@ extern drivetrain Drivetrain;
 extern motor_group IntakeMotors;
 extern motor_group LeftDriveSmart;
 extern motor_group RightDriveSmart;
-extern digital_out Expand;
+extern pneumatics Expand;
 extern rotation Xrotation;
 extern rotation Yrotation;
 extern inertial heading;

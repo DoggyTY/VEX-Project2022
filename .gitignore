@@ -1,2 +1,3 @@
-
-secret/Hidden.txt
+secret/src/Hidden.c++
+secret/include/robot-config.h
+secret/include/vex.h

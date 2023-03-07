@@ -24,8 +24,7 @@ void Controller();
 void AutoSkills();
 void AutoComp();
 void ShootMode();
-int PTU();
-bool Shootsetup();
+
 void ScreenAnime();
 int PID();
 void gotoPTD(int x, int y);
@@ -37,23 +36,6 @@ char complaint[] = "captain blames us for everything smh my head";
 bool PTUactive = true;
 
 // Global GPS vars
-double Anglelooking = 0;
-double Rotation = 0;
-double dpr = 299.236700254; //Distance per rotation, need to test numbers, also should be in mm, because else it would break resulting in Robot Position Fault
-bool Left = false;
-bool PosFault = false; // This is something to use if having problems with robot going to far that it gps goes out the arena, making any system that uses gps disable until problem is resolved.
-double prevoustimer = 0;
-double Xrpm, Yrpm, Xdis, Ydis, rotationchange;
-double Xaxis = 1;
-double Yaxis = 1;
-double FieldX = 3650*0.23333333333333333333333333333333333333333; // 12 feet, if need inches/feet. Position 0 is the corner of own low goal
-double FieldY = 3650*0.23333333333333333333333333333333333333333;
-double LowGoal = 1200*0.23333333333333333333333333333333333333333; // 1 Tile is 600 by 600, or 24 by 24 inches
-double LowGoalHeight = 543.56*0.23333333333333333333333333333333333333333; // 21.4 inches
-double HeighGoalX = 3050*0.23333333333333333333333333333333333333333;
-double HeightGoalY = 3050*0.23333333333333333333333333333333333333333;
-double XDistoGoal, YDistoGoal, VectorDistoGoal,AngleToGoal,DisAngleGoal,VelocityToGoal; //All Varibles to support Shoot Setup Modular
-double ShootAngleFault = 300;
 int zAnimation = 15;
 int BackzAnimation = 30;
 
@@ -88,6 +70,7 @@ int maxIntegral = 3000;
 int integralBound = 3; //If error is outside the bounds, then apply the integral. This is a buffer with +-integralBound degrees
 float TurnSpeed = 1;
 float LaderalSpeed = 1;
+double dpr = 29.9236700254;
 // The table of numbers below is not relevent to the competition
 float Raidan = 0.0f;
 int Entry = 0;
@@ -866,8 +849,9 @@ int main(){
   heading.resetRotation();
   // //Threads
   // thread PTUupdate = thread(PTU);
-  // thread sPID = thread(PID);
+  thread sPID = thread(PID);
   // AutoSkills();
+  AutoComp();
   // thread control = thread(Controller);
   // thread Logo = thread(ScreenAnime);
   while(true){
@@ -926,31 +910,6 @@ void Controller(){
     ShootMotors.stop();
     this_thread::sleep_for(25);
   }
-}
-bool Shootsetup() {
-  Left = false;
-  if (PosFault == true){
-    return false;
-  }
-  XDistoGoal = HeighGoalX - Xaxis;
-  YDistoGoal = HeightGoalY - Yaxis;
-  VectorDistoGoal = sqrt(pow(XDistoGoal,2) + pow(YDistoGoal,2));
-  if(XDistoGoal < 0) {
-    Left = true;
-  }
-  XDistoGoal = std::abs(XDistoGoal);
-  AngleToGoal = acos(YDistoGoal/VectorDistoGoal) * 180/3.1415;
-  DisAngleGoal = Anglelooking - DisAngleGoal;
-  if (Left){
-    Drivetrain.turnFor(left,DisAngleGoal,degrees);
-  } else{
-    Drivetrain.turnFor(right,DisAngleGoal,degrees);
-  }
-
-  // Velocity setup is next but is too hard to finish now, Rain don't do it, it needs to be specific to other varibles as we talked about.
-
-  this_thread::sleep_for(25);
-  return true;
 }
 void ShootMode() {
   ShootMotors.setVelocity(Shootvelo,percent);
@@ -1015,81 +974,10 @@ void ShootMode() {
   }
   this_thread::sleep_for(25);
 }
-void gotoPTD(double x, double y){
-  while(true){
-  double differencex = Xaxis - x;
-  double differencey = Yaxis - y;
-  double diffencevector = sqrt(pow(differencex,2) + pow(differencey,2));
-  double angleofblank = asin(differencey/diffencevector);
-  if (differencex < 0){
-    angleofblank += M_PI;
-  }
-  thread PIDcontrol = thread(PID);
-  PIDcontrol.detach();
-  Drivetrain.turnFor(angleofblank * 180/M_PI,deg);
-  Drivetrain.driveFor(diffencevector/0.23333333333333333,mm);
-  this_thread::sleep_for(50);
-  PIDcontrol.interrupt();
-  if((Xaxis < x+1 && Xaxis > x-1) && (Yaxis < y+1 && Yaxis> y-1)){
-    break;
-  }
-  }
-}
-
-int PTU() {
-  // This is all prototype code and none of it really can fuction well, all theoretical
-  // Also need to rewrite some of it to make sure that its correctly formatting gps, with x and y.
-  while(true){
-  double timebetweengps = vex::timer::systemHighResolution() - prevoustimer;
-  double LocalXrpm = Xrotation.velocity(rpm) / 60; // divide by 60 to get rps, which would be useful later... also need to convert it to a smaller number, like 0.01 millisecond because brain processes things at 1.3 trillion inputs a seconds
-  double LocalYrpm = Yrotation.velocity(rpm) / 60;
-  if (Rotation != heading.heading(deg)){
-    continue;
-  }
-  Rotation = (heading.heading(deg)) * (M_PI /180);
-  Xrpm = (((sin(Rotation)*LocalYrpm) + (sin(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;
-  Yrpm = (((cos(Rotation)*LocalYrpm) + (cos(Rotation+90)*LocalXrpm))/ 1000) * timebetweengps;
-  Xdis = Xrpm * dpr;
-  Ydis = Yrpm * dpr;
-  // VectorRPM = sqrt(pow(Xrpm,2) + pow(Yrpm,2));
-  // VectorDis = sqrt(pow(Xdis,2) + pow(Ydis,2));
-  Xaxis = Xaxis + Xdis;
-  Yaxis = Yaxis + Ydis;
-  Brain.Screen.clearScreen();
-  Brain.Screen.setCursor(1, 1);
-  Brain.Screen.print(Xaxis);
-  Brain.Screen.newLine();
-  Brain.Screen.print(Yaxis);
-  Brain.Screen.newLine();
-  Brain.Screen.print(Xdis);
-  Brain.Screen.newLine();
-  Brain.Screen.print(Ydis);
-  Brain.Screen.newLine();
-  Brain.Screen.print(Rotation);
-  Brain.Screen.newLine();
-  Brain.Screen.print(Yrpm);
-  Brain.Screen.newLine();
-  Brain.Screen.print(Xrpm);
-  Brain.Screen.newLine();
-
-  if (Xaxis > FieldX or Yaxis > FieldY){
-    Controller1.Screen.setCursor(2,3);
-    Controller1.Screen.print("Robot Position Fault"); // Making it known to driver of PosFault, Should do this with other things but yeah
-    PosFault = true;
-  } else {
-    Controller1.Screen.setCursor(2,3);
-    Controller1.Screen.clearLine();
-    PosFault = false;
-  }
-  prevoustimer = vex::timer::systemHighResolution();
-  this_thread::sleep_for(100);
-  }
-  return 0;
-}
 
 int PID() {
   while (enablePID) {
-    float calculatedDesiredValue = desiredValue*(dpr/10);
+    float calculatedDesiredValue = desiredValue*(dpr);
     // In cm now
 
     // Get motor positions
@@ -1290,17 +1178,17 @@ void AutoSkills(){
 }
 
 void AutoComp(){
-  wait(2,sec);
   IntakeMotors.setVelocity(10,pct);
   IntakeMotors.spin(forward);
-  LaderalSpeed = 0.1;
+  LaderalSpeed = 0.5;
   desiredValue = -10;
-  wait(2,sec);
+  wait(1,sec);
+  IntakeMotors.stop();
   LaderalSpeed = 1; 
   desiredValue = 5;
-  wait(5,sec);
+  wait(2,sec);
   IntakeMotors.spinFor(reverse,0.5,sec);
-  desiredTurnValue = 10;
+  desiredTurnValue = 350;
   wait(4,sec);
   IntakeMotors.setVelocity(70,pct);
   ShootMotors.setVelocity(75,pct);

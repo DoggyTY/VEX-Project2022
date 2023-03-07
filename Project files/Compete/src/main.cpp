@@ -127,14 +127,15 @@ void pre_auton(void) {
 void autonomous(void) {
   thread sPID = thread(PID);
   // AutoSkills(); // choose one when ready
-  // AutoComp();
+  AutoComp();
 }
   void AutoSkills(){
   IntakeMotors.setVelocity(10,pct);
-  IntakeMotors.spin(forward);
   LaderalSpeed = 0.1;
   desiredValue = -10;
   wait(2,sec);
+  IntakeMotors.spinFor(forward,180,degrees);
+  wait(1,sec);
   LaderalSpeed = 1; 
   desiredValue = 5;
   wait(2,sec);
@@ -152,13 +153,12 @@ void autonomous(void) {
   desiredValue += 40;
   wait(1,sec);
   desiredTurnValue -= 135;
-  wait(5,sec);
+  wait(4,sec);
   desiredValue -= 75;
-  wait(8,sec);
+  wait(6,sec);
   desiredTurnValue -= 90;
   IntakeMotors.stop();
-  IntakeMotors.spinFor(reverse,0.2,sec);
-  wait(5,sec);
+  IntakeMotors.spinFor(reverse,0.3,sec);
   //
   ShootMotors.setVelocity(85,pct);
   ShootMotors.spin(forward);
@@ -184,14 +184,16 @@ void autonomous(void) {
   wait(5,sec);
   ShootMotors.stop();
   desiredValue -= 40;
-  IntakeMotors.setVelocity(10,pct);
+  IntakeMotors.stop();
   wait(5,sec);
   desiredTurnValue -= 90;
   LaderalSpeed = 0.1;
   desiredValue -= 50;
-  wait(10,sec);
+  wait(2,sec);
+  IntakeMotors.spinFor(forward,180,degrees);
+  wait(3,sec);
   desiredValue += 40;
-  wait(5,sec);
+  wait(3,sec);
   // desiredTurnValue += 90;
   // wait(5,sec);
   // desiredValue -= 75;
@@ -225,32 +227,41 @@ void autonomous(void) {
   // desiredValue += 40;
   desiredTurnValue = 315;
   //Expand
-  Expand.open();
+  // Expand.open();
   while(true){
     this_thread::sleep_for(25);
   }
 }
 
 void AutoComp(){
-  wait(2,sec);
-  IntakeMotors.setVelocity(10,pct);
-  IntakeMotors.spin(forward);
-  LaderalSpeed = 0.1;
-  desiredValue = -10;
-  wait(2,sec);
-  LaderalSpeed = 1; 
-  desiredValue = 5;
-  wait(5,sec);
-  IntakeMotors.spinFor(reverse,0.5,sec);
-  desiredTurnValue = 10;
-  wait(4,sec);
-  IntakeMotors.setVelocity(70,pct);
-  ShootMotors.setVelocity(75,pct);
-  ShootMotors.spin(forward);
-  wait(1.5,sec);
-  IntakeMotors.spin(forward);
-  wait(2,sec);
-  ShootMotors.stop();
+  wait(8,sec);
+  IntakeMotors.setVelocity(100,pct);
+  IntakeMotors.spin(reverse);
+  // heading.calibrate();
+  // wait(2,sec);
+  // wait(1,sec);
+  // desiredValue += 20;
+  // wait(1,sec);
+  // desiredTurnValue -= 90;
+  // wait(100,sec);
+  // IntakeMotors.setVelocity(10,pct);
+  // IntakeMotors.spin(forward);
+  // LaderalSpeed = 0.3;
+  // desiredValue = -10;
+  // wait(3,sec);
+  // LaderalSpeed = 1; 
+  // desiredValue = 6;
+  // wait(3,sec);
+  // IntakeMotors.spinFor(reverse,0.5,sec);
+  // desiredTurnValue -= 10;
+  // wait(4,sec);
+  // IntakeMotors.setVelocity(70,pct);
+  // ShootMotors.setVelocity(75,pct);
+  // ShootMotors.spin(forward);
+  // wait(1.5,sec);
+  // IntakeMotors.spin(forward);
+  // wait(2,sec);
+  // ShootMotors.stop();
 }
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
@@ -281,13 +292,14 @@ enablePID = false;
   LeftDriveSmart.spin(forward);
   RightDriveSmart.spin(forward);
   ShootMotors.setVelocity(60,percent);
+
   while (true){
     if (Controller1.Axis4.position() > 10 || Controller1.Axis4.position() < -10){
       LeftDriveSmart.setVelocity(((Controller1.Axis3.position())+Controller1.Axis4.position()*-1)*Turncap,percent);
       RightDriveSmart.setVelocity(((Controller1.Axis3.position())-Controller1.Axis4.position()*-1)*Turncap,percent);
     } else{
-      LeftDriveSmart.setVelocity((Controller1.Axis3.position())*Speedcap,percent);
-      RightDriveSmart.setVelocity((Controller1.Axis3.position())*Speedcap,percent);
+      LeftDriveSmart.setVelocity(Controller1.Axis3.position()*Speedcap,percent);
+      RightDriveSmart.setVelocity(Controller1.Axis3.position()*Speedcap,percent);
     }   
     if (Controller1.ButtonL2.pressing()) {
     IntakeMotors.setVelocity(70,percent);
@@ -330,7 +342,7 @@ void ShootMode() {
     ShootMotors.stop();
   }
   if (Controller1.ButtonL2.pressing()) {
-    IntakeMotors.setVelocity(80,percent);
+    IntakeMotors.setVelocity(70,percent);
     IntakeMotors.spin(forward);
   } else if (Controller1.ButtonL1.pressing()) {
     IntakeMotors.setVelocity(20,percent);
